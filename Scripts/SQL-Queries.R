@@ -35,7 +35,7 @@ opt_parser <- OptionParser(
 											"\t 2.2 Dataframe formating and sample annotation (function: TransposeAnnotator) \n",
 											"\t 2.3 Save the results as a table (function: writeQuery) \n"),
 
-	usage = "Rscript SQL-queries.R -p <cohort_project> -c <cohort_metadata> [-m <mapping_option>]-i <splice_junction> -o <output_directory>",
+	usage = "Rscript SQL-queries.R -p <cohort_project> -c <cohort_metadata> [-m <mapping_option>] -i <splice_junction> -o <output_directory>",
 
 	option_list = option_list)
 opt <- parse_args(opt_parser)
