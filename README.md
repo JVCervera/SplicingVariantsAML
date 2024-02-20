@@ -144,13 +144,16 @@ python get_VAF_vcf.py
 ```
 
 ###  RNASeq Variant Calling 
+
 * **Step 5**. BAM to FASTQ conversion
+
 bam2fastq is used for the file conversion.
 ```
 bam2fastq -o  path/to/FASTQ/file_1.fq path/to/FASTQ/file_2.fq path/to/BAM/file.bam
 ```
 
 * **Step 6**. RNAMut Variant Calling
+
 RNAMut software is used for variant calling.
 ```
 java -jar $PATH_TO_RNAMUT_EXECUTABLE/RNAmut.jar
