@@ -158,8 +158,8 @@ RNAMut software is used for variant calling.
 ```
 java -jar $PATH_TO_RNAMUT_EXECUTABLE/RNAmut.jar
 -n sample_id
-path/to/FASTQ/file_1.fq,path/to/FASTQ/file_2.fq
-path/to/RNAMut_VariantCalling_Results
+/path/to/FASTQ/file_1.fq,/path/to/FASTQ/file_2.fq
+/path/to/RNAMut_VariantCalling_Results
 -i GENE_PANEL
 -f oncogenicity_filter.txt 
 ```
