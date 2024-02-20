@@ -105,14 +105,14 @@ Rscript recoverVariant_SampleID.R
 * **Step 3**. Variant searcher in WXS Variant calling data
 
 ```
-usage: Rscript find_variants.R [-h]
+usage: Rscript find_DNAvariants.R [-h]
                                 --cohort_project {"BeatAML", "TCGA"}
                                 --rna_metadata
                                 --search_variant
                                 --variant_collection
                                 --output_file
 
-For additional help: Rscript find_variants.R -h  
+For additional help: Rscript find_DNAvariants.R -h  
 ```
 
 Example of usage with the BeatAML cohort:
