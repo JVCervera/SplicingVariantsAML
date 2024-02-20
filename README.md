@@ -40,6 +40,7 @@ Required software to run the pipeline:
 + plotly
 + knitr
 + ggsignif
++ rstatix
 + RcmdrMisc
 
 ## Bioinformatic Pipeline
