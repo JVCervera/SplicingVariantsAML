@@ -156,7 +156,7 @@ bam2fastq -o  path/to/FASTQ/file_1.fq path/to/FASTQ/file_2.fq path/to/BAM/file.b
 
 RNAMut software is used for variant calling.
 ```
-java -jar $PATH_TO_RNAMUT_EXECUTABLE/RNAmut.jar
+java -jar /path/to/RNAmut.jar
 -n sample_id
 /path/to/FASTQ/file_1.fq,/path/to/FASTQ/file_2.fq
 /path/to/RNAMut_VariantCalling_Results
