@@ -117,7 +117,7 @@ For additional help: Rscript find_DNAvariants.R -h
 
 Example of usage with the BeatAML cohort:
 ```
-Rscript find_variants.R
+Rscript find_DNAvariants.R
 -p BeatAML
 -r BeatAML.AMLRNASeqFiles.csv
 -s Potential_SAVs.tsv
