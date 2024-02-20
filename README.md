@@ -126,7 +126,7 @@ Rscript find_DNAvariants.R
 -o BeatAML.FoundVariantsDNA.tsv
 ```
 
-* **Step 4**. Get Variant Allele Frequency (VAF)
+**Step 4**. Get Variant Allele Frequency (VAF)
 ```
 usage: python get_VAF_vcf.py [-h]
                               --inputfile
@@ -209,14 +209,14 @@ python RNASpliceJunctionCollector.py
 -o BeatAML.SJ_UMcollection
 ```
 
-* **Step 9** Add Gene notation
+* **Step 9**. Add Gene notation
 
 The gene notation is added to the collected splice junctions using the function annotate of the junc-utils tool.
 ```
 junc_utils annotate --genome_id hg38 BeatAML.SJ_UMcollection.txt BeatAML.SJ_UMcollection_annot.txt
 ```
 
-* **Step 10** SQL-based queries to extract a particular gene splice junctions
+* **Step 10**. SQL-based queries to extract a particular gene splice junctions
 
 The SQL queries are defined based on the gene notation of the splice junctions
 ```
@@ -240,7 +240,7 @@ Rscript SQL-queries.R
 -o /Results/BeatAML/SpliceJunction
 ```
 ### Integration
-* **Step 11** WXS and RNASeq variant calling results integration
+* **Step 11**. WXS and RNASeq variant calling results integration
 ```
 usage: Rscript integrate_foundvariants.R [-h]
                                           --dnavariants
