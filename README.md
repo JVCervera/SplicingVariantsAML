@@ -42,7 +42,7 @@ Required software to run the pipeline:
 + ggsignif
 + RcmdrMisc
 
-## Pipeline
+## Bioinformatic Pipeline
 The main bash script `Integration_pipeline.sh` incorporates all three workflows to process the different biological data structures.
 BeatAML cohort:
   + Configuration file: `Data/BeatAML_config.sh`
