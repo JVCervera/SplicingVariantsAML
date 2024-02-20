@@ -221,7 +221,8 @@ The SQL queries are defined based on the gene notation of the splice junctions
 ```
 usage: Rscript SQL-queries.R [-h]
                               --cohort_project {"BeatAML", "TCGA"}
-                              --cohort_excel
+                              --cohort_metadata
+                              --mapping_option
                               --splice_junction
                               --output_directory
 
@@ -232,9 +233,10 @@ Example of usage with the BeatAML cohort:
 ```
 Rscript SQL-queries.R
 -p BeatAML 
--e BeatAML_cohort.xlsx 
--i BeatAML.SJ_UMcollection.annot.txt 
--o /SQL-Query_output_directory
+-c BeatAML.AMLExomeFiles.csv
+-m "UM"
+-i BeatAML.SJ_UMcollection
+-o /Results/BeatAML/SpliceJunction
 ```
 ### Integration
 * **Step 11** WXS and RNASeq variant calling results integration
