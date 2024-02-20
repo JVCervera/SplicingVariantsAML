@@ -1,6 +1,6 @@
 # find variants of interest
 # Script to find a set of variants of interest in a variant collection
-# Also takes the GDC cohort manifest to check if the sample harboring the variants have RNASeq data
+# Also takes the GDC cohort manifest to check if the sample harboring the variants presents RNASeq data
 
 required_packages <- c("optparse","dplyr", "readxl", "stringr", "tidyr", "knitr")
 
