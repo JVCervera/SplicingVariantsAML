@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Script to find the variants of interest, in our specific case Papaemmanuil's variants with a potential splice altering effect called (candidate SAV), in the RNAMut variant calling results. Collects all the variants called by RNAMut and if a variant of interest is found is flagged as "CandidateSAV",the search is based on the RNAMut Mutation annotation. Generates two tab-separated output files: 1. All collected variants, 2. Only variants of interest.
+Script to find the variants of interest, in our specific case Papaemmanuil's variants with a potential splice altering effect called (candidate SAV),
+in the RNAMut variant calling results. Collects all the variants called by RNAMut and if a variant of interest is found is flagged as "CandidateSAV",
+the search is based on the RNAMut Mutation annotation. Generates two tab-separated output files: 1. All collected variants, 2. Only variants of interest.
 
 """
 
