@@ -507,7 +507,6 @@ def main():
 		print(f"Error: {str(e)}")
 
 	cohortMetadata = load_cohortMetadata(input_file)
-	# 1. Extract somatic variantas of all the files:
 	sample_id_list = cohortMetadata["sample_id"].to_list()
 	case_id_list = cohortMetadata["case_id"].to_list()
 	sampleTAGlist = create_sampleTAG_list(sample_id_list, case_id_list)
