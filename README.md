@@ -138,7 +138,7 @@ Example of usage with the BeatAML cohort:
 ```
 python get_VAF_vcf.py
 -i BeatAML
--w path/to/VCF
+-w path/to/BeatAMLv36/VCF
 -f BeatAML.FoundVariantsDNA.tsv
 -o BeatAML.FoundVariantsDNA.vaf.xlsx
 ```
