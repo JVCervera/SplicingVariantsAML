@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+BCOR	chrX:40062853-40062853_Sub:T>A	K1322*	4	105	0.037	Oncogenic

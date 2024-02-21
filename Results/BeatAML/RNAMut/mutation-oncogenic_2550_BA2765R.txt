@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+RUNX1	chr21:34880572-34880572_Sub:C>G	G165R	446	421	0.514	Oncogenic

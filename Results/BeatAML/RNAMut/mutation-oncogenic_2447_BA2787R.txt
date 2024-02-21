@@ -1,0 +1,4 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+ASXL1	chr20:32436967-32436967_Sub:A>T	K1419*	4	150	0.026	Oncogenic
+TP53	chr17:7674254-7674254_Sub:T>A	M237L	2	85	0.023	Oncogenic
+TP53	chr17:7676241-7676241_Del:A	L43fs	2	67	0.029	Oncogenic

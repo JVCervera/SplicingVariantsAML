@@ -1,0 +1,3 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+SF3B1	chr2:197402635-197402635_Sub:C>G	K666N	316	399	0.442	Oncogenic
+TP53	chr17:7674953-7674953_Sub:T>A	H193L	2	67	0.029	Oncogenic
