@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+IDH1	chr2:208248389-208248389_Sub:G>C	R132G	31	31	0.500	Oncogenic

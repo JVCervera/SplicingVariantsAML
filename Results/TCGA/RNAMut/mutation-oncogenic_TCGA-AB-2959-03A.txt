@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+RUNX1	chr21:34859485-34859485_Sub:C>T	R201Q	611	7	0.989	Oncogenic

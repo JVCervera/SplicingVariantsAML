@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+DNMT3A	chr2:25234374-25234374_Sub:G>A	R882C	51	44	0.537	Oncogenic

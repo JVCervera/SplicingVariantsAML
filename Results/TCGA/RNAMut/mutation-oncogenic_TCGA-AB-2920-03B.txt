@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+TP53	chr17:7675229-7675229_Del:G	P128fs*41	17	5	0.773	Oncogenic

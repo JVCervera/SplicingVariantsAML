@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+WT1	chr11:32428058-32428058_Del:C	G257fs*28	9	24	0.273	Oncogenic

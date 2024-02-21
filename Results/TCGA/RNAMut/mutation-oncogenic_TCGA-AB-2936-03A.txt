@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+RUNX1	chr21:34799310-34799310_Sub:G>A	R320*	238	292	0.449	Oncogenic

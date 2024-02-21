@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+DNMT3A	chr2:25240438-25240438_Sub:C>T	R729Q	13	18	0.419	Oncogenic

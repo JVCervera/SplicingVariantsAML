@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+TP53	chr17:7674220-7674220_Sub:C>T	R248Q	75	15	0.833	Oncogenic

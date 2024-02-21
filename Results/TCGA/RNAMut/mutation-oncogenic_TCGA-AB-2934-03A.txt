@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+DNMT3A	chr2:25240417-25240417_Sub:C>T	R736H	31	22	0.585	Oncogenic

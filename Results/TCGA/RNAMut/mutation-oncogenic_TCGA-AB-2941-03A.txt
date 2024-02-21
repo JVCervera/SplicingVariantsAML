@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+TP53	chr17:7674947-7674947_Sub:A>C	I195S	90	3	0.968	Oncogenic

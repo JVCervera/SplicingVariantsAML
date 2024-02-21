@@ -1,0 +1,3 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+FLT3	chr13:28018505-28018505_Sub:C>A	D835Y	24	318	0.070	Oncogenic
+SF3B1	chr2:197402110-197402110_Sub:T>C	K700E	241	266	0.475	Oncogenic

@@ -1,0 +1,3 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+RUNX1	chr21:34799344-34799344_Ins:T	G309fs	14	106	0.117	Oncogenic
+RUNX1	chr21:34880581-34880581_Sub:T>C	R162G	139	104	0.572	Oncogenic

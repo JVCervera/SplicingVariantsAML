@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+DNMT3A	chr2:25244237-25244237_Del:C	G590fs*60	16	1	0.941	Oncogenic

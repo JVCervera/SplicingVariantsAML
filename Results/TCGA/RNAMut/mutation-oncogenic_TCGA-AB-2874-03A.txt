@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+WT1	chr11:32392020-32392020_Sub:G>A	R462W	7	15	0.318	Oncogenic

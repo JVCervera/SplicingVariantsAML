@@ -1,0 +1,1 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info

@@ -1,0 +1,4 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+DNMT3A	chr2:25247662-25247662_Del:T	M315fs	3	17	0.150	Oncogenic
+TP53	chr17:7670685-7670685_Del:G	R342fs*2	20	260	0.071	Oncogenic
+TP53	chr17:7675076-7675076_Sub:T>C	H179R	125	29	0.812	Oncogenic

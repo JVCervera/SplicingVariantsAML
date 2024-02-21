@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+TET2	chr4:105234317-105234317_Del:C	F125fs*2	17	0	1.000	Oncogenic

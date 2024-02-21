@@ -1,0 +1,3 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+TET2	chr4:105235383-105235383_Sub:C>T	Q481*	45	40	0.529	Oncogenic
+TET2	chr4:105235957-105235957_Del:A	H672fs*27	35	43	0.449	Oncogenic

@@ -1,0 +1,3 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+WT1	chr11:32396396-32396396_Ins:A	V371fs*13	9	10	0.474	Oncogenic
+WT1	chr11:32396400-32396400_Ins:C	R369fs*15	10	4	0.714	Oncogenic

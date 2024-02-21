@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+SF3B1	chr2:197402110-197402110_Sub:T>C	K700E	250	269	0.482	Oncogenic
