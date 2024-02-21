@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+ASXL1	chr20:32436125-32436125_Del:T	T1139fs*31	3	142	0.021	Oncogenic

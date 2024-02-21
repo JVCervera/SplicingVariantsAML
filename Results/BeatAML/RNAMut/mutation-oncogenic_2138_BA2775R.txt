@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+DNMT3A	chr2:25237005-25239138_Del:CCTGTTCATA	M801fs*5	5	134	0.036	Oncogenic

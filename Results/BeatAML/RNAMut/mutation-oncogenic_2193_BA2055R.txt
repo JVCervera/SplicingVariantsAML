@@ -1,0 +1,4 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+SF3B1	chr2:197416861-197416861_Del:T	V183fs*47	3	126	0.023	Oncogenic
+TP53	chr17:7675131-7675131_Del:C	A161fs*8	2	3	0.400	Oncogenic
+U2AF1	chr21:43093196-43093196_Del:C	G210fs	6	182	0.032	Oncogenic

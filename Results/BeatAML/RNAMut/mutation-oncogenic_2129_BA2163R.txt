@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+TP53	chr17:7675217-7675217_Sub:T>C	K132R	240	13	0.949	Oncogenic

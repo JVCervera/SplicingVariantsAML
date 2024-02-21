@@ -1,0 +1,3 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+DNMT3A	chr2:25234339-25234339_Del:C	W893fs	3	118	0.025	Oncogenic
+FLT3	chr13:28018492-28018492_Sub:T>C	D839G	70	2511	0.027	Oncogenic
