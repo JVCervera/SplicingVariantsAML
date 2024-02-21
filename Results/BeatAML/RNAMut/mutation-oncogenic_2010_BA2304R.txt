@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+TP53	chr17:7674945-7674945_Sub:G>A	R196*	3	67	0.043	Oncogenic
