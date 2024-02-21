@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+SF3B1	chr2:197398582-197398582_Ins:CCTTTAA	G1005fs*5	14	256	0.052	Oncogenic

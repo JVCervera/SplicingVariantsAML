@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+TP53	chr17:7675085-7675085_Sub:C>T	C176Y	74	1	0.987	Oncogenic

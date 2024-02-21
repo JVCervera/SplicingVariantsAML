@@ -1,0 +1,3 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+DNMT3A	chr2:25235818-25235818_Sub:T>C	K829R	19	7	0.731	Oncogenic
+IDH1	chr2:208248389-208248389_Sub:G>A	R132C	19	15	0.559	Oncogenic

@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+TP53	chr17:7674864-7674864_Ins:GCGGCTC	P223fs*3	2	4	0.333	Oncogenic

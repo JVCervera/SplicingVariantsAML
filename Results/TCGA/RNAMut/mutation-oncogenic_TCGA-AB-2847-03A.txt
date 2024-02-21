@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+U2AF1	chr21:43104346-43104346_Sub:G>A	S34F	90	145	0.383	Oncogenic
