@@ -1,0 +1,3 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+ASXL1	chr20:32434924-32434924_Del:G	G738fs*5	4	149	0.026	Oncogenic
+BCOR	chrX:40073328-40073328_Del:A	L673fs*41	3	64	0.045	Oncogenic

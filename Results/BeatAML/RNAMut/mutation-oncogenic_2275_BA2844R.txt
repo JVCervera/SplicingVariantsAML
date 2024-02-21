@@ -1,0 +1,3 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+BCOR	chrX:40072766-40072766_Del:C	R861fs*17	4	70	0.054	Oncogenic
+DNMT3A	chr2:25240441-25240441_Del:C	G728fs*50	3	125	0.023	Oncogenic
