@@ -1,0 +1,2 @@
+Gene	Mutation	ProtMut	MutReads	WTReads	VAF	Info
+DNMT3A	chr2:25239131-25239131_Sub:T>A	R803W	3	145	0.020	Oncogenic
