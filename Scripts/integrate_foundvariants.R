@@ -12,7 +12,7 @@ option_list <- list(
 opt_parser <- OptionParser(
   description =paste0("R Script to integrate the found variants in DNA data with the found variants in RNA data"),
   
-  usage = "Rscript Integrate_foundvariants.R -d <dna_variants> -r <rna_variants> -o <output>",
+  usage = "Rscript integrate_foundvariants.R -d <dna_variants> -r <rna_variants> -o <output>",
   
   option_list = option_list)
 opt <- parse_args(opt_parser)
@@ -20,9 +20,9 @@ opt <- parse_args(opt_parser)
 
 
 # Check if all three arguments are defined
-if (is.null(opt$cohort_project) || is.null(opt$cohort_metadata) || is.null(opt$splice_junction) || is.null(opt$output_directory)) {
-	cat("Please provide values for all four arguments: -d <dna_variants> -r <rna_variants> -o <output> .\n")
-	cat("For help, run: Rscript Integrate_foundvariants.R -h\n")
+if (is.null(opt$dnavariants) || is.null(opt$rnavariants) || is.null(opt$output)) {
+	cat("Please provide values for all three arguments: -d <dna_variants> -r <rna_variants> -o <output> .\n")
+	cat("For help, run: Rscript integrate_foundvariants.R -h\n")
 	q(save = "no")
 }
 
@@ -121,5 +121,5 @@ m$Validable <- ifelse(m$RNA_Sample == "No RNA BAM", "No Validable", "Validable")
 m$Validable.DNA <- NULL
 m$Validable.RNA <- NULL
 
-write.xlsx(m, output, rowNames=FALSE)
+write.xlsx(m, output_file, rowNames=FALSE)
 
