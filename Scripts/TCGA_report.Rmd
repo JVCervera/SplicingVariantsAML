@@ -1,0 +1,3377 @@
+---
+title: "TCGA - Analysis of Splicing Variants"
+author: "Interactive Report"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    toc_collapsed: yes
+    toc_depth: 3
+    number_sections: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+```{r echo = F, results = 'hide'}
+library(ggplot2)
+library(dplyr)
+library(readxl)
+library(openxlsx)
+library(stringr)
+library(sqldf)
+library(tidyr)
+library(DT)
+library(plotly)
+library(knitr)
+library(kableExtra)
+library(ggsignif)
+library(rstatix)
+library(stats)
+```
+
+
+```{r echo=FALSE}
+extractedSJ_dir_in <- "/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/ExtractedSJ-Annotated/"
+normalizedEx_dir_out <- "/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/NormalizedExpression/"
+```
+
+
+In the TCGA cohort we found 11 variants of interest, of which 9 variants can be validated by RNASeq data. 
+
+The samples of interest are those where the variant has been called either in DNA or RNA, and have RNASeq data available for validation.
+
+```{r echo=FALSE}
+found_variants <- read_excel("/SplicingVariantsAML-main/Results/TCGA/TCGA.Variant_summary.xlsx", sheet = "Sheet 1")
+validable_variants <- unique(found_variants$MutationKey_Hg38[found_variants$Validable == "Validable"])
+```
+
+```{r echo=FALSE}
+to_be_validated = read.delim("/SplicingVariantsAML-main/Data/Potential_SAVs.tsv", sep ="\t")
+columns_to_select <- c("ID", "SYMBOL","MutationKey_Hg38" ,"hg19","hg38","HGVSc","HGVSp","Consequence","Prediction_merged", "Predictors" ,"MINIGENE" , "SpliceAI_pred_DP_AG","SpliceAI_pred_DP_AL","SpliceAI_pred_DP_DG","SpliceAI_pred_DP_DL" ,
+"SpliceAI_pred_DS_AG","SpliceAI_pred_DS_AL","SpliceAI_pred_DS_DG","SpliceAI_pred_DS_DL","SpliceAI_pred_SYMBOL", "MaxEntScan_alt","MaxEntScan_diff","MaxEntScan_ref","Motif","New.splice.site","Wild.Type","Mutant",   "Variation...." )
+
+found_variants <- merge(found_variants, to_be_validated[,c("MutationKey_Hg38", "HGVSc", "HGVSp")], by = "MutationKey_Hg38", all.x=TRUE)
+
+to_be_validated_2 <- to_be_validated[to_be_validated$MutationKey_Hg38 %in% validable_variants, columns_to_select]
+```
+
+
+Splicing alterations to be evaluated:
+```{r  echo=FALSE}
+datatable(
+  to_be_validated_2,
+  rownames = FALSE,
+  extensions = 'Buttons',
+  options = list(paging = TRUE,
+              pageLength = 4,
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              buttons = c( 'excel'), 
+              scrollX = TRUE,  
+              scrollY = TRUE
+              )
+)
+```
+
+
+```{r echo=FALSE}
+summary_res <- data.frame(matrix(ncol = 19, nrow = 0))
+
+colnames(summary_res) <- c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","Prediction","splice_junction_status","splice_junction_position", "sample_id","case_id",
+"RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue","VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+
+```
+
+# NRAS chr1,114716123,C,T {.tabset}
+Variant found in **5 patients** of the TCGA (**5 samples**).
+
+* Patients with NRAS chr1,114716123,C,T variant: **5 patients (5 samples)**
+* Patients with the variant and RNASeq for validation: **4 patients (4 samples)**
+
+The splicing alterations being assessed are: 
+
+* **Donor Gain**: predicted at 4bp from the variant, chr1:114716126, found in the splice junction collection, but not found in the mutated samples.
+* **Exon 2 Skipping**: chr1:114713979-114716657, found in the mutated samples.
+
+Variant information:
+```{r echo=FALSE}
+datatable(to_be_validated[to_be_validated$MutationKey_Hg38 == "chr1,114716123,C,T",],
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp', 
+              scrollX = TRUE,  
+              scrollY = TRUE,
+              columnDefs = list(list(targets = '_all', className = 'dt-center')))
+)
+```
+
+Load the extracted splice junctions of the gene harboring the mutation.
+```{r}
+extractedSJ_path <- paste0(extractedSJ_dir_in,"NRAS_UM_annotSJ.tsv")
+GeneSJ <- read.delim(extractedSJ_path, sep ="\t")
+```
+
+Set the sample's group: Mutated (MUT) or No Mutated (WT)
+```{r}
+samples_df <- found_variants[found_variants$Gene=="NRAS" & found_variants$MutationKey_Hg38 == "chr1,114716123,C,T",]
+
+cases <- samples_df$RNA_Sample[samples_df$Validable == "Validable"]
+GeneSJ$GROUP <- ifelse(GeneSJ$sample_id %in% cases , "MUT", "WT")
+```
+
+
+## SJ Lookup {.tabset}
+
+Search for the splice junctions of interest in the extracted splice junctions of the gene by position (chr_SJstart_SJend).
+
+
+### Donor Gain
+Search: predicted at 4 bp from the variant
+
+Show all the splice junctions containing the position 114716126
+```{r}
+colnames(GeneSJ)[grep("114716126",colnames(GeneSJ))]
+```
+
+Found: chr1_114709722_114716126
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr1_114709722_114716126
+```
+Samples with the SJ of interest:
+```{r}
+table(GeneSJ$chr1_114709722_114716126>0) 
+```
+Groups of the samples having the alternative splice junction:
+```{r}
+table(GeneSJ$GROUP[GeneSJ$chr1_114709722_114716126 > 0])
+```
+
+Alternative SJ not found in the mutated samples.
+
+### Exon Skipping 2
+Search: chr1:114713979-114716657
+
+Show all the splice junctions containing the position 114713979
+```{r}
+colnames(GeneSJ)[grep("114713979",colnames(GeneSJ))]
+```
+Found: chr1:114713979-114716657
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr1_114713979_114716657
+```
+
+Samples with the SJ of interest:
+```{r}
+table(GeneSJ$chr1_114713979_114716657>0) 
+```
+
+Groups of the samples having the alternative splice junction:
+```{r}
+table(GeneSJ$GROUP[GeneSJ$chr1_114713979_114716657 > 0])
+```
+
+Alternative SJ found in the mutated samples.
+
+### Canonical SJ
+Exon1-2: chr1:114716178-114716657
+
+Exon2-3: chr1:114713979-114716049
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr1_114716178_114716657
+```
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr1_114713979_114716049
+```
+
+
+## Normalization
+Count the reads of all the splice junctions of the gene harboring the variant:
+```{r}
+GeneSJ$rowSum_SJtotal <- rowSums(GeneSJ[,grep("chr", names(GeneSJ))])
+```
+
+Normalization of the expression by the total read counts of all the splice junctions of the gene:
+```{r}
+GeneSJ$Normalized_CanonEx1_2 <- (GeneSJ$chr1_114716178_114716657)/GeneSJ$rowSum_SJtotal*100
+GeneSJ$Normalized_CanonEx2_3 <- (GeneSJ$chr1_114713979_114716049)/GeneSJ$rowSum_SJtotal*100
+GeneSJ$Normalized_ES2 <- (GeneSJ$chr1_114713979_114716657)/GeneSJ$rowSum_SJtotal*100
+```
+
+Download the normalized values for the assessed splice junctions of all the AML samples:
+```{r echo=FALSE}
+normalization_df <- GeneSJ[,c("sample_id","case_id", "GROUP","Normalized_CanonEx1_2", "Normalized_CanonEx2_3",  "Normalized_ES2","chr1_114716178_114716657", "chr1_114713979_114716049","chr1_114713979_114716657", "rowSum_SJtotal","file_id.BAM","file_name.BAM","file_id.STAR.SJCounts","file_name.STAR.SJCounts" )]
+
+colnames(normalization_df)[grep("chr1_114716178_114716657", names(normalization_df))] <- "chr1_114716178_114716657_CanonEx1_2"
+colnames(normalization_df)[grep("chr1_114713979_114716049", names(normalization_df))] <- "chr1_114713979_114716049_CanonEx2_3"
+colnames(normalization_df)[grep("chr1_114713979_114716657", names(normalization_df))] <- "chr1_114713979_114716657_ES2"
+
+write.xlsx(normalization_df, paste0(normalizedEx_dir_out, "TCGA.NRAS.chr1-114716123-C-T.xlsx"), row.names = FALSE)
+```
+
+```{r echo=FALSE}
+datatable(normalization_df,
+extensions = 'Buttons',
+rownames = FALSE, 
+filter = 'top',
+options = list(paging = TRUE,
+              pageLength = 4,
+              autoWidth = FALSE,
+              dom = 'lifrtBp',
+              buttons = list(
+               list(
+                 extend = 'excel',
+                 filename = "TCGA.NRAS.chr1-114716123-C-T.Normalized" 
+               )
+              ),
+              scrollX = TRUE,  
+              scrollY = TRUE,
+              columnDefs = list(list(targets = '_all', className = 'dt-center'))
+))
+```
+
+## VAF
+```{r echo=FALSE}
+GeneSJ_subset <- GeneSJ[GeneSJ$sample_id %in% cases,]
+GeneSJ_subset$Gene <- "NRAS"
+GeneSJ_subset$MutationKey_Hg38 <- "chr1,114716123,C,T"
+
+annot_vaf <- merge(found_variants[,c("MutationKey_Hg38","Gene","HGVSc", "HGVSp","sample_id","case_id",                                               "RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf",                         "MuTect2_filter","VarScan2_filter","SomaticSniper_filter","MuSE_filter","MUTReads","WTReads","VAF")], 
+                   GeneSJ_subset[,c("Gene","MutationKey_Hg38","sample_id", "case_id", "Normalized_CanonEx1_2", "Normalized_CanonEx2_3", "Normalized_ES2")], 
+                   by.x=c("RNA_Sample", "case_id","Gene", "MutationKey_Hg38"), 
+                   by.y=c("sample_id", "case_id","Gene", "MutationKey_Hg38"))
+
+
+annot_vaf <- annot_vaf %>% select(Gene,MutationKey_Hg38,HGVSc, HGVSp,
+                                  sample_id,
+                                  case_id, RNA_Sample,DNA_Sample,
+                                  MuTect2_vaf,VarScan2_vaf,SomaticSniper_vaf,MuSE_vaf,
+                                  VAF,
+                                  Normalized_CanonEx1_2, Normalized_CanonEx2_3, Normalized_ES2,
+                                  everything()
+                                  )
+colnames(annot_vaf)[grep("VAF", names(annot_vaf))] <- "VAF_RNA"
+colnames(annot_vaf)[grep("MUTReads", names(annot_vaf))] <- "MUTReads_RNA"
+colnames(annot_vaf)[grep("WTReads", names(annot_vaf))] <- "WTReads_RNA"
+
+write.xlsx(annot_vaf, paste0(normalizedEx_dir_out, "TCGA.NRAS.chr1-114716123-C-T.MUT.xlsx"), row.names = FALSE)
+```
+
+Mutated samples vaf:
+```{r echo=FALSE}
+datatable(annot_vaf,
+extensions = 'Buttons',
+rownames = FALSE, 
+filter = 'top',
+options = list(paging = TRUE,
+              pageLength = 4,
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              buttons = list(
+               list(
+                 extend = 'excel',
+                 filename = "TCGA.NRAS.chr1-114716123-C-T.MUT" 
+               )
+              ),
+              scrollX = TRUE,  
+              scrollY = TRUE
+              )
+)
+```
+
+## Plots {.tabset}
+
+```{r echo=FALSE}
+GeneSJ$GROUP <- ifelse(GeneSJ$GROUP == "MUT", "MUT", "WT")
+GeneSJ$GROUP <- as.factor(GeneSJ$GROUP)
+```
+
+### Static Dot Plots 
+Canonical SJ:
+
+```{r echo=FALSE}
+ggplot(GeneSJ, aes(sample_id,Normalized_CanonEx1_2, color=GROUP)) + 
+  geom_point(size=.8)  +
+  ggtitle("Normalized expression of NRAS Exon 1-2 Splice Junction") +
+  labs(color='GROUP') 
+
+ggplot(GeneSJ, aes(sample_id,Normalized_CanonEx2_3,color=GROUP)) + 
+  geom_point(size=.8) +
+  ggtitle("Normalized expression of NRAS Exon 2-3 Splice Junction") +
+  labs(color='GROUP') 
+```
+
+Splicing alterations:
+
+```{r echo=FALSE}
+ggplot(GeneSJ, aes(sample_id,Normalized_ES2,color=GROUP)) +
+  geom_point(size=.8) +
+  ggtitle("Normalized expression of NRAS Exon Skipping 2 Splice Junction") +
+  labs(color='GROUP') 
+```
+
+### Interactive Dot Plots
+
+```{r echo=FALSE}
+plot_df <- merge(GeneSJ,annot_vaf[c("RNA_Sample", "VAF_RNA", 
+                                    "MuTect2_vaf", "VarScan2_vaf", "SomaticSniper_vaf", "MuSE_vaf")],
+                 by.x="sample_id", by.y="RNA_Sample", all.x = TRUE)
+```
+
+Canonical SJ:
+
+```{r echo=FALSE}
+ggplotly(ggplot(plot_df, aes(sample_id,Normalized_CanonEx1_2, color=GROUP)) + 
+  geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
+                             "\nVAF VarScan2: ",VarScan2_vaf,
+                             "\nVAF SomaticSniper: ",SomaticSniper_vaf,
+                             "\nVAF MuSE: ",MuSE_vaf)),size= 0.8)  +
+  ggtitle("Normalized expression of NRAS Exon 1-2 Splice Junction") +
+  labs(color='GROUP') 
+)
+```
+
+
+```{r echo=FALSE}
+ggplotly(ggplot(plot_df, aes(sample_id,Normalized_CanonEx2_3,color=GROUP)) + 
+  geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
+                             "\nVAF VarScan2: ",VarScan2_vaf,
+                             "\nVAF SomaticSniper: ",SomaticSniper_vaf,
+                             "\nVAF MuSE: ",MuSE_vaf)),size= 0.8) +
+  ggtitle("Normalized expression of NRAS Exon 2-3 Splice Junction") +
+  labs(color='GROUP') 
+)
+```
+
+Splicing alteration:
+
+```{r echo=FALSE}
+ggplotly(ggplot(plot_df, aes(sample_id,Normalized_ES2,color=GROUP)) +
+  geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
+                             "\nVAF VarScan2: ",VarScan2_vaf,
+                             "\nVAF SomaticSniper: ",SomaticSniper_vaf,
+                             "\nVAF MuSE: ",MuSE_vaf)),size= 0.8)  +
+  ggtitle("Normalized expression of NRAS Exon Skipping 2 Splice Junction") +
+  labs(color='GROUP') 
+)
+```
+
+### Violin Plots
+Violin Plots for the alternative splice junctions interrogated:
+```{r echo=FALSE}
+plot_boxplot <- plot_df[plot_df$GROUP %in% c("WT"),]
+plot_dotplot <- plot_df[plot_df$GROUP %in% c("MUT"),]
+
+GEN = "NRAS"
+SJ = "chr1:114713979-114716657"
+
+ggplot(plot_df, aes(y=Normalized_ES2, x=factor(GROUP, level=c("WT", "MUT")))) + 
+       geom_violin(scale="area") +
+       geom_point(data = plot_dotplot, 
+                  aes(y=Normalized_ES2, x=GROUP),
+                  color="black",
+                  size=2
+                  ) +
+        
+       ylab("Normalized SJ expression") +
+       xlab(paste(GEN, SJ))
+```
+
+## Statistical Analysis {.tabset}
+
+```{r}
+SJCounts <- GeneSJ #TCGA.NRAS.chr1-114716123-C-T.xlsx
+```
+
+### Exon Skipping {.tabset}
+#### Expression Difference 
+Normality Test:
+```{r}
+shapiro.test(SJCounts$Normalized_ES2[SJCounts$GROUP == "WT"])
+```
+
+Value of Mean Normalized Expression of the Alternative SJ in WT samples:
+```{r}
+mean_WT_SJi <- mean(SJCounts$Normalized_ES2[SJCounts$GROUP == "WT"], na.rm=TRUE)
+mean_WT_SJi
+```
+
+Normalized Expression Value of the Alternative SJ in the MUT sample:
+```{r}
+MUT_SJi <- SJCounts$Normalized_ES2[SJCounts$GROUP == "MUT"]
+MUT_SJi
+```
+
+Deviation from the mean normalized expression:
+```{r}
+SJCounts$Difference <-  SJCounts$Normalized_ES2 - mean_WT_SJi
+```
+
+```{r echo=FALSE}
+table <- SJCounts[SJCounts$GROUP == "WT", c("sample_id", "Normalized_ES2", "Difference")]
+table <- table[order(table$Difference, decreasing = TRUE),]
+```
+
+
+```{r echo=FALSE}
+datatable(table,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp'
+))
+```
+
+Difference in the MUT sample: deviation of the Normalized expression of the MUT patient from the mean normalized WT expression
+```{r}
+SJCounts$Difference[SJCounts$GROUP == "MUT"]
+```
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
+  ylab("Differential Expression") +
+  labs(color = "GROUP",
+       title = "Differential Expression Distribution")
+```
+
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
+  geom_boxplot() +
+  ylab("Differential Expression") +
+  xlab("GROUP")
+```
+
+#### ECDF
+
+```{r}
+v_ecdf <- ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"])
+v_ecdf
+```
+
+```{r}
+plot(ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"]))
+```
+
+```{r}
+v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+```
+
+
+```{r}
+MUT_df <- SJCounts[SJCounts$GROUP == "MUT",c("sample_id","case_id", "Normalized_ES2")]
+colnames(MUT_df) <- c("sample_id", "case_id", "NormalizedExpression")
+MUT_df$ECDF <- v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+MUT_df$Pvalue <- NA
+MUT_df$Prediction <- "Exon Skipping"
+MUT_df$splice_junction_status <- "AlternativeSJ found in MUT samples"
+MUT_df$splice_junction_position <- "chr1:114713979-114716657"
+
+MUT_df$ECDF <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$ECDF)
+
+```
+
+
+```{r echo=FALSE}
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+```
+
+Download the vaf, inferred percentiles and pvalues of the mutated samples:
+```{r echo=FALSE}
+datatable(MUT_vaf,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              scrollX=TRUE
+))
+```
+
+#### Mann Whitney 
+Normality:
+```{r}
+shapiro.test(SJCounts$Normalized_ES2[SJCounts$GROUP== "WT"])
+```
+
+```{r}
+shapiro.test(SJCounts$Normalized_ES2[SJCounts$GROUP== "MUT"])
+```
+
+Mann Whitney:
+```{r}
+wt <- wilcox.test(x=SJCounts$Normalized_ES2[SJCounts$GROUP== "MUT"], 
+                  y=SJCounts$Normalized_ES2[SJCounts$GROUP== "WT"],
+                  alternative = "two.sided", 
+                  paired = FALSE, 
+                  conf.int = 0.95)
+
+wt
+```
+
+```{r echo=FALSE}
+stat_df <- data.frame(matrix(ncol = 19, nrow = 1))
+colnames(stat_df) <- c("Gene","MutationKey_Hg38","HGVSc","HGVSp","Prediction","splice_junction_status","splice_junction_position", "sample_id","case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue","VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+
+stat_df$Gene <- unique(MUT_vaf$Gene)
+stat_df$MutationKey_Hg38 <- unique(MUT_vaf$MutationKey_Hg38)
+stat_df$HGVSc <- unique(MUT_vaf$HGVSc)
+stat_df$HGVSp <- unique(MUT_vaf$HGVSp)
+stat_df$sample_id <- paste(MUT_vaf$sample_id, collapse = ';\n') 
+stat_df$case_id <- paste(MUT_vaf$case_id, collapse = ';\n') 
+stat_df$RNA_Sample <- paste(MUT_vaf$RNA_Sample, collapse = ';\n') 
+stat_df$DNA_Sample <- paste(MUT_vaf$DNA_Sample, collapse = ';\n')
+stat_df$NormalizedExpression <- paste0(MUT_vaf$NormalizedExpression, collapse= ";\n")
+stat_df$ECDF <- paste0(MUT_vaf$ECDF, collapse = ";\n")
+stat_df$VAF_RNA <-  paste(MUT_vaf$VAF_RNA, collapse = ';\n')
+stat_df$MuTect2_vaf <-  paste(MUT_vaf$MuTect2_vaf, collapse = ';\n')
+stat_df$VarScan2_vaf <-  paste(MUT_vaf$VarScan2_vaf, collapse = ';\n')
+stat_df$SomaticSniper_vaf <-  paste(MUT_vaf$SomaticSniper_vaf, collapse = ';\n')
+stat_df$MuSE_vaf <-  paste(MUT_vaf$MuSE_vaf, collapse = ';\n')
+stat_df$Prediction  <- unique(MUT_vaf$Prediction)
+stat_df$splice_junction_status <- unique(MUT_vaf$splice_junction_status)
+stat_df$splice_junction_position <- unique(MUT_vaf$splice_junction_position)
+
+stat_df$Pvalue <- wt$p.value
+```
+
+```{r echo=FALSE}
+summary_res <- rbind(summary_res, stat_df)
+```
+
+
+```{r echo=FALSE}
+## Add not found effects information:
+MUT_df <- MUT_df[,c("sample_id", "case_id")]
+MUT_df$Prediction <- "Donor Gain"
+MUT_df$splice_junction_status <- "AlternativeSJ not found in MUT samples"
+MUT_df$splice_junction_position <- "chr1:114709722-114716126"
+MUT_df$ECDF <- NA
+MUT_df$Pvalue <- NA
+
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38", "HGVSc","HGVSp","Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+
+stat_df <- data.frame(matrix(ncol = 19, nrow = 1))
+colnames(stat_df) <- c("Gene","MutationKey_Hg38","HGVSc","HGVSp","Prediction","splice_junction_status","splice_junction_position", "sample_id","case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue","VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+stat_df$Gene <- unique(MUT_vaf$Gene)
+stat_df$MutationKey_Hg38 <- unique(MUT_vaf$MutationKey_Hg38)
+stat_df$HGVSc <- unique(MUT_vaf$HGVSc)
+stat_df$HGVSp <- unique(MUT_vaf$HGVSp)
+stat_df$sample_id <- paste(MUT_vaf$sample_id, collapse = ';\n') 
+stat_df$case_id <- paste(MUT_vaf$case_id, collapse = ';\n') 
+stat_df$RNA_Sample <- paste(MUT_vaf$RNA_Sample, collapse = ';\n') 
+stat_df$DNA_Sample <- paste(MUT_vaf$DNA_Sample, collapse = ';\n')
+stat_df$NormalizedExpression <- NA
+stat_df$ECDF <- NA
+stat_df$VAF_RNA <-  paste(MUT_vaf$VAF_RNA, collapse = ';\n')
+stat_df$MuTect2_vaf <-  paste(MUT_vaf$MuTect2_vaf, collapse = ';\n')
+stat_df$VarScan2_vaf <-  paste(MUT_vaf$VarScan2_vaf, collapse = ';\n')
+stat_df$SomaticSniper_vaf <-  paste(MUT_vaf$SomaticSniper_vaf, collapse = ';\n')
+stat_df$MuSE_vaf <-  paste(MUT_vaf$MuSE_vaf, collapse = ';\n')
+stat_df$Prediction  <- unique(MUT_vaf$Prediction)
+stat_df$splice_junction_status <- unique(MUT_vaf$splice_junction_status)
+stat_df$splice_junction_position <- unique(MUT_vaf$splice_junction_position)
+
+stat_df$Pvalue <- NA
+
+## Save
+summary_res <- rbind(summary_res, stat_df)
+```
+
+
+```{r echo=FALSE}
+rm(GeneSJ, normalization_df, GeneSJ_subset, annot_vaf, plot_df, samples_df,table, plot_boxplot, plot_dotplot, vaf_select, SJCounts, MUT_df, MUT_vaf)
+```
+
+# KRAS chr12,25245347,C,T {.tabset}
+Variant found in **2 patients** of the TCGA (**2 samples**).
+
+* Patients with KRAS chr12,25245347,C,T variant: **2 patients (2 samples)**
+* Patients with the variant and RNASeq for validation: **2 patients (2 samples)**
+
+The splicing alterations being assessed are: 
+
+* **Donor Gain**: predicted at 1bp from the variant, chr12:25245345, found in the mutated samples.
+
+
+Variant information:
+```{r echo=FALSE}
+datatable(to_be_validated[to_be_validated$MutationKey_Hg38 == "chr12,25245347,C,T",],
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp', 
+              scrollX = TRUE,  
+              scrollY = TRUE,
+              columnDefs = list(list(targets = '_all', className = 'dt-center')))
+)
+```
+
+Load the extracted splice junctions of the gene harboring the mutation.
+```{r}
+extractedSJ_path <- paste0(extractedSJ_dir_in,"KRAS_UM_annotSJ.tsv")
+GeneSJ <- read.delim(extractedSJ_path, sep ="\t")
+```
+
+Set the sample's group: Mutated (MUT) or No Mutated (WT)
+```{r}
+samples_df <- found_variants[found_variants$Gene=="KRAS" & found_variants$MutationKey_Hg38 == "chr12,25245347,C,T",]
+
+cases <- samples_df$RNA_Sample[samples_df$Validable == "Validable"]
+GeneSJ$GROUP <- ifelse(GeneSJ$sample_id %in% cases , "MUT", "WT")
+```
+
+
+## SJ Lookup {.tabset}
+
+Search for the splice junctions of interest in the extracted splice junctions of the gene by position (chr_SJstart_SJend).
+
+
+### Donor Gain
+Search: predicted a 1bp from the variant, chr12:25245345
+
+Show all the splice junctions containing the positions between 25245340 - 25245349
+```{r}
+colnames(GeneSJ)[grep("2524534",colnames(GeneSJ))]
+```
+Alternative SJ not found in the splice junction collection.
+
+## VAF
+```{r echo=FALSE}
+GeneSJ_subset <- GeneSJ[GeneSJ$sample_id %in% cases,]
+GeneSJ_subset$Gene <- "KRAS"
+GeneSJ_subset$MutationKey_Hg38 <- "chr12,25245347,C,T"
+
+annot_vaf <- merge(found_variants[,c("MutationKey_Hg38","Gene","HGVSc","HGVSp","sample_id","case_id",                                               "RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf",                         "MuTect2_filter","VarScan2_filter","SomaticSniper_filter","MuSE_filter","MUTReads","WTReads","VAF")], 
+                   GeneSJ_subset[,c("Gene","MutationKey_Hg38","sample_id", "case_id")], 
+                   by.x=c("RNA_Sample", "case_id","Gene", "MutationKey_Hg38"), 
+                   by.y=c("sample_id", "case_id","Gene", "MutationKey_Hg38"))
+
+
+annot_vaf <- annot_vaf %>% select(Gene,MutationKey_Hg38,HGVSc, HGVSp,
+                                  sample_id,
+                                  case_id, RNA_Sample,DNA_Sample,
+                                  MuTect2_vaf,VarScan2_vaf,SomaticSniper_vaf,MuSE_vaf,
+                                  VAF,
+                                  everything()
+                                  )
+colnames(annot_vaf)[grep("VAF", names(annot_vaf))] <- "VAF_RNA"
+colnames(annot_vaf)[grep("MUTReads", names(annot_vaf))] <- "MUTReads_RNA"
+colnames(annot_vaf)[grep("WTReads", names(annot_vaf))] <- "WTReads_RNA"
+
+write.xlsx(annot_vaf, paste0(normalizedEx_dir_out, "TCGA.KRAS.chr12-25245347-C-T.MUT.xlsx"), row.names = FALSE)
+```
+
+Mutated samples vaf:
+```{r echo=FALSE}
+datatable(annot_vaf,
+extensions = 'Buttons',
+rownames = FALSE, 
+filter = 'top',
+options = list(paging = TRUE,
+              pageLength = 4,
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              buttons = list(
+               list(
+                 extend = 'excel',
+                 filename = "TCGA.KRAS.chr12-25245347-C-T.MUT" 
+               )
+              ),
+              scrollX = TRUE,  
+              scrollY = TRUE
+              )
+)
+```
+
+
+```{r echo=FALSE}
+## Generate Mut_df
+MUT_df <- GeneSJ[GeneSJ$GROUP == "MUT",c("sample_id","case_id")]
+```
+
+
+```{r echo=FALSE}
+## Add not found effects information: Donor Gain 1
+MUT_df <- MUT_df[,c("sample_id", "case_id")]
+MUT_df$Prediction <- "Donor Gain"
+MUT_df$splice_junction_status <- "AlternativeSJ not found in SJ collection"
+MUT_df$splice_junction_position <- "chr12:25245345"
+MUT_df$NormalizedExpression <- NA
+MUT_df$ECDF <- NA
+MUT_df$Pvalue <- NA
+
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+
+## Save
+summary_res <- rbind(summary_res, MUT_vaf)
+```
+
+```{r echo=FALSE}
+rm(GeneSJ, normalization_df, GeneSJ_subset, annot_vaf, plot_df, samples_df,table, plot_boxplot, plot_dotplot, vaf_select, SJCounts, MUT_df, MUT_vaf)
+```
+
+
+# KMT2D chr12,49022063,G,A {.tabset}
+Variant found in **1 patient** of the TCGA (**1 sample**).
+
+* Patients with KMT2D chr12,49022063,G,A variant: **1 patient (1 sample)**
+* Patients with the variant and RNASeq for validation: **1 patient (1 sample)**
+
+The splicing alterations being assessed are: 
+
+* **Donor Gain**:  predicted at 2bp from the variant, chr12:49022064, not found in the splice junction collection.
+* **Donor Gain**: chr12:49022070, not found in the splice junction collection.
+
+Variant information:
+```{r echo=FALSE}
+datatable(to_be_validated[to_be_validated$MutationKey_Hg38 == "chr12,49022063,G,A",],
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp', 
+              scrollX = TRUE,  
+              scrollY = TRUE,
+              columnDefs = list(list(targets = '_all', className = 'dt-center')))
+)
+```
+
+Load the extracted splice junctions of the gene harboring the mutation.
+```{r}
+extractedSJ_path <- paste0(extractedSJ_dir_in,"KMT2D_UM_annotSJ.tsv")
+GeneSJ <- read.delim(extractedSJ_path, sep ="\t")
+```
+
+Set the sample's group: Mutated (MUT) or No Mutated (WT)
+
+```{r}
+samples_df <- found_variants[found_variants$Gene=="KMT2D" & found_variants$MutationKey_Hg38 == "chr12,49022063,G,A",]
+
+cases <- samples_df$RNA_Sample[samples_df$Validable == "Validable"]
+GeneSJ$GROUP <- ifelse(GeneSJ$sample_id %in% cases , "MUT", "WT")
+```
+
+
+## SJ Lookup{.tabset}
+
+Search for the splice junctions of interest in the extracted splice junctions of the gene by position (chr_SJstart_SJend).
+
+### Donor Gain 
+Search: predicted at 49022065
+
+Show all the splice junctions containing the positions from 49022060 to 49022069
+```{r}
+colnames(GeneSJ)[grepl("4902206", colnames(GeneSJ))] 
+```
+Alternative SJ not found in the splice junction collection.
+
+### Donor Gain 
+
+Show all the splice junctions containing the positions from 49022070 to 49022079
+```{r}
+colnames(GeneSJ)[grepl("4902207", colnames(GeneSJ))] 
+```
+
+Alternative SJ not found in the splice junction collection.
+
+## VAF
+```{r echo=FALSE}
+GeneSJ_subset <- GeneSJ[GeneSJ$sample_id %in% cases,]
+GeneSJ_subset$Gene <- "KMT2D"
+GeneSJ_subset$MutationKey_Hg38 <- "chr12,49022063,G,A"
+
+annot_vaf <- merge(found_variants[,c("MutationKey_Hg38","Gene","HGVSc","HGVSp","sample_id","case_id",                                               "RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf",                         "MuTect2_filter","VarScan2_filter","SomaticSniper_filter","MuSE_filter","MUTReads","WTReads","VAF")], 
+                   GeneSJ_subset[,c("Gene","MutationKey_Hg38","sample_id", "case_id")], 
+                   by.x=c("RNA_Sample", "case_id","Gene", "MutationKey_Hg38"), 
+                   by.y=c("sample_id", "case_id","Gene", "MutationKey_Hg38"))
+
+
+annot_vaf <- annot_vaf %>% select(Gene,MutationKey_Hg38,HGVSc, HGVSp,
+                                  sample_id,
+                                  case_id, RNA_Sample,DNA_Sample,
+                                  MuTect2_vaf,VarScan2_vaf,SomaticSniper_vaf,MuSE_vaf,
+                                  VAF,
+                                  everything()
+                                  )
+colnames(annot_vaf)[grep("VAF", names(annot_vaf))] <- "VAF_RNA"
+colnames(annot_vaf)[grep("MUTReads", names(annot_vaf))] <- "MUTReads_RNA"
+colnames(annot_vaf)[grep("WTReads", names(annot_vaf))] <- "WTReads_RNA"
+
+write.xlsx(annot_vaf, paste0(normalizedEx_dir_out, "TCGA.KMT2D.chr12-49022063-G-A.MUT.xlsx"), row.names = FALSE)
+```
+
+Mutated samples vaf:
+```{r echo=FALSE}
+datatable(annot_vaf,
+extensions = 'Buttons',
+rownames = FALSE, 
+filter = 'top',
+options = list(paging = TRUE,
+              pageLength = 4,
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              buttons = list(
+               list(
+                 extend = 'excel',
+                 filename = "TCGA.KMT2D.chr12-49022063-G-A.MUT" 
+               )
+              ), 
+              scrollX = TRUE,  
+              scrollY = TRUE
+              )
+)
+```
+
+
+```{r echo=FALSE}
+## Generate Mut_df
+MUT_df <- GeneSJ[GeneSJ$GROUP == "MUT",c("sample_id","case_id")]
+```
+
+
+```{r echo=FALSE}
+## Add not found effects information: Donor Gain 1
+MUT_df <- MUT_df[,c("sample_id", "case_id")]
+MUT_df$Prediction <- "Donor Gain"
+MUT_df$splice_junction_status <- "AlternativeSJ not found in SJ collection"
+MUT_df$splice_junction_position <- "chr12:49022064"
+MUT_df$ECDF <- NA
+MUT_df$Pvalue <- NA
+MUT_df$NormalizedExpression <- NA
+
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+
+## Save
+summary_res <- rbind(summary_res, MUT_vaf)
+```
+
+```{r echo=FALSE}
+## Add not found effects information: Donor Gain 2
+MUT_df <- MUT_df[,c("sample_id", "case_id")]
+MUT_df$Prediction <- "Donor Gain"
+MUT_df$splice_junction_status <- "AlternativeSJ not found in SJ collection"
+MUT_df$splice_junction_position <- "chr12:49022070"
+MUT_df$ECDF <- NA
+MUT_df$Pvalue <- NA
+MUT_df$NormalizedExpression <- NA
+
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+
+## Save
+summary_res <- rbind(summary_res, MUT_vaf)
+```
+
+
+```{r echo=FALSE}
+rm(GeneSJ, normalization_df, GeneSJ_subset, annot_vaf, plot_df, samples_df,table, plot_boxplot, plot_dotplot, vaf_select, SJCounts, MUT_df, MUT_vaf)
+```
+
+# FLT3 chr13,28018485,G,T {.tabset}
+Variant found in **2 patients** of the TCGA (**2 samples**).
+
+* Patients with FLT3 chr13,28018485,G,T variant: **2 patients (2 samples)**
+* Patients with the variant and RNASeq for validation: **2 patients (2 samples)**
+
+
+The splicing alterations being assessed are: 
+
+* **Donor Loss**: chr13:28015702-28018466; donor splice site chr13:28018466.
+* **Exon Skipping 20**: chr13:28015702-28023349, found in mutated samples.
+* **Exon Skipping 19**: chr13:28018590-28024860, not found in mutated samples.
+* **Exon Skipping 19 + 20**: chr13:28015702-28024860, found in mutated samples.
+ 
+Variant information:
+```{r echo=FALSE}
+datatable(to_be_validated[to_be_validated$MutationKey_Hg38 == "chr13,28018485,G,T",],
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp', 
+              scrollX = TRUE,  
+              scrollY = TRUE,
+              columnDefs = list(list(targets = '_all', className = 'dt-center')))
+)
+```
+
+Load the extracted splice junctions of the gene harboring the mutation.
+```{r}
+extractedSJ_path <- paste0(extractedSJ_dir_in,"FLT3_UM_annotSJ.tsv")
+GeneSJ <- read.delim(extractedSJ_path, sep ="\t")
+```
+
+Set the sample's group: Mutated (MUT) or No Mutated (WT)
+
+```{r}
+samples_df <- found_variants[found_variants$Gene=="FLT3" & found_variants$MutationKey_Hg38 == "chr13,28018485,G,T",]
+
+cases <- samples_df$RNA_Sample[samples_df$Validable == "Validable"]
+GeneSJ$GROUP <- ifelse(GeneSJ$sample_id %in% cases , "MUT", "WT")
+```
+
+
+## SJ Lookup{.tabset}
+
+Search for the splice junctions of interest in the extracted splice junctions of the gene by position (chr_SJstart_SJend).
+
+### Exon Skipping 20
+Search: chr13:28015702-28023349 
+
+Show all the splice junctions containing the position 28015702_28023349
+```{r}
+colnames(GeneSJ)[grep("28015702_28023349",colnames(GeneSJ))]
+```
+
+Found: chr13:28015702-28023349
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr13_28015702_28023349
+```
+Samples with the SJ of interest:
+```{r}
+table(GeneSJ$chr13_28015702_28023349>0) 
+```
+Groups of the samples having the alternative splice junction:
+```{r}
+table(GeneSJ$GROUP[GeneSJ$chr13_28015702_28023349 > 0])
+```
+
+Alternative SJ found in the mutated samples.
+
+### Exon Skipping 19
+Search: chr13:28018590-28024860
+
+Show all the splice junctions containing the positions 28018590-28024860
+```{r}
+colnames(GeneSJ)[grep("28018590_28024860",colnames(GeneSJ))]
+```
+
+Found: chr13:28018590-28024860
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr13_28018590_28024860
+```
+
+Samples with the SJ of interest:
+```{r}
+table(GeneSJ$chr13_28018590_28024860>0) 
+```
+
+Groups of the samples having the alternative splice junction:
+```{r}
+table(GeneSJ$GROUP[GeneSJ$chr13_28018590_28024860 > 0])
+```
+Alternative SJ found in the mutated samples.
+
+### Exon Skipping 19+20
+Search: chr13:28015702-28024860
+
+Show all the splice junctions containing the positions 28015702-28024860
+```{r}
+colnames(GeneSJ)[grep("28015702_28024860",colnames(GeneSJ))]
+```
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr13_28015702_28024860
+```
+
+Samples with the SJ of interest:
+```{r}
+table(GeneSJ$chr13_28015702_28024860 >0) 
+```
+
+Groups of the samples having the alternative splice junction:
+```{r}
+table(GeneSJ$GROUP[GeneSJ$chr13_28015702_28024860 > 0])
+```
+Alternative SJ found in the mutated samples.
+
+### Canonical SJ
+Exon 19-20	chr13:28018590-28023349
+
+Exon 20-21	chr13:28015702-28018466; splice site chr13:28018466
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr13_28018590_28023349
+```
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr13_28015702_28018466
+```
+
+
+## Normalization
+Count the reads of all the splice junctions of the gene harboring the variant:
+```{r}
+GeneSJ$rowSum_SJtotal <- rowSums(GeneSJ[,grep("chr", names(GeneSJ))])
+```
+
+Normalization of the expression by the total read counts of all the splice junctions of the gene:
+```{r}
+GeneSJ$Normalized_CanonEx19_20 <- (GeneSJ$chr13_28018590_28023349)/GeneSJ$rowSum_SJtotal*100
+GeneSJ$Normalized_CanonEx20_21 <- (GeneSJ$chr13_28015702_28018466)/GeneSJ$rowSum_SJtotal*100
+
+GeneSJ$Normalized_SE20 <- (GeneSJ$chr13_28015702_28023349)/GeneSJ$rowSum_SJtotal*100
+GeneSJ$INCLUSION_Ex20 <- GeneSJ$chr13_28018590_28023349 + GeneSJ$chr13_28015702_28018466
+GeneSJ$PSI_SE20 <- (GeneSJ$INCLUSION_Ex20)/(GeneSJ$chr13_28015702_28023349+GeneSJ$INCLUSION_Ex20)
+
+GeneSJ$Normalized_SE1920 <- (GeneSJ$chr13_28015702_28024860)/GeneSJ$rowSum_SJtotal*100
+```
+
+Download the normalized values for the assessed splice junctions of all the AML samples:
+```{r echo=FALSE}
+normalization_df <- GeneSJ[,c("sample_id","case_id", "GROUP",
+                              "Normalized_CanonEx19_20", "Normalized_CanonEx20_21", "Normalized_SE20", "INCLUSION_Ex20","PSI_SE20",
+                              "Normalized_SE1920", 
+                              "chr13_28018590_28023349", "chr13_28015702_28018466", "chr13_28015702_28023349", 
+                              "chr13_28015702_28024860", "rowSum_SJtotal","file_id.BAM","file_name.BAM","file_id.STAR.SJCounts","file_name.STAR.SJCounts" )]
+
+colnames(normalization_df)[grep("chr13_28018590_28023349", names(normalization_df))] <- "chr13_28018590_28023349_CanonEx19_20"
+colnames(normalization_df)[grep("chr13_28015702_28018466", names(normalization_df))] <- "chr13_28015702_28018466_CanonEx20_21"
+colnames(normalization_df)[grep("chr13_28015702_28023349", names(normalization_df))] <- "chr13_28015702_28023349_SE20"
+colnames(normalization_df)[grep("chr13_28015702_28024860", names(normalization_df))] <- "chr13_28015702_28024860_SE1920"
+
+write.xlsx(normalization_df, paste0(normalizedEx_dir_out, "TCGA.FLT3.chr13-28018485-G-T.xlsx"), row.names = FALSE)
+```
+
+```{r echo=FALSE}
+datatable(normalization_df,
+extensions = 'Buttons',
+rownames = FALSE, 
+filter = 'top',
+options = list(paging = TRUE,
+              pageLength = 4,
+              autoWidth = FALSE,
+              dom = 'lifrtBp',
+              buttons = list(
+               list(
+                 extend = 'excel',
+                 filename = "TCGA.FLT3.chr13-28018485-G-T.Normalized" 
+               )
+              ), 
+              scrollX = TRUE,  
+              scrollY = TRUE,
+              columnDefs = list(list(targets = '_all', className = 'dt-center'))
+))
+```
+
+## VAF
+```{r echo=FALSE}
+GeneSJ_subset <- GeneSJ[GeneSJ$sample_id %in% cases,]
+GeneSJ_subset$Gene <- "FLT3"
+GeneSJ_subset$MutationKey_Hg38 <- "chr13,28018485,G,T"
+
+annot_vaf <- merge(found_variants[,c("MutationKey_Hg38","Gene","HGVSc","HGVSp","sample_id","case_id",                                               "RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf",                         "MuTect2_filter","VarScan2_filter","SomaticSniper_filter","MuSE_filter","MUTReads","WTReads","VAF")], 
+                   GeneSJ_subset[,c("Gene","MutationKey_Hg38","sample_id", "case_id", "Normalized_CanonEx19_20", "Normalized_CanonEx20_21", "Normalized_SE20", "PSI_SE20","Normalized_SE1920")], 
+                   by.x=c("RNA_Sample", "case_id","Gene", "MutationKey_Hg38"), 
+                   by.y=c("sample_id", "case_id","Gene", "MutationKey_Hg38"))
+
+
+annot_vaf <- annot_vaf %>% select(Gene,MutationKey_Hg38,HGVSc, HGVSp,
+                                  sample_id,
+                                  case_id, RNA_Sample,DNA_Sample,
+                                  MuTect2_vaf,VarScan2_vaf,SomaticSniper_vaf,MuSE_vaf,
+                                  VAF,
+                                  Normalized_CanonEx19_20, Normalized_CanonEx20_21, Normalized_SE20, PSI_SE20,
+                                  Normalized_SE1920,
+                                  everything()
+                                  )
+colnames(annot_vaf)[grep("VAF", names(annot_vaf))] <- "VAF_RNA"
+colnames(annot_vaf)[grep("MUTReads", names(annot_vaf))] <- "MUTReads_RNA"
+colnames(annot_vaf)[grep("WTReads", names(annot_vaf))] <- "WTReads_RNA"
+
+write.xlsx(annot_vaf, paste0(normalizedEx_dir_out, "TCGA.FLT3.chr13-28018485-G-T.MUT.xlsx"), row.names = FALSE)
+```
+
+Mutated samples vaf:
+```{r echo=FALSE}
+datatable(annot_vaf,
+extensions = 'Buttons',
+rownames = FALSE, 
+filter = 'top',
+options = list(paging = TRUE,
+              pageLength = 4,
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              buttons = list(
+               list(
+                 extend = 'excel',
+                 filename = "TCGA.FLT3.chr13-28018485-G-T.MUT" 
+               )
+              ), 
+              scrollX = TRUE,  
+              scrollY = TRUE
+              )
+)
+```
+
+## Plots {.tabset}
+
+```{r echo=FALSE}
+GeneSJ$GROUP <- ifelse(GeneSJ$GROUP == "MUT", "MUT", "WT")
+GeneSJ$GROUP <- as.factor(GeneSJ$GROUP)
+```
+
+### Static Dot Plots 
+Canonical splice junction: Exon 20-21	chr13:28015702-28018466; donor splice site chr13:28018466
+
+```{r echo=FALSE}
+ggplot(GeneSJ, aes(sample_id,Normalized_CanonEx20_21,color=GROUP)) + 
+  geom_point(size=.8) +
+  labs(color='GROUP', 
+       title = "Normalized Expression of FLT3 chr13:28015702-28018466", 
+       subtitle="Potential Donor Loss Effect",
+       y = "Normalized Expression")
+```
+
+
+Splicing alterations:
+
+```{r echo=FALSE}
+ggplot(GeneSJ, aes(sample_id,Normalized_SE20,color=GROUP)) + 
+  geom_point(size=.8) +
+  labs(color='GROUP', 
+       title = "Normalized Expression of FLT3 chr13:28015702-28023349", 
+       subtitle="Potential Exon 20 Skipping",
+       y = "Normalized Expression")
+```
+
+
+```{r echo=FALSE}
+ggplot(GeneSJ, aes(sample_id,Normalized_SE1920,color=GROUP)) + 
+  geom_point(size=.8) +
+  labs(color='GROUP', 
+       title = "Normalized Expression of FLT3 chr13:28015702-28024860", 
+       subtitle="Potential Exon 19+20 Skipping",
+       y = "Normalized Expression")
+```
+
+### Interactive Dot Plots
+
+```{r echo=FALSE}
+plot_df <- merge(GeneSJ,annot_vaf[c("RNA_Sample", "VAF_RNA", 
+                                    "MuTect2_vaf", "VarScan2_vaf", "SomaticSniper_vaf", "MuSE_vaf")],
+                 by.x="sample_id", by.y="RNA_Sample", all.x = TRUE)
+```
+
+Canonical splice junction: Exon 20-21	chr13:28015702-28018466; donor splice site chr13:28018466
+
+```{r echo=FALSE}
+ggplotly(ggplot(plot_df, aes(sample_id,Normalized_CanonEx20_21,color=GROUP)) + 
+  geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
+                             "\nVAF VarScan2: ",VarScan2_vaf,
+                             "\nVAF SomaticSniper: ",SomaticSniper_vaf,
+                             "\nVAF MuSE: ",MuSE_vaf)),size= 0.8) +
+  ggtitle("Normalized expression of FLT3 Exon 20-21 Splice Junction") +
+  labs(color='GROUP')
+)
+```
+
+Splicing alterations:
+
+```{r echo=FALSE}
+ggplotly(ggplot(plot_df, aes(sample_id,Normalized_SE20,color=GROUP)) + 
+  geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
+                             "\nVAF VarScan2: ",VarScan2_vaf,
+                             "\nVAF SomaticSniper: ",SomaticSniper_vaf,
+                             "\nVAF MuSE: ",MuSE_vaf)),size= 0.8)  +
+  ggtitle("Normalized expression of FLT3 Exon Skipping 20 Splice Junction") +
+  labs(color='GROUP')
+)
+  
+ggplotly(ggplot(plot_df, aes(sample_id,Normalized_SE1920,color=GROUP)) + 
+  geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
+                             "\nVAF VarScan2: ",VarScan2_vaf,
+                             "\nVAF SomaticSniper: ",SomaticSniper_vaf,
+                             "\nVAF MuSE: ",MuSE_vaf)),size= 0.8)  +
+  ggtitle("Normalized expression of FLT3 Exon Skipping 19+20 Splice Junction") +
+  labs(color='GROUP')
+)
+```
+
+
+### Violin Plots
+Violin Plots for the alternative splice junctions interrogated:
+
+```{r echo=FALSE}
+plot_boxplot <- plot_df[plot_df$GROUP %in% c("WT"),]
+plot_dotplot <- plot_df[plot_df$GROUP %in% c("MUT"),]
+
+GEN = "FLT3"
+SJ = "chr13:28015702-28023349"
+
+ggplot(plot_df, aes(y=Normalized_SE20, x=factor(GROUP, level=c("WT", "MUT")))) + 
+       geom_violin(scale="area") +
+       geom_point(data = plot_dotplot, 
+                  aes(y=Normalized_SE20, x=GROUP),
+                  color="black",
+                  size=2
+                  ) +
+        
+       ylab("Normalized Expression of ES20 (%)") +
+       xlab(paste(GEN, SJ))
+```
+
+
+## Statistical Analysis {.tabset}
+```{r}
+SJCounts <- GeneSJ
+```
+
+### Donor Loss {.tabset}
+#### Expression Difference 
+Normality Test:
+```{r}
+shapiro.test(SJCounts$Normalized_CanonEx20_21[SJCounts$GROUP == "WT"])
+```
+
+Value of Mean Normalized Expression of the Alternative SJ in WT samples:
+```{r}
+mean_WT_SJi <- mean(SJCounts$Normalized_CanonEx20_21[SJCounts$GROUP == "WT"], na.rm=TRUE)
+mean_WT_SJi
+```
+
+Normalized Expression Value of the Alternative SJ in the MUT sample:
+```{r}
+MUT_SJi <- SJCounts$Normalized_CanonEx20_21[SJCounts$GROUP == "MUT"]
+MUT_SJi
+```
+
+Deviation from the mean normalized expression:
+```{r}
+SJCounts$Difference <-  SJCounts$Normalized_CanonEx20_21 - mean_WT_SJi
+```
+
+```{r echo=FALSE}
+table <- SJCounts[SJCounts$GROUP == "WT", c("sample_id", "Normalized_CanonEx20_21", "Difference")]
+table <- table[order(table$Difference, decreasing = TRUE),]
+```
+
+```{r echo=FALSE}
+datatable(table,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp'
+))
+```
+
+Difference in the MUT sample: deviation of the Normalized expression of the MUT patient from the mean normalized WT expression
+```{r}
+SJCounts$Difference[SJCounts$GROUP == "MUT"]
+```
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
+  ylab("Differential Expression") +
+  labs(color = "GROUP",
+       title = "Differential Expression Distribution")
+```
+
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
+  geom_boxplot() +
+  ylab("Differential Expression") +
+  xlab("GROUP")
+```
+
+#### ECDF - Pvalue Inference
+
+```{r}
+v_ecdf <- ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"])
+v_ecdf
+```
+
+```{r}
+plot(ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"]))
+```
+
+```{r}
+v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])))
+```
+
+```{r}
+print(paste0("Inferred Pvalue: ", v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])))
+```
+
+
+```{r}
+MUT_df <- SJCounts[SJCounts$GROUP == "MUT",c("sample_id","case_id", "Normalized_CanonEx20_21")]
+colnames(MUT_df) <- c("sample_id", "case_id", "NormalizedExpression")
+
+MUT_df$ECDF <- v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+MUT_df$Pvalue <-  MUT_df$ECDF
+
+MUT_df$Prediction <- "Donor Loss"
+MUT_df$splice_junction_status <- "CanonicalSJ"
+MUT_df$splice_junction_position <- "chr13:28015702-28018466"
+
+MUT_df$ECDF <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$ECDF)
+MUT_df$Pvalue <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$Pvalue)
+```
+
+```{r echo=FALSE}
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+```
+
+Download the vaf, inferred percentiles and pvalues of the mutated samples:
+```{r echo=FALSE}
+datatable(MUT_vaf,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              scrollX=TRUE
+))
+```
+
+```{r echo=FALSE}
+summary_res <- rbind(summary_res, MUT_vaf)
+```
+
+### Exon Skipping 20 {.tabset}
+#### Expression Difference 
+Normality Test:
+```{r}
+shapiro.test(SJCounts$Normalized_SE20[SJCounts$GROUP == "WT"])
+```
+
+Value of Mean Normalized Expression of the SJ in WT samples:
+```{r}
+mean_WT_SJi <- mean(SJCounts$Normalized_SE20[SJCounts$GROUP == "WT"], na.rm=TRUE)
+mean_WT_SJi
+```
+
+Normalized Expression Value of the  SJ in the MUT sample:
+```{r}
+MUT_SJi <- SJCounts$Normalized_SE20[SJCounts$GROUP == "MUT"]
+MUT_SJi
+```
+
+Deviation from the mean normalized expression:
+```{r}
+SJCounts$Difference <-  SJCounts$Normalized_SE20 - mean_WT_SJi
+```
+
+```{r echo=FALSE}
+table <- SJCounts[SJCounts$GROUP == "WT", c("sample_id", "Normalized_SE20", "Difference")]
+table <- table[order(table$Difference, decreasing = TRUE),]
+```
+
+```{r echo=FALSE}
+datatable(table,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp', 
+              scrollX = TRUE,  
+              scrollY = TRUE
+))
+```
+Difference in the MUT sample: deviation of the Normalized expression of the MUT patient from the mean normalized WT expression
+```{r}
+SJCounts$Difference[SJCounts$GROUP == "MUT"]
+```
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
+  ylab("Differential Expression") +
+  labs(color = "GROUP",
+       title = "Differential Expression Distribution")
+```
+
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
+  geom_boxplot() +
+  ylab("Differential Expression") +
+  xlab("GROUP")
+```
+
+#### ECDF - Pvalue Inference
+
+```{r}
+v_ecdf <- ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"])
+v_ecdf
+```
+
+```{r}
+plot(ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"]))
+```
+
+```{r}
+v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])))
+```
+
+```{r}
+1-v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+print(paste0("Inferred Pvalue: ", 1-v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])))
+```
+
+
+```{r echo=FALSE}
+MUT_df <- SJCounts[SJCounts$GROUP == "MUT",c("sample_id","case_id", "Normalized_SE20")]
+colnames(MUT_df) <- c("sample_id", "case_id", "NormalizedExpression")
+MUT_df$ECDF <- v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+MUT_df$Pvalue <- 1- MUT_df$ECDF
+
+MUT_df$Prediction <- "Exon Skipping"
+MUT_df$splice_junction_status <- "AlternativeSJ found in MUT samples"
+MUT_df$splice_junction_position <- "chr13:28015702-28023349"
+
+MUT_df$ECDF <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$ECDF)
+MUT_df$Pvalue <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$Pvalue)
+```
+
+
+```{r echo=FALSE}
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+```
+
+Download the vaf, inferred percentiles and pvalues of the mutated samples:
+```{r echo=FALSE}
+datatable(MUT_vaf,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              scrollX=TRUE
+))
+```
+
+```{r echo=FALSE}
+summary_res <- rbind(summary_res, MUT_vaf)
+```
+
+### Exon Skipping 19 + 20 {.tabset}
+#### Expression Difference 
+Normality Test:
+```{r}
+shapiro.test(SJCounts$Normalized_SE1920[SJCounts$GROUP == "WT"])
+```
+
+
+Value of Mean Normalized Expression of the SJ in WT samples:
+```{r}
+mean_WT_SJi <- mean(SJCounts$Normalized_SE1920[SJCounts$GROUP == "WT"], na.rm=TRUE)
+mean_WT_SJi
+```
+
+Value of Mean Normalized Expression of the SJ in WT samples:
+```{r}
+MUT_SJi <- SJCounts$Normalized_SE1920[SJCounts$GROUP == "MUT"]
+MUT_SJi
+```
+
+
+
+Deviation from the mean normalized expression:
+
+```{r}
+SJCounts$Difference <-  SJCounts$Normalized_SE1920 - mean_WT_SJi
+```
+
+```{r echo=FALSE}
+table <- SJCounts[SJCounts$GROUP == "WT", c("sample_id", "Normalized_SE1920", "Difference")]
+table <- table[order(table$Difference, decreasing = TRUE),]
+```
+
+```{r echo=FALSE}
+datatable(table,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp'
+))
+```
+Difference in the MUT sample: deviation of the Normalized expression of the MUT patient from the mean normalized WT expression
+```{r}
+SJCounts$Difference[SJCounts$GROUP == "MUT"]
+```
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
+  ylab("Differential Expression") +
+  labs(color = "GROUP",
+       title = "Differential Expression Distribution")
+```
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
+  geom_boxplot() +
+  ylab("Differential Expression") +
+  xlab("GROUP")
+```
+
+#### ECDF - Pvalue Inference {.tabset}
+
+```{r}
+v_ecdf <- ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"])
+v_ecdf
+```
+
+```{r}
+plot(ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"]))
+```
+
+```{r}
+v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])))
+```
+
+```{r}
+1-v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+print(paste0("Inferred Pvalue: ", 1-v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])))
+```
+
+```{r}
+v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+```
+
+```{r}
+MUT_df <- SJCounts[SJCounts$GROUP == "MUT",c("sample_id","case_id", "Normalized_SE1920")]
+colnames(MUT_df) <- c("sample_id", "case_id", "NormalizedExpression")
+
+MUT_df$ECDF <- v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+MUT_df$Pvalue <- 1- MUT_df$ECDF
+
+MUT_df$Prediction <- "Exon Skipping"
+MUT_df$splice_junction_status <- "AlternativeSJ found in MUT samples"
+MUT_df$splice_junction_position <- "chr13:28015702-28024860"
+
+MUT_df$ECDF <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$ECDF)
+MUT_df$Pvalue <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$Pvalue)
+```
+
+```{r echo=FALSE}
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+```
+
+Download the vaf, inferred percentiles and pvalues of the mutated samples:
+```{r echo=FALSE}
+datatable(MUT_vaf,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              scrollX=TRUE
+)
+)
+```
+
+```{r echo=FALSE}
+summary_res <- rbind(summary_res, MUT_vaf)
+```
+
+
+
+```{r}
+## Add not found effects information:
+MUT_df <- SJCounts[SJCounts$GROUP == "MUT",c("sample_id","case_id")]
+
+MUT_df$Prediction <- "Exon Skipping"
+MUT_df$splice_junction_status <- "AlternativeSJ not found in MUT samples"
+MUT_df$splice_junction_position <- "chr13:28018590-28024860"
+MUT_df$ECDF <- NA
+MUT_df$Pvalue <- NA
+MUT_df$NormalizedExpression <- NA
+
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+```
+
+```{r echo=FALSE}
+summary_res <- rbind(summary_res, MUT_vaf)
+```
+
+
+```{r echo=FALSE}
+rm(GeneSJ, normalization_df, GeneSJ_subset, annot_vaf, plot_df, samples_df,table, plot_boxplot, plot_dotplot, vaf_select, SJCounts, MUT_df, MUT_vaf)
+```
+
+# IDH1 {.tabset}
+Three (3) variants: chr2,208248389,G,A, chr2,208248389,G,T & chr2,208248389,G,C
+
+Variants found in **16 patients** of the TCGA (**16 samples**)
+
+* Patients with IDH1 chr2,208248389,G,A variant: **14 patients (14 samples)**
+* Patients with IDH1 chr2,208248389,G,T variant: **1 patient (1 sample)**
+* Patients with IDH1 chr2,208248389,G,C variant: **1 patient (1 sample)**
+
+Patients with the variant and RNASeq for validation: **11 patients (11 samples)**
+
+* Patients with IDH1 chr2,208248389,G,A variant and RNASeq for validation: **9 patients (9 samples)**
+* Patients with IDH1 chr2,208248389,G,T variant and RNASeq for validation: **1 patients (1 sample)**
+* Patients with IDH1 chr2,208248389,G,C variant and RNASeq for validation: **1 patients (1 sample)**
+
+
+The splicing alterations being assessed are: 
+
+* **Donor Gain**: chr2:208245425-208248422, found in the mutated samples.
+* **Exon Skipping 4**: chr2:208245425-208251429, not found in the splice junction collection.
+* **Donor Loss**: chr2:208245425-208248368; donor splice site chr2:208248368.
+
+Variant information:
+```{r echo=FALSE}
+datatable(to_be_validated[to_be_validated$MutationKey_Hg38 %in% c( "chr2,208248389,G,A","chr2,208248389,G,T" ,"chr2,208248389,G,C"),],
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp', 
+              scrollX = TRUE,  
+              scrollY = TRUE,
+              columnDefs = list(list(targets = '_all', className = 'dt-center')))
+)
+```
+
+Load the extracted splice junctions of the gene harboring the mutation.
+```{r}
+extractedSJ_path <- paste0(extractedSJ_dir_in,"IDH1_UM_annotSJ.tsv")
+GeneSJ <- read.delim(extractedSJ_path, sep ="\t")
+```
+
+Set the sample's group: Mutated (MUT) or No Mutated (WT)
+```{r}
+samples_df <- found_variants[found_variants$Gene=="IDH1" & found_variants$MutationKey_Hg38 %in% c( "chr2,208248389,G,A","chr2,208248389,G,T" ,"chr2,208248389,G,C"),]
+```
+
+```{r}
+R132C <- samples_df$RNA_Sample[samples_df$MutationKey_Hg38 == "chr2,208248389,G,A" & samples_df$Validable =="Validable"] #n=9 G>A
+R132G <- samples_df$RNA_Sample[samples_df$MutationKey_Hg38 == "chr2,208248389,G,C" & samples_df$Validable =="Validable"] #n=1 G>C
+R132S  <- samples_df$RNA_Sample[samples_df$MutationKey_Hg38 == "chr2,208248389,G,T" & samples_df$Validable =="Validable"] #n=1 G>T
+
+cases <- append(R132C, R132G)
+cases <- append(cases, R132S)
+
+GeneSJ$GROUP <- ifelse(GeneSJ$sample_id %in% R132C, "MUT", 
+                                ifelse(GeneSJ$sample_id %in% R132G, "MUT",
+                                      ifelse(GeneSJ$sample_id %in% R132S, "MUT", 
+                                                     "WT")))
+
+
+GeneSJ$Variant_status <- ifelse(GeneSJ$sample_id %in% R132C, "R132C", 
+                                ifelse(GeneSJ$sample_id %in% R132G, "R132G",
+                                              ifelse(GeneSJ$sample_id %in% R132S, "R132S", 
+                                                     "WT")))
+```
+
+
+## SJ Lookup{.tabset}
+
+Search for the splice junctions of interest in the extracted splice junctions of the gene by position (chr_SJstart_SJend).
+
+### Donor Gain
+Search: chr2:208245425-208248422
+
+Show all the splice junctions containing the position 208245425-208248422
+```{r}
+colnames(GeneSJ)[grep("208245425_208248422",colnames(GeneSJ))]
+```
+
+Found: chr2_208245425_208248422
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr2_208245425_208248422
+```
+Samples with the SJ of interest:
+```{r}
+table(GeneSJ$chr2_208245425_208248422>0) 
+```
+Groups of the samples having the alternative splice junction:
+```{r}
+table(GeneSJ$GROUP[GeneSJ$chr2_208245425_208248422 > 0])
+```
+Alternative SJ found in the mutated samples.
+
+### Exon Skipping 4
+Search: chr2:208245425-208251429 
+
+Show all the splice junctions containing the positions 208245425-208251429
+```{r}
+colnames(GeneSJ)[grep("208245425_208251429",colnames(GeneSJ))]
+```
+Alternative SJ not found in the splice junction collection.
+
+### Canonical SJ
+Exon 3-4: chr2:208248661-208251429
+
+Exon 4-5: chr2:208245425-208248368; splice site chr2:208248368
+
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr2_208248661_208251429
+```
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr2_208245425_208248368
+```
+
+
+## Normalization
+Count the reads of all the splice junctions of the gene harboring the variant:
+```{r}
+GeneSJ$rowSum_SJtotal <- rowSums(GeneSJ[,grep("chr", names(GeneSJ))])
+```
+
+Normalization of the expression by the total read counts of all the splice junctions of the gene:
+```{r}
+GeneSJ$Normalized_CanonEx3_4 <- (GeneSJ$chr2_208248661_208251429)/GeneSJ$rowSum_SJtotal*100
+GeneSJ$Normalized_CanonEx4_5 <- (GeneSJ$chr2_208245425_208248368)/GeneSJ$rowSum_SJtotal*100
+
+GeneSJ$Normalized_DGEx4 <- (GeneSJ$chr2_208245425_208248422)/GeneSJ$rowSum_SJtotal*100
+```
+
+Download the normalized values for the assessed splice junctions of all the AML samples:
+```{r echo=FALSE}
+normalization_df <- GeneSJ[,c("sample_id","case_id", "GROUP","Variant_status","Normalized_CanonEx3_4", "Normalized_CanonEx4_5", "Normalized_DGEx4","chr2_208248661_208251429", "chr2_208245425_208248368", "chr2_208245425_208248422", "rowSum_SJtotal","file_id.BAM","file_name.BAM","file_id.STAR.SJCounts","file_name.STAR.SJCounts" )]
+
+colnames(normalization_df)[grep("chr2_208248661_208251429", names(normalization_df))] <- "chr2_208248661_208251429_CanonEx3_4"
+colnames(normalization_df)[grep("chr2_208245425_208248368", names(normalization_df))] <- "chr2_208245425_208248368_CanonEx4_5"
+colnames(normalization_df)[grep("chr2_208245425_208248422", names(normalization_df))] <- "chr2_208245425_208248422_DGEx4"
+
+write.xlsx(normalization_df, paste0(normalizedEx_dir_out, "TCGA.IDH1.xlsx"), row.names = FALSE)
+```
+
+```{r echo=FALSE}
+datatable(normalization_df,
+extensions = 'Buttons',
+rownames = FALSE, 
+filter = 'top',
+options = list(paging = TRUE,
+              pageLength = 4,
+              autoWidth = FALSE,
+              dom = 'lifrtBp',
+              buttons = list(
+               list(
+                 extend = 'excel',
+                 filename = "TCGA.IDH1.Normalized" 
+               )
+              ), 
+              scrollX = TRUE,  
+              scrollY = TRUE,
+              columnDefs = list(list(targets = '_all', className = 'dt-center'))
+))
+```
+
+## VAF
+```{r echo=FALSE}
+GeneSJ_subset <- GeneSJ[GeneSJ$sample_id %in% cases,]
+GeneSJ_subset$Gene <- "IDH1"
+
+annot_vaf <- merge(found_variants[,c("MutationKey_Hg38","Gene","HGVSc","HGVSp","sample_id","case_id",                                               "RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf",                         "MuTect2_filter","VarScan2_filter","SomaticSniper_filter","MuSE_filter","MUTReads","WTReads","VAF")], 
+                   GeneSJ_subset[,c("Gene","sample_id", "case_id","Normalized_CanonEx3_4", "Normalized_CanonEx4_5", "Normalized_DGEx4")], 
+                   by.x=c("RNA_Sample", "case_id","Gene"), 
+                   by.y=c("sample_id", "case_id","Gene"))
+
+
+annot_vaf <- annot_vaf %>% select(Gene,MutationKey_Hg38,HGVSc, HGVSp,
+                                  sample_id,
+                                  case_id, RNA_Sample,DNA_Sample,
+                                  MuTect2_vaf,VarScan2_vaf,SomaticSniper_vaf,MuSE_vaf,
+                                  VAF,
+                                  Normalized_CanonEx3_4, Normalized_CanonEx4_5, Normalized_DGEx4,
+                                  everything()
+                                  )
+colnames(annot_vaf)[grep("VAF", names(annot_vaf))] <- "VAF_RNA"
+colnames(annot_vaf)[grep("MUTReads", names(annot_vaf))] <- "MUTReads_RNA"
+colnames(annot_vaf)[grep("WTReads", names(annot_vaf))] <- "WTReads_RNA"
+
+write.xlsx(annot_vaf, paste0(normalizedEx_dir_out, "TCGA.IDH1.MUT.xlsx"), row.names = FALSE)
+```
+
+Mutated samples vaf:
+```{r echo=FALSE}
+datatable(annot_vaf,
+extensions = 'Buttons',
+rownames = FALSE, 
+filter = 'top',
+options = list(paging = TRUE,
+              pageLength = 4,
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              buttons = list(
+               list(
+                 extend = 'excel',
+                 filename = "TCGA.IDH1.MUT" 
+               )
+              ), 
+              scrollX = TRUE,  
+              scrollY = TRUE
+              )
+)
+```
+
+## Plots {.tabset}
+
+```{r echo=FALSE}
+GeneSJ$GROUP <- ifelse(GeneSJ$GROUP == "MUT", "MUT", "WT")
+GeneSJ$GROUP <- as.factor(GeneSJ$GROUP)
+```
+
+### Static Dot Plots 
+Canonical splice junction: Exon 4-5: chr2:208245425-208248368; donor splice site chr2:208248368
+
+```{r echo=FALSE}
+ggplot(GeneSJ, aes(sample_id,Normalized_CanonEx4_5,color=GROUP)) + 
+  geom_point(size=.8) +
+  labs(color='GROUP', 
+       title = "Normalized expression of IDH1 Exon 4-5 Splice Junction", 
+       subtitle="Potential Donor Loss Effect",
+       y = "Normalized Expression")
+```
+
+
+Splicing alterations:
+
+```{r echo=FALSE}
+ggplot(GeneSJ, aes(sample_id,Normalized_DGEx4,color=GROUP)) + 
+  geom_point(size=.8) +
+  labs(color='GROUP', 
+       title = "Normalized expression of IDH1 Exon 4 Donor Gain Splice Junction", 
+       subtitle="Potential Exon 4 Donor Gain",
+       y = "Normalized Expression")
+```
+
+
+```{r echo=FALSE}
+ggplot(GeneSJ, aes(sample_id,Normalized_DGEx4,color=Variant_status)) + 
+  geom_point(size=.8) +
+  labs(color='variant_status', 
+       title = "Normalized expression of IDH1 Exon 4 Donor Gain Splice Junction", 
+       subtitle="Potential Exon 4 Donor Gain",
+       y = "Normalized Expression",
+       color="Variant status")
+```
+
+
+### Interactive Dot Plots
+
+```{r echo=FALSE}
+plot_df <- merge(GeneSJ,annot_vaf[c("RNA_Sample", "VAF_RNA", 
+                                    "MuTect2_vaf", "VarScan2_vaf", "SomaticSniper_vaf", "MuSE_vaf")],
+                 by.x="sample_id", by.y="RNA_Sample", all.x = TRUE)
+```
+
+Canonical splice junction: Exon 4-5: chr2:208245425-208248368; donor splice site chr2:208248368
+
+```{r echo=FALSE}
+ggplotly(ggplot(plot_df, aes(sample_id,Normalized_CanonEx4_5,color=GROUP)) + 
+  geom_point(aes(text=paste0("Variant: ",Variant_status ,"\nVAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
+                             "\nVAF VarScan2: ",VarScan2_vaf,
+                             "\nVAF SomaticSniper: ",SomaticSniper_vaf,
+                             "\nVAF MuSE: ",MuSE_vaf)),size= 0.8) +
+  ggtitle("Normalized expression of IDH1 Exon 4-5 Splice Junction") +
+  labs(color='GROUP')
+)
+```
+
+Splicing alteration:
+
+```{r echo=FALSE}
+ggplotly(ggplot(plot_df, aes(sample_id,Normalized_DGEx4,color=GROUP)) + 
+  geom_point(aes(text=paste0("Variant: ",Variant_status ,"\nVAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
+                             "\nVAF VarScan2: ",VarScan2_vaf,
+                             "\nVAF SomaticSniper: ",SomaticSniper_vaf,
+                             "\nVAF MuSE: ",MuSE_vaf)),size= 0.8) +
+  ggtitle("Normalized expression of IDH1 Exon 4 Donor Gain Splice Junction") +
+  labs(color='GROUP')
+)
+
+```
+
+
+```{r echo=FALSE}
+ggplotly(ggplot(plot_df, aes(sample_id,Normalized_DGEx4,color=Variant_status)) + 
+  geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
+                             "\nVAF VarScan2: ",VarScan2_vaf,
+                             "\nVAF SomaticSniper: ",SomaticSniper_vaf,
+                             "\nVAF MuSE: ",MuSE_vaf)),size= 0.8) +
+  ggtitle("Normalized expression of IDH1 Exon 4 Donor Gain Splice Junction") +
+  labs(color='Variant status') 
+)
+
+```
+
+
+### Violin Plots
+Violin Plots for the alternative splice junctions interrogated:
+
+```{r echo=FALSE}
+plot_boxplot <- plot_df[plot_df$GROUP %in% c("WT"),]
+plot_dotplot <- plot_df[plot_df$GROUP %in% c("MUT"),]
+
+GEN = "IDH1"
+SJ = "chr2:208245425-208248422"
+
+ggplot(plot_df, aes(y=Normalized_DGEx4, x=factor(GROUP, level=c("WT", "MUT")))) + 
+       geom_violin(scale="area") +
+       geom_point(data = plot_dotplot, 
+                  aes(y=Normalized_DGEx4, x=GROUP),
+                  color="black",
+                  size=2
+                  ) +
+        
+       ylab("Normalized Expression of potential Donor Gain") +
+       xlab(paste(GEN, SJ))
+```
+
+
+## Statistical Analysis {.tabset}
+
+```{r}
+SJCounts <- GeneSJ
+```
+ 
+### Donor Gain {.tabset}
+#### Expression Difference 
+Normality Test:
+```{r}
+shapiro.test(SJCounts$Normalized_DGEx4[SJCounts$GROUP == "WT"])
+```
+
+Value of Mean Normalized Expression of the Alternative SJ in WT samples:
+```{r}
+mean_WT_SJi <- mean(SJCounts$Normalized_DGEx4[SJCounts$GROUP == "WT"], na.rm=TRUE)
+mean_WT_SJi
+```
+
+Normalized Expression Value of the Alternative SJ in the MUT sample:
+```{r}
+MUT_SJi <- SJCounts$Normalized_DGEx4[SJCounts$GROUP == "MUT"]
+MUT_SJi
+```
+
+
+
+Deviation from the mean normalized expression:
+```{r}
+SJCounts$Difference <-  SJCounts$Normalized_DGEx4 - mean_WT_SJi
+```
+
+```{r echo=FALSE}
+table <- SJCounts[SJCounts$GROUP == "WT", c("sample_id", "Normalized_DGEx4", "Difference")]
+table <- table[order(table$Difference, decreasing = TRUE),]
+```
+
+```{r echo=FALSE}
+datatable(table,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp'
+))
+```
+
+Difference in the MUT sample: deviation of the Normalized expression of the MUT patient from the mean normalized WT expression
+```{r}
+SJCounts[SJCounts$GROUP == "MUT", c("sample_id", "Difference")]
+```
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
+  ylab("Differential Expression") +
+  labs(color = "GROUP",
+       title = "Differential Expression Distribution")
+```
+
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
+  geom_boxplot() +
+  ylab("Differential Expression") +
+  xlab("GROUP")
+```
+
+#### ECDF
+
+```{r}
+v_ecdf <- ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"])
+v_ecdf
+```
+
+```{r}
+plot(ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"]))
+```
+
+```{r}
+v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+```
+
+```{r}
+MUT_df <- SJCounts[SJCounts$GROUP == "MUT",c("sample_id","case_id", "Normalized_DGEx4")]
+colnames(MUT_df) <- c("sample_id", "case_id", "NormalizedExpression")
+
+MUT_df$ECDF <- v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+MUT_df$Pvalue <-NA
+
+MUT_df$Prediction <- "Donor Gain"
+MUT_df$splice_junction_status <- "AlternativeSJ found in MUT samples"
+MUT_df$splice_junction_position <- "chr2:208245425-208248422"
+
+MUT_df$ECDF <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$ECDF)
+```
+
+```{r echo=FALSE}
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+```
+
+Download the vaf, inferred percentiles and pvalues of the mutated samples:
+```{r echo=FALSE}
+datatable(MUT_vaf,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              scrollX=TRUE
+))
+```
+
+#### Kruskal Wallis 
+
+Kruskal Wallis:
+```{r}
+kruskal.test(Normalized_DGEx4 ~ Variant_status, data = SJCounts)
+```
+
+Pairwise comparisons:
+```{r}
+pairwise.wilcox.test(SJCounts$Normalized_DGEx4, SJCounts$Variant_status)
+```
+
+Detailed:
+```{r}
+pkw <- pairwise_wilcox_test(SJCounts,Normalized_DGEx4 ~ Variant_status)
+pkw
+```
+
+
+```{r echo=FALSE}
+MUT_vaf_2 <- MUT_vaf[MUT_vaf$MutationKey_Hg38 == "chr2,208248389,G,A",]
+
+stat_df <- data.frame(matrix(ncol = 19, nrow = 1))
+colnames(stat_df) <- c("Gene","MutationKey_Hg38","HGVSc","HGVSp","Prediction","splice_junction_status","splice_junction_position", "sample_id","case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue","VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+
+stat_df$Gene <- unique(MUT_vaf_2$Gene)
+stat_df$MutationKey_Hg38 <- unique(MUT_vaf_2$MutationKey_Hg38)
+stat_df$HGVSc <- unique(MUT_vaf_2$HGVSc)
+stat_df$HGVSp <- unique(MUT_vaf_2$HGVSp)
+stat_df$sample_id <- paste(MUT_vaf_2$sample_id, collapse = ';\n') 
+stat_df$case_id <- paste(MUT_vaf_2$case_id, collapse = ';\n') 
+stat_df$RNA_Sample <- paste(MUT_vaf_2$RNA_Sample, collapse = ';\n') 
+stat_df$DNA_Sample <- paste(MUT_vaf_2$DNA_Sample, collapse = ';\n')
+stat_df$NormalizedExpression <- paste0(MUT_vaf_2$NormalizedExpression, collapse= ";\n")
+stat_df$ECDF <- paste0(MUT_vaf_2$ECDF, collapse = ";\n")
+stat_df$VAF_RNA <-  paste(MUT_vaf_2$VAF_RNA, collapse = ';\n')
+stat_df$MuTect2_vaf <-  paste(MUT_vaf_2$MuTect2_vaf, collapse = ';\n')
+stat_df$VarScan2_vaf <-  paste(MUT_vaf_2$VarScan2_vaf, collapse = ';\n')
+stat_df$SomaticSniper_vaf <-  paste(MUT_vaf_2$SomaticSniper_vaf, collapse = ';\n')
+stat_df$MuSE_vaf <-  paste(MUT_vaf_2$MuSE_vaf, collapse = ';\n')
+stat_df$Prediction <- "Donor Gain"
+stat_df$splice_junction_status <- "AlternativeSJ found in MUT samples"
+stat_df$splice_junction_position <- "chr2:208245425-208248422"
+
+stat_df$Pvalue <- pkw$p.adj[3]
+```
+
+```{r echo=FALSE}
+summary_res<- rbind(summary_res,stat_df)
+```
+
+
+
+```{r echo=FALSE}
+MUT_vaf_2 <- MUT_vaf[MUT_vaf$MutationKey_Hg38 == "chr2,208248389,G,C",]
+
+stat_df <- data.frame(matrix(ncol = 19, nrow = 1))
+colnames(stat_df) <- c("Gene","MutationKey_Hg38","HGVSc","HGVSp","Prediction","splice_junction_status","splice_junction_position", "sample_id","case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue","VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+stat_df$Gene <- unique(MUT_vaf_2$Gene)
+stat_df$MutationKey_Hg38 <- unique(MUT_vaf_2$MutationKey_Hg38)
+stat_df$HGVSc <- unique(MUT_vaf_2$HGVSc)
+stat_df$HGVSp <- unique(MUT_vaf_2$HGVSp)
+stat_df$sample_id <- paste(MUT_vaf_2$sample_id, collapse = ';\n') 
+stat_df$case_id <- paste(MUT_vaf_2$case_id, collapse = ';\n') 
+stat_df$RNA_Sample <- paste(MUT_vaf_2$RNA_Sample, collapse = ';\n') 
+stat_df$DNA_Sample <- paste(MUT_vaf_2$DNA_Sample, collapse = ';\n')
+stat_df$NormalizedExpression <- paste0(MUT_vaf_2$NormalizedExpression, collapse= ";\n")
+stat_df$ECDF <- paste0(MUT_vaf_2$ECDF, collapse = ";\n")
+stat_df$VAF_RNA <-  paste(MUT_vaf_2$VAF_RNA, collapse = ';\n')
+stat_df$MuTect2_vaf <-  paste(MUT_vaf_2$MuTect2_vaf, collapse = ';\n')
+stat_df$VarScan2_vaf <-  paste(MUT_vaf_2$VarScan2_vaf, collapse = ';\n')
+stat_df$SomaticSniper_vaf <-  paste(MUT_vaf_2$SomaticSniper_vaf, collapse = ';\n')
+stat_df$MuSE_vaf <-  paste(MUT_vaf_2$MuSE_vaf, collapse = ';\n')
+stat_df$Prediction <- "Donor Gain"
+stat_df$splice_junction_status <- "AlternativeSJ found in MUT samples"
+stat_df$splice_junction_position <- "chr2:208245425-208248422"
+
+stat_df$Pvalue <- pkw$p.adj[5]
+```
+
+```{r echo=FALSE}
+summary_res<- rbind(summary_res,stat_df)
+```
+
+```{r echo=FALSE}
+MUT_vaf_2 <- MUT_vaf[MUT_vaf$MutationKey_Hg38 == "chr2,208248389,G,T",]
+
+stat_df <- data.frame(matrix(ncol = 19, nrow = 1))
+colnames(stat_df) <- c("Gene","MutationKey_Hg38","HGVSc","HGVSp","Prediction","splice_junction_status","splice_junction_position", "sample_id","case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue","VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+stat_df$Gene <- unique(MUT_vaf_2$Gene)
+stat_df$MutationKey_Hg38 <- unique(MUT_vaf_2$MutationKey_Hg38)
+stat_df$HGVSc <- unique(MUT_vaf_2$HGVSc)
+stat_df$HGVSp <- unique(MUT_vaf_2$HGVSp)
+stat_df$sample_id <- paste(MUT_vaf_2$sample_id, collapse = ';\n') 
+stat_df$case_id <- paste(MUT_vaf_2$case_id, collapse = ';\n') 
+stat_df$RNA_Sample <- paste(MUT_vaf_2$RNA_Sample, collapse = ';\n') 
+stat_df$DNA_Sample <- paste(MUT_vaf_2$DNA_Sample, collapse = ';\n')
+stat_df$NormalizedExpression <- paste0(MUT_vaf_2$NormalizedExpression, collapse= ";\n")
+stat_df$ECDF <- paste0(MUT_vaf_2$ECDF, collapse = ";\n")
+stat_df$VAF_RNA <-  paste(MUT_vaf_2$VAF_RNA, collapse = ';\n')
+stat_df$MuTect2_vaf <-  paste(MUT_vaf_2$MuTect2_vaf, collapse = ';\n')
+stat_df$VarScan2_vaf <-  paste(MUT_vaf_2$VarScan2_vaf, collapse = ';\n')
+stat_df$SomaticSniper_vaf <-  paste(MUT_vaf_2$SomaticSniper_vaf, collapse = ';\n')
+stat_df$MuSE_vaf <-  paste(MUT_vaf_2$MuSE_vaf, collapse = ';\n')
+stat_df$Prediction <- "Donor Gain"
+stat_df$splice_junction_status <- "AlternativeSJ found in MUT samples"
+stat_df$splice_junction_position <- "chr2:208245425-208248422"
+
+stat_df$Pvalue <- pkw$p.adj[6]
+```
+
+```{r echo=FALSE}
+summary_res<- rbind(summary_res,stat_df)
+```
+
+
+
+### Donor Loss {.tabset}
+#### Expression Difference 
+Normality Test:
+```{r}
+shapiro.test(SJCounts$Normalized_CanonEx4_5[SJCounts$GROUP == "WT"])
+```
+
+Value of Mean Normalized Expression of the Alternative SJ in WT samples:
+```{r}
+mean_WT_SJi <- mean(SJCounts$Normalized_CanonEx4_5[SJCounts$GROUP == "WT"], na.rm=TRUE)
+mean_WT_SJi
+```
+
+Normalized Expression Value of the Alternative SJ in the MUT sample:
+```{r}
+MUT_SJi <- SJCounts$Normalized_CanonEx4_5[SJCounts$GROUP == "MUT"]
+MUT_SJi
+```
+
+
+
+Deviation from the mean normalized expression:
+```{r}
+SJCounts$Difference <-  SJCounts$Normalized_CanonEx4_5 - mean_WT_SJi
+```
+
+```{r echo=FALSE}
+table <- SJCounts[SJCounts$GROUP == "WT", c("sample_id", "Normalized_CanonEx4_5", "Difference")]
+table <- table[order(table$Difference, decreasing = TRUE),]
+```
+
+```{r echo=FALSE}
+datatable(table,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp'
+))
+```
+
+Difference in the MUT sample: deviation of the Normalized expression of the MUT patient from the mean normalized WT expression
+```{r}
+SJCounts$Difference[SJCounts$GROUP == "MUT"]
+```
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
+  ylab("Differential Expression") +
+  labs(color = "GROUP",
+       title = "Differential Expression Distribution")
+```
+
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
+  geom_boxplot() +
+  ylab("Differential Expression") +
+  xlab("GROUP")
+```
+
+#### ECDF
+
+```{r}
+v_ecdf <- ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"])
+v_ecdf
+```
+
+```{r}
+plot(ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"]))
+```
+
+```{r}
+v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+```
+
+```{r}
+MUT_df <- SJCounts[SJCounts$GROUP == "MUT",c("sample_id","case_id", "Normalized_CanonEx4_5")]
+colnames(MUT_df) <- c("sample_id", "case_id", "NormalizedExpression")
+
+MUT_df$ECDF <- v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+MUT_df$Pvalue <- NA
+MUT_df$Prediction  <- "Donor Loss"
+MUT_df$splice_junction_status <- "CanonicalSJ"
+MUT_df$splice_junction_position <- "chr2:208245425-208248368"
+
+MUT_df$ECDF <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$ECDF)
+```
+
+```{r echo=FALSE}
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+```
+
+Download the vaf, inferred percentiles and pvalues of the mutated samples:
+```{r echo=FALSE}
+datatable(MUT_vaf,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              scrollX=TRUE
+))
+```
+
+
+
+
+#### Kruskal Wallis 
+
+Kruskal Wallis:
+```{r}
+kruskal.test(Normalized_CanonEx4_5 ~ Variant_status, data = SJCounts)
+```
+
+Pairwise comparisons:
+```{r}
+pairwise.wilcox.test(SJCounts$Normalized_CanonEx4_5, SJCounts$Variant_status)
+```
+
+Detailed:
+```{r}
+pkw <- pairwise_wilcox_test(SJCounts,Normalized_CanonEx4_5 ~ Variant_status)
+pkw
+```
+
+
+```{r echo=FALSE}
+MUT_vaf_2 <- MUT_vaf[MUT_vaf$MutationKey_Hg38 == "chr2,208248389,G,A",]
+
+stat_df <- data.frame(matrix(ncol = 19, nrow = 1))
+colnames(stat_df) <- c("Gene","MutationKey_Hg38","HGVSc","HGVSp","Prediction","splice_junction_status","splice_junction_position", "sample_id","case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue","VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+stat_df$Gene <- unique(MUT_vaf_2$Gene)
+stat_df$MutationKey_Hg38 <- unique(MUT_vaf_2$MutationKey_Hg38)
+stat_df$HGVSc <- unique(MUT_vaf_2$HGVSc)
+stat_df$HGVSp <- unique(MUT_vaf_2$HGVSp)
+stat_df$sample_id <- paste(MUT_vaf_2$sample_id, collapse = ';\n') 
+stat_df$case_id <- paste(MUT_vaf_2$case_id, collapse = ';\n') 
+stat_df$RNA_Sample <- paste(MUT_vaf_2$RNA_Sample, collapse = ';\n') 
+stat_df$DNA_Sample <- paste(MUT_vaf_2$DNA_Sample, collapse = ';\n')
+stat_df$NormalizedExpression <- paste0(MUT_vaf_2$NormalizedExpression, collapse= ";\n")
+stat_df$ECDF <- paste0(MUT_vaf_2$ECDF, collapse = ";\n")
+stat_df$VAF_RNA <-  paste(MUT_vaf_2$VAF_RNA, collapse = ';\n')
+stat_df$MuTect2_vaf <-  paste(MUT_vaf_2$MuTect2_vaf, collapse = ';\n')
+stat_df$VarScan2_vaf <-  paste(MUT_vaf_2$VarScan2_vaf, collapse = ';\n')
+stat_df$SomaticSniper_vaf <-  paste(MUT_vaf_2$SomaticSniper_vaf, collapse = ';\n')
+stat_df$MuSE_vaf <-  paste(MUT_vaf_2$MuSE_vaf, collapse = ';\n')
+stat_df$Prediction  <- "Donor Loss"
+stat_df$splice_junction_status <- "CanonicalSJ"
+stat_df$splice_junction_position <- "chr2:208245425-208248368"
+
+stat_df$Pvalue <- pkw$p.adj[3]
+```
+
+```{r echo=FALSE}
+summary_res<- rbind(summary_res,stat_df)
+```
+
+
+
+```{r echo=FALSE}
+MUT_vaf_2 <- MUT_vaf[MUT_vaf$MutationKey_Hg38 == "chr2,208248389,G,C",]
+
+stat_df <- data.frame(matrix(ncol = 19, nrow = 1))
+colnames(stat_df) <- c("Gene","MutationKey_Hg38","HGVSc","HGVSp","Prediction","splice_junction_status","splice_junction_position", "sample_id","case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue","VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+stat_df$Gene <- unique(MUT_vaf_2$Gene)
+stat_df$MutationKey_Hg38 <- unique(MUT_vaf_2$MutationKey_Hg38)
+stat_df$HGVSc <- unique(MUT_vaf_2$HGVSc)
+stat_df$HGVSp <- unique(MUT_vaf_2$HGVSp)
+stat_df$sample_id <- paste(MUT_vaf_2$sample_id, collapse = ';\n') 
+stat_df$case_id <- paste(MUT_vaf_2$case_id, collapse = ';\n') 
+stat_df$RNA_Sample <- paste(MUT_vaf_2$RNA_Sample, collapse = ';\n') 
+stat_df$DNA_Sample <- paste(MUT_vaf_2$DNA_Sample, collapse = ';\n')
+stat_df$NormalizedExpression <- paste0(MUT_vaf_2$NormalizedExpression, collapse= ";\n")
+stat_df$ECDF <- paste0(MUT_vaf_2$ECDF, collapse = ";\n")
+stat_df$VAF_RNA <-  paste(MUT_vaf_2$VAF_RNA, collapse = ';\n')
+stat_df$MuTect2_vaf <-  paste(MUT_vaf_2$MuTect2_vaf, collapse = ';\n')
+stat_df$VarScan2_vaf <-  paste(MUT_vaf_2$VarScan2_vaf, collapse = ';\n')
+stat_df$SomaticSniper_vaf <-  paste(MUT_vaf_2$SomaticSniper_vaf, collapse = ';\n')
+stat_df$MuSE_vaf <-  paste(MUT_vaf_2$MuSE_vaf, collapse = ';\n')
+stat_df$Prediction  <- "Donor Loss"
+stat_df$splice_junction_status <- "CanonicalSJ"
+stat_df$splice_junction_position <- "chr2:208245425-208248368"
+
+stat_df$Pvalue <- pkw$p.adj[5]
+```
+
+```{r echo=FALSE}
+summary_res<- rbind(summary_res,stat_df)
+```
+
+
+```{r echo=FALSE}
+MUT_vaf_2 <- MUT_vaf[MUT_vaf$MutationKey_Hg38 == "chr2,208248389,G,T",]
+
+stat_df <- data.frame(matrix(ncol = 19, nrow = 1))
+colnames(stat_df) <- c("Gene","MutationKey_Hg38","HGVSc","HGVSp","Prediction","splice_junction_status","splice_junction_position", "sample_id","case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue","VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+stat_df$Gene <- unique(MUT_vaf_2$Gene)
+stat_df$MutationKey_Hg38 <- unique(MUT_vaf_2$MutationKey_Hg38)
+stat_df$HGVSc <- unique(MUT_vaf_2$HGVSc)
+stat_df$HGVSp <- unique(MUT_vaf_2$HGVSp)
+stat_df$sample_id <- paste(MUT_vaf_2$sample_id, collapse = ';\n') 
+stat_df$case_id <- paste(MUT_vaf_2$case_id, collapse = ';\n') 
+stat_df$RNA_Sample <- paste(MUT_vaf_2$RNA_Sample, collapse = ';\n') 
+stat_df$DNA_Sample <- paste(MUT_vaf_2$DNA_Sample, collapse = ';\n')
+stat_df$NormalizedExpression <- paste0(MUT_vaf_2$NormalizedExpression, collapse= ";\n")
+stat_df$ECDF <- paste0(MUT_vaf_2$ECDF, collapse = ";\n")
+stat_df$VAF_RNA <-  paste(MUT_vaf_2$VAF_RNA, collapse = ';\n')
+stat_df$MuTect2_vaf <-  paste(MUT_vaf_2$MuTect2_vaf, collapse = ';\n')
+stat_df$VarScan2_vaf <-  paste(MUT_vaf_2$VarScan2_vaf, collapse = ';\n')
+stat_df$SomaticSniper_vaf <-  paste(MUT_vaf_2$SomaticSniper_vaf, collapse = ';\n')
+stat_df$MuSE_vaf <-  paste(MUT_vaf_2$MuSE_vaf, collapse = ';\n')
+stat_df$Prediction  <- "Donor Loss"
+stat_df$splice_junction_status <- "CanonicalSJ"
+stat_df$splice_junction_position <- "chr2:208245425-208248368"
+
+stat_df$Pvalue <- pkw$p.adj[6]
+```
+
+```{r echo=FALSE}
+summary_res<- rbind(summary_res,stat_df)
+```
+
+
+```{r echo=FALSE}
+## Add not found effects information:
+MUT_df <- MUT_df[,c("sample_id", "case_id")]
+MUT_df$Prediction <- "Exon Skipping"
+MUT_df$splice_junction_status <- "AlternativeSJ not found in SJ collection"
+MUT_df$splice_junction_position <- "chr2:208245425-208251429"
+MUT_df$ECDF <- NA
+MUT_df$Pvalue <- NA
+MUT_df$NormalizedExpression <- NA
+
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+
+MUT_vaf_2 <- MUT_vaf[MUT_vaf$MutationKey_Hg38 == "chr2,208248389,G,A",]
+stat_df <- data.frame(matrix(ncol = 19, nrow = 1))
+colnames(stat_df) <- c("Gene","MutationKey_Hg38","HGVSc","HGVSp","Prediction","splice_junction_status","splice_junction_position", "sample_id","case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue","VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+stat_df$Gene <- unique(MUT_vaf_2$Gene)
+stat_df$MutationKey_Hg38 <- unique(MUT_vaf_2$MutationKey_Hg38)
+stat_df$HGVSc <- unique(MUT_vaf_2$HGVSc)
+stat_df$HGVSp <- unique(MUT_vaf_2$HGVSp)
+stat_df$sample_id <- paste(MUT_vaf_2$sample_id, collapse = ';\n') 
+stat_df$case_id <- paste(MUT_vaf_2$case_id, collapse = ';\n') 
+stat_df$RNA_Sample <- paste(MUT_vaf_2$RNA_Sample, collapse = ';\n') 
+stat_df$DNA_Sample <- paste(MUT_vaf_2$DNA_Sample, collapse = ';\n')
+stat_df$NormalizedExpression <- NA
+stat_df$ECDF <- NA
+stat_df$Pvalue <- NA
+stat_df$VAF_RNA <-  paste(MUT_vaf_2$VAF_RNA, collapse = ';\n')
+stat_df$MuTect2_vaf <-  paste(MUT_vaf_2$MuTect2_vaf, collapse = ';\n')
+stat_df$VarScan2_vaf <-  paste(MUT_vaf_2$VarScan2_vaf, collapse = ';\n')
+stat_df$SomaticSniper_vaf <-  paste(MUT_vaf_2$SomaticSniper_vaf, collapse = ';\n')
+stat_df$MuSE_vaf <-  paste(MUT_vaf_2$MuSE_vaf, collapse = ';\n')
+stat_df$Prediction  <- unique(MUT_vaf_2$Prediction)
+stat_df$splice_junction_status <- unique(MUT_vaf_2$splice_junction_status)
+stat_df$splice_junction_position <- unique(MUT_vaf_2$splice_junction_position)
+## Save
+summary_res <- rbind(summary_res, stat_df)
+
+MUT_vaf_2 <- MUT_vaf[MUT_vaf$MutationKey_Hg38 == "chr2,208248389,G,T",]
+stat_df <- data.frame(matrix(ncol = 19, nrow = 1))
+colnames(stat_df) <- c("Gene","MutationKey_Hg38","HGVSc","HGVSp","Prediction","splice_junction_status","splice_junction_position", "sample_id","case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue","VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+stat_df$Gene <- unique(MUT_vaf_2$Gene)
+stat_df$MutationKey_Hg38 <- unique(MUT_vaf_2$MutationKey_Hg38)
+stat_df$HGVSc <- unique(MUT_vaf_2$HGVSc)
+stat_df$HGVSp <- unique(MUT_vaf_2$HGVSp)
+stat_df$sample_id <- paste(MUT_vaf_2$sample_id, collapse = ';\n') 
+stat_df$case_id <- paste(MUT_vaf_2$case_id, collapse = ';\n') 
+stat_df$RNA_Sample <- paste(MUT_vaf_2$RNA_Sample, collapse = ';\n') 
+stat_df$DNA_Sample <- paste(MUT_vaf_2$DNA_Sample, collapse = ';\n')
+stat_df$NormalizedExpression <- NA
+stat_df$ECDF <- NA
+stat_df$Pvalue <- NA
+stat_df$VAF_RNA <-  paste(MUT_vaf_2$VAF_RNA, collapse = ';\n')
+stat_df$MuTect2_vaf <-  paste(MUT_vaf_2$MuTect2_vaf, collapse = ';\n')
+stat_df$VarScan2_vaf <-  paste(MUT_vaf_2$VarScan2_vaf, collapse = ';\n')
+stat_df$SomaticSniper_vaf <-  paste(MUT_vaf_2$SomaticSniper_vaf, collapse = ';\n')
+stat_df$MuSE_vaf <-  paste(MUT_vaf_2$MuSE_vaf, collapse = ';\n')
+stat_df$Prediction  <- unique(MUT_vaf_2$Prediction)
+stat_df$splice_junction_status <- unique(MUT_vaf_2$splice_junction_status)
+stat_df$splice_junction_position <- unique(MUT_vaf_2$splice_junction_position)
+## Save
+summary_res <- rbind(summary_res, stat_df)
+
+MUT_vaf_2 <- MUT_vaf[MUT_vaf$MutationKey_Hg38 == "chr2,208248389,G,C",]
+stat_df <- data.frame(matrix(ncol = 19, nrow = 1))
+colnames(stat_df) <- c("Gene","MutationKey_Hg38","HGVSc","HGVSp","Prediction","splice_junction_status","splice_junction_position", "sample_id","case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue","VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+stat_df$Gene <- unique(MUT_vaf_2$Gene)
+stat_df$MutationKey_Hg38 <- unique(MUT_vaf_2$MutationKey_Hg38)
+stat_df$HGVSc <- unique(MUT_vaf_2$HGVSc)
+stat_df$HGVSp <- unique(MUT_vaf_2$HGVSp)
+stat_df$sample_id <- paste(MUT_vaf_2$sample_id, collapse = ';\n') 
+stat_df$case_id <- paste(MUT_vaf_2$case_id, collapse = ';\n') 
+stat_df$RNA_Sample <- paste(MUT_vaf_2$RNA_Sample, collapse = ';\n') 
+stat_df$DNA_Sample <- paste(MUT_vaf_2$DNA_Sample, collapse = ';\n')
+stat_df$NormalizedExpression <- NA
+stat_df$ECDF <- NA
+stat_df$Pvalue <- NA
+stat_df$VAF_RNA <-  paste(MUT_vaf_2$VAF_RNA, collapse = ';\n')
+stat_df$MuTect2_vaf <-  paste(MUT_vaf_2$MuTect2_vaf, collapse = ';\n')
+stat_df$VarScan2_vaf <-  paste(MUT_vaf_2$VarScan2_vaf, collapse = ';\n')
+stat_df$SomaticSniper_vaf <-  paste(MUT_vaf_2$SomaticSniper_vaf, collapse = ';\n')
+stat_df$MuSE_vaf <-  paste(MUT_vaf_2$MuSE_vaf, collapse = ';\n')
+stat_df$Prediction  <- unique(MUT_vaf_2$Prediction)
+stat_df$splice_junction_status <- unique(MUT_vaf_2$splice_junction_status)
+stat_df$splice_junction_position <- unique(MUT_vaf_2$splice_junction_position)
+## Save
+summary_res <- rbind(summary_res, stat_df)
+
+```
+
+```{r echo=FALSE}
+rm(GeneSJ, normalization_df, GeneSJ_subset, annot_vaf, plot_df, samples_df,table, plot_boxplot, plot_dotplot, vaf_select, SJCounts, MUT_df, MUT_vaf)
+```
+
+# CBL chr11,119278165,G,C & chr11,119278164,A,T {.tabset}
+Variant found in **2 patients** of the TCGA (**2 samples**).
+
+* Patients with CBL chr11,119278165,G,C variant: **1 patient (1 sample)**
+* Patients with CBL chr11,119278164,A,T variant: **1 patient (1 sample)**
+
+* Patients with the variant and RNASeq for validation: **2 patients (2 samples)**
+
+The splicing alterations being assessed are: 
+
+* **Aceptor Gain**: chr11:119277845-119278189, found only in the mutated samples.
+* **Aceptor Gain**: chr11:119277845-119278237, found only in the mutated samples.
+* **Aceptor Loss**: chr11:119277845-119278165; aceptor splice site chr11:119278165.
+
+
+Variant information:
+```{r echo=FALSE}
+datatable(to_be_validated[to_be_validated$MutationKey_Hg38 %in% c("chr11,119278165,G,C","chr11,119278164,A,T"),],
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp', 
+              scrollX = TRUE,  
+              scrollY = TRUE,
+              columnDefs = list(list(targets = '_all', className = 'dt-center')))
+)
+```
+
+Load the extracted splice junctions of the gene harboring the mutation.
+```{r}
+extractedSJ_path <- paste0(extractedSJ_dir_in,"CBL_UM_annotSJ.tsv")
+GeneSJ <- read.delim(extractedSJ_path, sep ="\t")
+```
+
+Set the sample's group: Mutated (MUT) or No Mutated (WT)
+```{r}
+samples_df <- found_variants[found_variants$Gene=="CBL" & found_variants$MutationKey_Hg38 %in% c("chr11,119278165,G,C","chr11,119278164,A,T"),]
+
+cases <- samples_df$RNA_Sample[samples_df$Validable == "Validable"]
+GeneSJ$GROUP <- ifelse(GeneSJ$sample_id %in% cases , "MUT", "WT")
+```
+
+
+## SJ Lookup {.tabset}
+
+Search for the splice junctions of interest in the extracted splice junctions of the gene by position (chr_SJstart_SJend).
+
+### Aceptor Gain
+Search: chr11:119277845-119278189
+
+Show all the splice junctions containing the position 119277845-119278189 
+```{r}
+colnames(GeneSJ)[grep("119277845_119278189",colnames(GeneSJ))]
+```
+Found: chr11_119277845_119278189
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr11_119277845_119278189
+```
+
+Samples with the SJ of interest:
+```{r}
+table(GeneSJ$chr11_119277845_119278189>0) 
+```
+
+Groups of the samples having the alternative splice junction:
+```{r}
+table(GeneSJ$GROUP[GeneSJ$chr11_119277845_119278189 > 0])
+```
+
+Alternative SJ found in the mutated samples.
+
+
+### Aceptor Gain
+Search: chr11:119277845-119278237
+
+Show all the splice junctions containing the position 119277845-119278237
+```{r}
+colnames(GeneSJ)[grep("119277845_119278237",colnames(GeneSJ))]
+```
+Found: chr11_119277845_119278237
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr11_119277845_119278237
+```
+
+Samples with the SJ of interest:
+```{r}
+table(GeneSJ$chr11_119277845_119278237>0) 
+```
+
+Groups of the samples having the alternative splice junction:
+```{r}
+table(GeneSJ$GROUP[GeneSJ$chr11_119277845_119278237 > 0])
+```
+
+Alternative SJ found in the mutated samples.
+
+### Canonical SJ
+Exon 7-8: chr11:119277845-119278165; aceptor splice site: chr11:119278165
+
+Exon 8-9: chr11:119278298-119278509
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr11_119277845_119278165
+```
+
+Reads of all the AML samples (mutated and no mutated) for the splice junction:
+```{r}
+GeneSJ$chr11_119278298_119278509
+```
+
+
+## Normalization
+Count the reads of all the splice junctions of the gene harboring the variant:
+```{r}
+GeneSJ$rowSum_SJtotal <- rowSums(GeneSJ[,grep("chr", names(GeneSJ))])
+```
+
+Normalization of the expression by the total read counts of all the splice junctions of the gene:
+```{r}
+GeneSJ$Normalized_CanonEx7_8 <- (GeneSJ$chr11_119277845_119278165)/GeneSJ$rowSum_SJtotal*100
+GeneSJ$Normalized_CanonEx8_9 <- (GeneSJ$chr11_119278298_119278509)/GeneSJ$rowSum_SJtotal*100
+
+GeneSJ$Normalized_Ex8AG_chr11.119277845.119278189 <- (GeneSJ$chr11_119277845_119278189)/GeneSJ$rowSum_SJtotal*100
+GeneSJ$Normalized_Ex8AG_chr11.119277845.119278237 <- (GeneSJ$chr11_119277845_119278237)/GeneSJ$rowSum_SJtotal*100
+
+```
+
+Download the normalized values for the assessed splice junctions of all the AML samples:
+```{r echo=FALSE}
+normalization_df <- GeneSJ[,c("sample_id","case_id", "GROUP","Normalized_CanonEx7_8", "Normalized_CanonEx8_9","Normalized_Ex8AG_chr11.119277845.119278189","Normalized_Ex8AG_chr11.119277845.119278237", "chr11_119277845_119278165","chr11_119278298_119278509","chr11_119277845_119278189", "chr11_119277845_119278237", "rowSum_SJtotal","file_id.BAM","file_name.BAM","file_id.STAR.SJCounts","file_name.STAR.SJCounts" )]
+
+colnames(normalization_df)[grep("chr11_119277845_119278165", names(normalization_df))] <- "chr11_119277845_119278165_CanonEx7_8"
+colnames(normalization_df)[grep("chr11_119278298_119278509", names(normalization_df))] <- "chr11_119278298_119278509_CanonEx8_9"
+colnames(normalization_df)[grep("chr11_119277845_119278189", names(normalization_df))] <- "chr11_119277845_119278189_Ex8AG"
+colnames(normalization_df)[grep("chr11_119277845_11927823", names(normalization_df))] <- "chr11_119277845_119278237_Ex8AG"
+
+write.xlsx(normalization_df, paste0(normalizedEx_dir_out, "TCGA.CBL.xlsx"), row.names = FALSE)
+```
+
+```{r echo=FALSE}
+datatable(normalization_df,
+extensions = 'Buttons',
+rownames = FALSE, 
+filter = 'top',
+options = list(paging = TRUE,
+              pageLength = 4,
+              autoWidth = FALSE,
+              dom = 'lifrtBp',
+              buttons = list(
+               list(
+                 extend = 'excel',
+                 filename = "TCGA.CBL.Normalized" 
+               )
+              ), 
+              scrollX = TRUE,  
+              scrollY = TRUE,
+              columnDefs = list(list(targets = '_all', className = 'dt-center'))
+))
+```
+
+## VAF
+```{r echo=FALSE}
+GeneSJ_subset <- GeneSJ[GeneSJ$sample_id %in% cases,]
+GeneSJ_subset$Gene <- "CBL"
+
+annot_vaf <- merge(found_variants[,c("MutationKey_Hg38","Gene","HGVSc","HGVSp","sample_id","case_id",                                               "RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf",                         "MuTect2_filter","VarScan2_filter","SomaticSniper_filter","MuSE_filter","MUTReads","WTReads","VAF")], 
+                   GeneSJ_subset[,c("Gene","sample_id","case_id", "Normalized_CanonEx7_8", "Normalized_CanonEx8_9", "Normalized_Ex8AG_chr11.119277845.119278189", "Normalized_Ex8AG_chr11.119277845.119278237")], 
+                   by.x=c("RNA_Sample", "case_id","Gene"),
+                   by.y=c("sample_id", "case_id","Gene"))
+
+
+annot_vaf <- annot_vaf %>% select(Gene,MutationKey_Hg38,HGVSc, HGVSp,
+                                  sample_id,
+                                  case_id, RNA_Sample,DNA_Sample,
+                                  MuTect2_vaf,VarScan2_vaf,SomaticSniper_vaf,MuSE_vaf,
+                                  VAF,
+                                  Normalized_CanonEx7_8, Normalized_CanonEx8_9,
+                                  Normalized_Ex8AG_chr11.119277845.119278189, 
+                                  Normalized_Ex8AG_chr11.119277845.119278237,
+                                  everything()
+                                  )
+
+colnames(annot_vaf)[grep("VAF", names(annot_vaf))] <- "VAF_RNA"
+colnames(annot_vaf)[grep("MUTReads", names(annot_vaf))] <- "MUTReads_RNA"
+colnames(annot_vaf)[grep("WTReads", names(annot_vaf))] <- "WTReads_RNA"
+
+write.xlsx(annot_vaf, paste0(normalizedEx_dir_out, "TCGA.CBL.MUT.xlsx"), row.names = FALSE)
+```
+
+Mutated samples vaf:
+```{r echo=FALSE}
+datatable(annot_vaf,
+extensions = 'Buttons',
+rownames = FALSE, 
+filter = 'top',
+options = list(paging = TRUE,
+              pageLength = 4,
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              buttons = list(
+               list(
+                 extend = 'excel',
+                 filename = "TCGA.CBL.MUT" 
+               )
+              ), 
+              scrollX = TRUE,  
+              scrollY = TRUE
+              )
+)
+```
+
+## Plots {.tabset}
+
+```{r echo=FALSE}
+GeneSJ$GROUP <- ifelse(GeneSJ$GROUP == "MUT", "MUT", "WT")
+GeneSJ$GROUP <- as.factor(GeneSJ$GROUP)
+```
+
+### Static Dot Plots 
+Canonical splice junction: Exon 7-8: chr11:119277845-119278165; aceptor splice site: chr11:119278165
+```{r echo=FALSE}
+ggplot(GeneSJ, aes(sample_id,Normalized_CanonEx7_8, color=GROUP)) + 
+  geom_point()  +
+  ggtitle("Normalized expression of CBL Exon 7-8 Splice Junction") +
+  labs(color='GROUP')
+```
+
+Splicing alterations:
+
+```{r echo=FALSE}
+ggplot(GeneSJ, aes(sample_id,Normalized_Ex8AG_chr11.119277845.119278189, color=GROUP)) + 
+  geom_point()  +
+  ggtitle("Normalized expression of CBL Exon 8 aceptor Gain (SpliceAI)") +
+  labs(color='GROUP') 
+
+ggplot(GeneSJ, aes(sample_id,Normalized_Ex8AG_chr11.119277845.119278237,color=GROUP)) + 
+  geom_point() +
+  ggtitle("Normalized expression of CBL Exon 8 aceptor Gain") +
+  labs(color='GROUP') 
+```
+
+
+### Interactive Dot Plots
+
+```{r echo=FALSE}
+plot_df <- merge(GeneSJ,annot_vaf[c("RNA_Sample", "VAF_RNA", 
+                                    "MuTect2_vaf", "VarScan2_vaf", "SomaticSniper_vaf", "MuSE_vaf")],
+                 by.x="sample_id", by.y="RNA_Sample", all.x = TRUE)
+```
+
+
+Canonical splice junction: Exon 7-8: chr11:119277845-119278165; aceptor splice site: chr11:119278165
+```{r echo=FALSE}
+ggplotly(ggplot(plot_df, aes(sample_id,Normalized_CanonEx7_8, color=GROUP)) + 
+  geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
+                             "\nVAF VarScan2: ",VarScan2_vaf,
+                             "\nVAF SomaticSniper: ",SomaticSniper_vaf,
+                             "\nVAF MuSE: ",MuSE_vaf)),size= 0.8)  +
+  ggtitle("Normalized expression of CBL Exon 8-9 Splice Junction") +
+  labs(color='GROUP') 
+)
+```
+
+Splicing alteration:
+```{r echo=FALSE}
+ggplotly(ggplot(plot_df, aes(sample_id,Normalized_Ex8AG_chr11.119277845.119278189, color=GROUP)) + 
+  geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
+                             "\nVAF VarScan2: ",VarScan2_vaf,
+                             "\nVAF SomaticSniper: ",SomaticSniper_vaf,
+                             "\nVAF MuSE: ",MuSE_vaf)),size= 0.8)   +
+  ggtitle("Normalized expression of CBL Exon 8 aceptor Gain (SpliceAI)") +
+  labs(color='GROUP') 
+)
+
+ggplotly(ggplot(plot_df, aes(sample_id,Normalized_Ex8AG_chr11.119277845.119278237,color=GROUP)) + 
+  geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
+                             "\nVAF VarScan2: ",VarScan2_vaf,
+                             "\nVAF SomaticSniper: ",SomaticSniper_vaf,
+                             "\nVAF MuSE: ",MuSE_vaf)),size= 0.8)  +
+  ggtitle("Normalized expression of CBL Exon 8 aceptor Gain") +
+  labs(color='GROUP') 
+)
+```
+
+
+### Violin Plots
+Violin Plots for the alternative splice junctions interrogated:
+```{r echo=FALSE}
+plot_boxplot <- plot_df[plot_df$GROUP %in% c("WT"),]
+plot_dotplot <- plot_df[plot_df$GROUP %in% c("MUT"),]
+
+GEN = "CBL"
+SJ = "chr11:119277845-119278165"
+
+ggplot(plot_df, aes(y=Normalized_CanonEx7_8, x=factor(GROUP, level=c("WT", "MUT")))) + 
+       geom_violin(scale="area") +
+       geom_point(data = plot_dotplot, 
+                  aes(y=Normalized_CanonEx7_8, x=GROUP),
+                  color="black",
+                  size=2
+                  ) +
+        
+       ylab("Normalized SJ expression") +
+       xlab(paste(GEN, SJ))
+```
+
+```{r echo=FALSE}
+plot_boxplot <- plot_df[plot_df$GROUP %in% c("WT"),]
+plot_dotplot <- plot_df[plot_df$GROUP %in% c("MUT"),]
+
+GEN = "CBL"
+SJ = "chr11.119277845.119278189"
+
+ggplot(plot_df, aes(y=Normalized_Ex8AG_chr11.119277845.119278189, x=factor(GROUP, level=c("WT", "MUT")))) + 
+       geom_violin(scale="area") +
+       geom_point(data = plot_dotplot, 
+                  aes(y=Normalized_Ex8AG_chr11.119277845.119278189, x=GROUP),
+                  color="black",
+                  size=2
+                  ) +
+        
+       ylab("Normalized SJ expression") +
+       xlab(paste(GEN, SJ))
+```
+
+
+```{r echo=FALSE}
+plot_boxplot <- plot_df[plot_df$GROUP %in% c("WT"),]
+plot_dotplot <- plot_df[plot_df$GROUP %in% c("MUT"),]
+
+GEN = "CBL"
+SJ = "chr11:119277845-119278237"
+
+ggplot(plot_df, aes(y=Normalized_Ex8AG_chr11.119277845.119278237, x=factor(GROUP, level=c("WT", "MUT")))) + 
+       geom_violin(scale="area") +
+       geom_point(data = plot_dotplot, 
+                  aes(y=Normalized_Ex8AG_chr11.119277845.119278237, x=GROUP),
+                  color="black",
+                  size=2
+                  ) +
+        
+       ylab("Normalized SJ expression") +
+       xlab(paste(GEN, SJ))
+```
+
+## Statistical Analysis {.tabset}
+
+```{r}
+SJCounts <- GeneSJ
+```
+
+### Aceptor Loss {.tabset}
+
+#### Expression Difference 
+
+Value of Mean Normalized Expression of the Alternative SJ in WT samples:
+```{r}
+mean_WT_SJi <- mean(SJCounts$Normalized_CanonEx7_8[SJCounts$GROUP == "WT"], na.rm=TRUE)
+mean_WT_SJi
+```
+
+Normalized Expression Value of the Alternative SJ in the MUT sample:
+```{r}
+MUT_SJi <- SJCounts$Normalized_CanonEx7_8[SJCounts$GROUP == "MUT"]
+MUT_SJi
+```
+Deviation from the mean normalized expression:
+```{r}
+SJCounts$Difference <-  SJCounts$Normalized_CanonEx7_8 - mean_WT_SJi
+```
+
+```{r echo=FALSE}
+table <- SJCounts[SJCounts$GROUP == "WT", c("sample_id", "Normalized_CanonEx7_8", "Difference")]
+table <- table[order(table$Difference, decreasing = TRUE),]
+```
+
+```{r echo=FALSE}
+datatable(table,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp'
+))
+```
+
+Difference in the MUT sample: deviation of the Normalized expression of the MUT patient from the mean normalized WT expression
+```{r}
+SJCounts$Difference[SJCounts$GROUP == "MUT"]
+```
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
+  ylab("Differential Expression") +
+  labs(color = "GROUP",
+       title = "Differential Expression Distribution")
+```
+
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
+  geom_boxplot() +
+  ylab("Differential Expression") +
+  xlab("GROUP")
+```
+
+#### ECDF - Pvalue Inference 
+
+```{r}
+v_ecdf <- ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"])
+v_ecdf
+```
+
+```{r}
+plot(ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"]))
+```
+
+```{r}
+v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+```
+
+
+```{r}
+MUT_df <- SJCounts[SJCounts$GROUP == "MUT",c("sample_id","case_id", "Normalized_CanonEx7_8")]
+colnames(MUT_df) <- c("sample_id", "case_id", "NormalizedExpression")
+
+MUT_df$ECDF <- v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+MUT_df$Pvalue <- MUT_df$ECDF
+
+MUT_df$Prediction <- "Aceptor Loss"
+MUT_df$splice_junction_status <- "CanonicalSJ"
+MUT_df$splice_junction_position <- "chr11:119277845-119278165"
+
+MUT_df$ECDF <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$ECDF)
+MUT_df$Pvalue <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$Pvalue)
+```
+
+```{r echo=FALSE}
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+```
+
+Download the vaf, inferred percentiles and pvalues of the mutated samples:
+```{r echo=FALSE}
+datatable(MUT_vaf,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              scrollX=TRUE
+))
+```
+
+```{r echo=FALSE}
+summary_res <- rbind(summary_res, MUT_vaf)
+```
+
+
+### Aceptor Gain {.tabset}
+
+#### Expression Difference 
+
+Value of Mean Normalized Expression of the Alternative SJ in WT samples:
+```{r}
+mean_WT_SJi <- mean(SJCounts$Normalized_Ex8AG_chr11.119277845.119278189[SJCounts$GROUP == "WT"], na.rm=TRUE)
+mean_WT_SJi
+```
+
+Normalized Expression Value of the Alternative SJ in the MUT sample:
+```{r}
+MUT_SJi <- SJCounts$Normalized_Ex8AG_chr11.119277845.119278189[SJCounts$GROUP == "MUT"]
+MUT_SJi
+```
+Deviation from the mean normalized expression:
+```{r}
+SJCounts$Difference <-  SJCounts$Normalized_Ex8AG_chr11.119277845.119278189 - mean_WT_SJi
+```
+
+```{r echo=FALSE}
+table <- SJCounts[SJCounts$GROUP == "WT", c("sample_id", "Normalized_Ex8AG_chr11.119277845.119278189", "Difference")]
+table <- table[order(table$Difference, decreasing = TRUE),]
+```
+
+```{r echo=FALSE}
+datatable(table,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp'
+))
+```
+
+Difference in the MUT sample: deviation of the Normalized expression of the MUT patient from the mean normalized WT expression
+```{r}
+SJCounts$Difference[SJCounts$GROUP == "MUT"]
+```
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
+  ylab("Differential Expression") +
+  labs(color = "GROUP",
+       title = "Differential Expression Distribution")
+```
+
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
+  geom_boxplot() +
+  ylab("Differential Expression") +
+  xlab("GROUP")
+```
+
+#### ECDF - Pvalue Inference 
+
+```{r}
+v_ecdf <- ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"])
+v_ecdf
+```
+
+```{r}
+plot(ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"]))
+```
+
+```{r}
+v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+```
+
+
+```{r}
+MUT_df <- SJCounts[SJCounts$GROUP == "MUT",c("sample_id","case_id", "Normalized_Ex8AG_chr11.119277845.119278189")]
+colnames(MUT_df) <- c("sample_id", "case_id", "NormalizedExpression")
+
+MUT_df$ECDF <- v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+MUT_df$Pvalue <- 1- MUT_df$ECDF
+
+MUT_df$Prediction <- "Aceptor Gain"
+MUT_df$splice_junction_status <- "AlternativeSJ found in MUT samples"
+MUT_df$splice_junction_position <- "chr11:119277845-119278189"
+
+MUT_df$ECDF <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$ECDF)
+MUT_df$Pvalue <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$Pvalue)
+```
+
+```{r echo=FALSE}
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+```
+
+Download the vaf, inferred percentiles and pvalues of the mutated samples:
+```{r echo=FALSE}
+datatable(MUT_vaf,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              scrollX = TRUE,
+              scrollY =TRUE
+))
+```
+
+```{r echo=FALSE}
+summary_res <- rbind(summary_res, MUT_vaf)
+```
+
+
+### Aceptor Gain {.tabset}
+
+#### Expression Difference 
+
+Value of Mean Normalized Expression of the Alternative SJ in WT samples:
+```{r}
+mean_WT_SJi <- mean(SJCounts$Normalized_Ex8AG_chr11.119277845.119278237[SJCounts$GROUP == "WT"], na.rm=TRUE)
+mean_WT_SJi
+```
+
+Normalized Expression Value of the Alternative SJ in the MUT sample:
+```{r}
+MUT_SJi <- SJCounts$Normalized_Ex8AG_chr11.119277845.119278237[SJCounts$GROUP == "MUT"]
+MUT_SJi
+```
+Deviation from the mean normalized expression:
+```{r}
+SJCounts$Difference <-  SJCounts$Normalized_Ex8AG_chr11.119277845.119278237 - mean_WT_SJi
+```
+
+```{r echo=FALSE}
+table <- SJCounts[SJCounts$GROUP == "WT", c("sample_id", "Normalized_Ex8AG_chr11.119277845.119278237", "Difference")]
+table <- table[order(table$Difference, decreasing = TRUE),]
+```
+
+```{r echo=FALSE}
+datatable(table,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp'
+))
+```
+
+Difference in the MUT sample: deviation of the Normalized expression of the MUT patient from the mean normalized WT expression
+```{r}
+SJCounts$Difference[SJCounts$GROUP == "MUT"]
+```
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
+  ylab("Differential Expression") +
+  labs(color = "GROUP",
+       title = "Differential Expression Distribution")
+```
+
+
+```{r echo=FALSE}
+ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
+  geom_boxplot() +
+  ylab("Differential Expression") +
+  xlab("GROUP")
+```
+
+#### ECDF - Pvalue Inference 
+
+```{r}
+v_ecdf <- ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"])
+v_ecdf
+```
+
+```{r}
+plot(ecdf(SJCounts$Difference[SJCounts$GROUP == "WT"]))
+```
+
+```{r}
+v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+```
+
+
+```{r}
+MUT_df <- SJCounts[SJCounts$GROUP == "MUT",c("sample_id","case_id", "Normalized_Ex8AG_chr11.119277845.119278237")]
+colnames(MUT_df) <- c("sample_id", "case_id", "NormalizedExpression")
+
+MUT_df$ECDF <- v_ecdf(SJCounts$Difference[SJCounts$GROUP == "MUT"])
+MUT_df$Pvalue <- 1- MUT_df$ECDF
+
+MUT_df$Prediction <- "Aceptor Gain"
+MUT_df$splice_junction_status <- "AlternativeSJ found in MUT samples"
+MUT_df$splice_junction_position <- "chr11:119277845-119278237"
+
+MUT_df$ECDF <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$ECDF)
+MUT_df$Pvalue <- ifelse(MUT_df$NormalizedExpression == 0, NA,MUT_df$Pvalue)
+```
+
+```{r echo=FALSE}
+vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","HGVSc", "HGVSp","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
+MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
+colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- MUT_vaf[, col_order]
+```
+
+Download the vaf, inferred percentiles and pvalues of the mutated samples:
+```{r echo=FALSE}
+datatable(MUT_vaf,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              scrollX = TRUE,
+              scrollY =TRUE
+))
+```
+
+```{r echo=FALSE}
+summary_res <- rbind(summary_res, MUT_vaf)
+```
+
+
+```{r echo=FALSE}
+rm(GeneSJ, normalization_df, GeneSJ_subset, annot_vaf, plot_df, samples_df,table, plot_boxplot, plot_dotplot, vaf_select, SJCounts, MUT_df, MUT_vaf)
+```
+
+
+# Results Summary
+```{r echo=FALSE}
+## Add non validable variants 
+#PTPN11 and WT1
+MUT <- data.frame(matrix(ncol = 8, nrow = 2))
+colnames(MUT) <- c("Gene", "MutationKey_Hg38", "Prediction", "splice_junction_status", "splice_junction_position", "NormalizedExpression","ECDF", "Pvalue")
+MUT$Gene <- c("PTPN11", "WT1")
+MUT$MutationKey_Hg38 <- c("chr12,112450361,G,A", "chr11,32396364,G,T")
+MUT$Prediction <- rep("No validable", times=2)
+MUT$splice_junction_status <- rep("No validable", times=2)
+MUT$splice_junction_position <- rep("No validable", times=2)
+MUT$ECDF <- rep(NA, times=2)
+MUT$Pvalue <- rep(NA, times=2)
+MUT$NormalizedExpression <- rep(NA, times=2)
+
+annot_vaf <- merge(found_variants[,c("MutationKey_Hg38","Gene","HGVSc","HGVSp","sample_id","case_id",                                               "RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf","VAF")], 
+                   MUT, 
+                   by.x=c("Gene", "MutationKey_Hg38"), 
+                   by.y=c("Gene", "MutationKey_Hg38"))
+
+colnames(annot_vaf)[grepl("VAF", colnames(annot_vaf))] <- "VAF_RNA"
+
+col_order <- c("Gene", "MutationKey_Hg38","HGVSc" ,"HGVSp" ,"Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF", "Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
+MUT_vaf <- annot_vaf[, col_order]
+
+summary_res <- rbind(summary_res, MUT_vaf)
+
+```
+
+
+```{r echo=FALSE}
+summary_res$Cohort <- "TCGA"
+
+col_order <- c("Cohort", "Gene",     "MutationKey_Hg38", "HGVSc", "HGVSp", "Prediction", "splice_junction_status","splice_junction_position","sample_id","case_id", 
+"RNA_Sample", "DNA_Sample","NormalizedExpression", "ECDF",  "Pvalue", "VAF_RNA",  "MuTect2_vaf","VarScan2_vaf", "SomaticSniper_vaf", 
+"MuSE_vaf")
+
+summary_res <- summary_res[,col_order]
+
+writexl::write_xlsx(summary_res, paste0(normalizedEx_dir_out,"TCGA.report.xlsx"))
+```
+
+Download the vaf, inferred percentiles and pvalues of all the splicing alterations evaluated:
+```{r echo=FALSE}
+datatable(summary_res,
+extensions = "Buttons",
+rownames = FALSE, 
+options = list(paging = TRUE,
+              pageLength = 4,
+              buttons = c('excel'), 
+              autoWidth = TRUE,
+              dom = 'lifrtBp',
+              scrollX=TRUE,
+              scrollY=TRUE
+))
+```
