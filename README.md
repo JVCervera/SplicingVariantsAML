@@ -40,8 +40,8 @@ Required software to run the pipeline:
 + plotly
 + knitr
 + ggsignif
++ stats
 + rstatix
-+ RcmdrMisc
 
 ## Bioinformatic Pipeline
 The main bash script `Integration_pipeline.sh` incorporates all three workflows to process the different biological data structures.
