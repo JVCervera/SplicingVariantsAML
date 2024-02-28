@@ -1670,7 +1670,7 @@ summary_res <- rbind(summary_res, MUT_vaf)
 
 
 
-```{r}
+```{r echo=FALSE}
 ## Add not found effects information:
 MUT_df <- SJCounts[SJCounts$GROUP == "MUT",c("sample_id","case_id")]
 
