@@ -36,22 +36,24 @@ library(stats)
 
 
 ```{r echo=FALSE}
-extractedSJ_dir_in <- "/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/ExtractedSJ-Annotated/"
-normalizedEx_dir_out <- "/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/NormalizedExpression/"
+extractedSJ_dir_in <- "../Results/TCGA/SpliceJunction/ExtractedSJ-Annotated/"
+normalizedEx_dir_out <- "../Results/TCGA/SpliceJunction/NormalizedExpression/"
+summary_dir_out <- "../Results/TCGA/"
 ```
 
 
 In the TCGA cohort we found 11 variants of interest, of which 9 variants can be validated by RNASeq data. 
 
 The samples of interest are those where the variant has been called either in DNA or RNA, and have RNASeq data available for validation.
+The splice junction search is made based on the STAR-SJCounts 1-based intronic positions.
 
 ```{r echo=FALSE}
-found_variants <- read_excel("/SplicingVariantsAML-main/Results/TCGA/TCGA.Variant_summary.xlsx", sheet = "Sheet 1")
+found_variants <- read_excel("../Results/TCGA/TCGA.Variant_summary.xlsx", sheet = "Sheet 1")
 validable_variants <- unique(found_variants$MutationKey_Hg38[found_variants$Validable == "Validable"])
 ```
 
 ```{r echo=FALSE}
-to_be_validated = read.delim("/SplicingVariantsAML-main/Data/Potential_SAVs.tsv", sep ="\t")
+to_be_validated = read.delim("/home/adminiis/SplicingVariantsAML-main/Data/Potential_SAVs.tsv", sep ="\t")
 columns_to_select <- c("ID", "SYMBOL","MutationKey_Hg38" ,"hg19","hg38","HGVSc","HGVSp","Consequence","Prediction_merged", "Predictors" ,"MINIGENE" , "SpliceAI_pred_DP_AG","SpliceAI_pred_DP_AL","SpliceAI_pred_DP_DG","SpliceAI_pred_DP_DL" ,
 "SpliceAI_pred_DS_AG","SpliceAI_pred_DS_AL","SpliceAI_pred_DS_DG","SpliceAI_pred_DS_DL","SpliceAI_pred_SYMBOL", "MaxEntScan_alt","MaxEntScan_diff","MaxEntScan_ref","Motif","New.splice.site","Wild.Type","Mutant",   "Variation...." )
 
@@ -3358,7 +3360,7 @@ col_order <- c("Cohort", "Gene",     "MutationKey_Hg38", "HGVSc", "HGVSp", "Pred
 
 summary_res <- summary_res[,col_order]
 
-writexl::write_xlsx(summary_res, paste0(normalizedEx_dir_out,"TCGA.report.xlsx"))
+writexl::write_xlsx(summary_res, paste0(summary_dir_out, "TCGA.report.xlsx"))
 ```
 
 Download the vaf, inferred percentiles and pvalues of all the splicing alterations evaluated:

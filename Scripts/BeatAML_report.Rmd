@@ -35,8 +35,9 @@ library(rstatix)
 ```
 
 ```{r echo=FALSE}
-extractedSJ_dir_in <- "/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/ExtractedSJ-Annotated/"
-normalizedEx_dir_out <- "/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/NormalizedExpression/"
+extractedSJ_dir_in <- "../Results/BeatAML/SpliceJunction/ExtractedSJ-Annotated/"
+normalizedEx_dir_out <- "../Results/BeatAML/SpliceJunction/NormalizedExpression/"
+summary_dir_out <- "../Results/BeatAML/"
 ```
 
 
@@ -45,12 +46,12 @@ In the BeatAML cohort we found 28 variants of interest, of which 25 variants can
 The samples of interest are those where the variant has been called either in DNA or RNA, and have RNASeq data available for validation. The splice junction search is made based on the STAR-SJCounts 1-based intronic positions.
 
 ```{r echo=FALSE}
-found_variants <- read_excel("/SplicingVariantsAML-main/Results/BeatAML/BeatAML.Variant_summary.xlsx", sheet = "Sheet 1")
+found_variants <- read_excel("../Results/BeatAML/BeatAML.Variant_summary.xlsx", sheet = "Sheet 1")
 validable_variants <- unique(found_variants$MutationKey_Hg38[found_variants$Validable == "Validable"])
 ```
 
 ```{r echo=FALSE}
-to_be_validated = read.delim("/home/adminiis/SplicingVariantsAML-main/Data/Potential_SAVs.tsv", sep ="\t")
+to_be_validated = read.delim("../Data/Potential_SAVs.tsv", sep ="\t")
 columns_to_select <- c("ID","SYMBOL" ,"MutationKey_Hg38","hg19","hg38","HGVSc","HGVSp","Consequence","Prediction_merged", "Predictors" ,"MINIGENE" , "SpliceAI_pred_DP_AG","SpliceAI_pred_DP_AL","SpliceAI_pred_DP_DG","SpliceAI_pred_DP_DL" ,
 "SpliceAI_pred_DS_AG","SpliceAI_pred_DS_AL","SpliceAI_pred_DS_DG","SpliceAI_pred_DS_DL","SpliceAI_pred_SYMBOL", "MaxEntScan_alt","MaxEntScan_diff","MaxEntScan_ref","Motif","New.splice.site","Wild.Type","Mutant",   "Variation....","Motif.1","New.splice.site.1","Wild.Type.1","Mutant.1","Variation.....1" )
 to_be_validated_2 <- to_be_validated[to_be_validated$MutationKey_Hg38 %in% validable_variants, columns_to_select]
@@ -498,7 +499,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts[SJCounts$GROUP == "MUT", c("sample_id", "Difference")]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -506,7 +507,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -644,7 +645,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts[SJCounts$GROUP == "MUT", c("sample_id", "Difference")]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -652,7 +653,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -1649,7 +1650,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -1657,7 +1658,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -1775,7 +1776,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -1783,7 +1784,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -1903,7 +1904,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -1911,7 +1912,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -2036,14 +2037,14 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
        title = "Differential Expression Distribution")
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -2521,7 +2522,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts[SJCounts$GROUP == "MUT", c("sample_id", "Difference")]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -2529,7 +2530,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -2747,7 +2748,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -2755,7 +2756,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -3470,7 +3471,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -3478,7 +3479,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -3636,7 +3637,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -3644,7 +3645,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -3806,7 +3807,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -3814,7 +3815,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -3975,7 +3976,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -3983,7 +3984,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -4144,7 +4145,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -4152,7 +4153,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -4651,7 +4652,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -4659,7 +4660,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -4773,7 +4774,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -4781,7 +4782,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -5207,7 +5208,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -5215,7 +5216,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -5329,7 +5330,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -5337,7 +5338,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -5769,7 +5770,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -5777,7 +5778,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -5891,7 +5892,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -5899,7 +5900,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -6354,7 +6355,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -6362,7 +6363,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -6477,7 +6478,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -6485,7 +6486,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -6854,7 +6855,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -6862,7 +6863,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -7228,7 +7229,7 @@ plot_df <- merge(GeneSJ,annot_vaf[c("RNA_Sample", "VAF_RNA",
 
 
 Canonical splice junction Exon downstream (DE): chr17:7674291-7674858, donor splice site chr17:7674858
-```{r}
+```{r echo=FALSE}
 ggplotly(ggplot(plot_df, aes(sample_id,Normalized_CanonDE,color=GROUP)) + 
   geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
                              "\nVAF VarScan2: ",VarScan2_vaf,
@@ -7349,7 +7350,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -7357,7 +7358,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -7471,7 +7472,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -7479,7 +7480,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -7987,7 +7988,7 @@ GeneSJ$GROUP <- as.factor(GeneSJ$GROUP)
 ### Static Dot Plots 
 
 Canonical splice junction:
-```{r}
+```{r echo=FALSE}
 ggplot(GeneSJ, aes(sample_id,Normalized_CanonDE,color=GROUP)) +
   geom_point(size=.8) +
   labs(color='GROUP', 
@@ -8017,7 +8018,7 @@ plot_df <- merge(GeneSJ,annot_vaf[c("RNA_Sample", "VAF_RNA",
 
 
 Canonical splice junction:
-```{r}
+```{r echo=FALSE}
 ggplotly(ggplot(plot_df, aes(sample_id,Normalized_CanonDE,color=GROUP)) + 
   geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
                              "\nVAF VarScan2: ",VarScan2_vaf,
@@ -8142,7 +8143,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -8150,7 +8151,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -8264,7 +8265,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -8272,7 +8273,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -8536,7 +8537,7 @@ GeneSJ$GROUP <- as.factor(GeneSJ$GROUP)
 ### Static Dot Plots 
 
 Canonical splice junction:
-```{r}
+```{r echo=FALSE}
 ggplot(GeneSJ, aes(sample_id,Normalized_CanonUE,color=GROUP)) +
   geom_point(size=.8) +
   labs(color='GROUP', 
@@ -8566,7 +8567,7 @@ plot_df <- merge(GeneSJ,annot_vaf[c("RNA_Sample", "VAF_RNA",
 
 
 Canonical splice junction:
-```{r}
+```{r echo=FALSE}
 ggplotly(ggplot(plot_df, aes(sample_id,Normalized_CanonUE,color=GROUP)) + 
   geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
                              "\nVAF VarScan2: ",VarScan2_vaf,
@@ -8690,7 +8691,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -8698,7 +8699,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -8812,7 +8813,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -8820,7 +8821,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -8933,7 +8934,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -8941,7 +8942,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -9638,7 +9639,7 @@ GeneSJ$GROUP <- as.factor(GeneSJ$GROUP)
 ### Static Dot Plots 
 
 Canonical splice junction:
-```{r}
+```{r echo=FALSE}
 ggplot(GeneSJ, aes(sample_id,Normalized_CanonUE,color=GROUP)) +
   geom_point(size=.8) +
   labs(color='GROUP', 
@@ -9647,7 +9648,7 @@ ggplot(GeneSJ, aes(sample_id,Normalized_CanonUE,color=GROUP)) +
        y = "Normalized Expression")
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(GeneSJ, aes(sample_id,Normalized_CanonDE,color=GROUP)) +
   geom_point(size=.8) +
   labs(color='GROUP', 
@@ -9677,7 +9678,7 @@ plot_df <- merge(GeneSJ,annot_vaf[c("RNA_Sample", "VAF_RNA",
 
 
 Canonical splice junction:
-```{r}
+```{r echo=FALSE}
 ggplotly(ggplot(plot_df, aes(sample_id,Normalized_CanonUE,color=GROUP)) + 
   geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
                              "\nVAF VarScan2: ",VarScan2_vaf,
@@ -9690,7 +9691,7 @@ ggplotly(ggplot(plot_df, aes(sample_id,Normalized_CanonUE,color=GROUP)) +
 )
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplotly(ggplot(plot_df, aes(sample_id,Normalized_CanonDE,color=GROUP)) + 
   geom_point(aes(text=paste0("VAF RNA: ",VAF_RNA,"\nVAF MuTect: ",MuTect2_vaf,
                              "\nVAF VarScan2: ",VarScan2_vaf,
@@ -9837,7 +9838,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -9845,7 +9846,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -9959,7 +9960,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -9967,7 +9968,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -10081,7 +10082,7 @@ Difference in the MUT sample: deviation of the Normalized expression of the MUT 
 SJCounts$Difference[SJCounts$GROUP == "MUT"]
 ```
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP))) +
   ylab("Differential Expression") +
   labs(color = "GROUP",
@@ -10089,7 +10090,7 @@ ggplot(SJCounts, aes(sample_id,Difference)) + geom_point(aes(colour=factor(GROUP
 ```
 
 
-```{r}
+```{r echo=FALSE}
 ggplot(SJCounts, aes(y=Difference, x=factor(GROUP, level=c("WT", "MUT")))) + 
   geom_boxplot() +
   ylab("Differential Expression") +
@@ -11967,5 +11968,5 @@ col_order <- c("Cohort", "Gene",     "MutationKey_Hg38", "HGVSc", "HGVSp", "Pred
 
 summary_res <- summary_res[,col_order]
 
-writexl::write_xlsx(summary_res,paste0(normalizedEx_dir_out,"BeatAML.report.xlsx")
+writexl::write_xlsx(summary_res, paste0(summary_dir_out, "/BeatAML.report.xlsx"))
 ```
