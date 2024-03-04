@@ -1,0 +1,16 @@
+python3 ggsashimi.py \
+ -b /TSV/KDM6A_chrX-45062737-C-T_BeatAML.tsv \
+ -c chrX:45062647-45063817 \
+ -o /PLOTS/KDM6A_chrX-45062737-C-T_BeatAML  \
+ -S plus \
+ -g gencode.v36.annotation.gtf \
+ -F png \
+ -O 3 \
+ -C 3 \
+ -A mean_j \
+ --palette palette_3sashimis.txt \
+ --shrink \
+ --fix-y-scale \
+ --base-size 15 \
+ --ann-height 3 \
+ -M 1

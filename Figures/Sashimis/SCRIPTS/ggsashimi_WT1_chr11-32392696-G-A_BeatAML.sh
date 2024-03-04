@@ -1,0 +1,16 @@
+python3 ggsashimi.py \
+ -b /TSV/WT1_chr11-32392696-G-A_BeatAML.tsv \
+ -c chr11:32391972-32396407 \
+ -o /PLOTS/WT1_chr11-32392696-G-A_BeatAML  \
+ -S minus \
+ -g gencode.v36.annotation.gtf \
+ -F png \
+ -O 3 \
+ -C 3 \
+ -A mean_j \
+ --palette palette_2sashimis.txt \
+ --shrink \
+ --fix-y-scale \
+ --base-size 15 \
+ --ann-height 3 \
+ -M 1
