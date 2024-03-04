@@ -136,7 +136,7 @@ plot <- rbind(plot, WT1_364)
 plot <- rbind(plot, WT1_696)
 ```
 
-MUT Dotplots
+MUT Dotplots:
 ```{r}
 plot_dotplot <- plot[plot$GROUP == "MUT",]
 
@@ -334,7 +334,10 @@ plot <- rbind(plot, FLT3_20)
 plot <- rbind(plot, FLT3_1920)
 plot <- rbind(plot, IDH1_C)
 plot <- rbind(plot, NRAS)
+```
 
+MUT Dotplots:
+```{r}
 plot_dotplot <- plot[plot$GROUP == "MUT",]
 ```
 
