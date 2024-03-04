@@ -1,7 +1,7 @@
 python3 ggsashimi.py \
  -b /TSV/CBL_2pt.tsv \
  -c chr11:119277757-119278297 \
- -o /PLOTS/CBL_exones7-8 \
+ -o /PLOTS/CBL_exons7-8 \
  -S plus \
  -g gencode.v36.annotation.gtf \
  -F png \
