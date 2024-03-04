@@ -1,0 +1,16 @@
+python3 ggsashimi.py \
+ -b /TSV/TET2_chr4-105259774-G-A_exons6-8.tsv \
+ -c chr4:105259619-105261848 \
+ -o /PLOTS/TET2_chr4-105259774-G-A_exons6-8 \
+ -S plus \
+ -g gencode.v36.annotation.gtf  \
+ -F png \
+ -O 3 \
+ -C 3 \
+ -A mean_j \
+ --palette palette_2sashimis.txt \
+ --shrink \
+ --fix-y-scale \
+ --base-size 15 \
+ --ann-height 3 \
+ -M 3
