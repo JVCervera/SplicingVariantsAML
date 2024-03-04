@@ -267,10 +267,11 @@ The potential splice altering effect analysis is conducted at the `BeatAML_repor
 
 Jose Cervera 
 
+cervera_jos@gva.es
+
 Hematology Researh Group, Instituto de Investigación Sanitaria La Fe
 
 46026
 
 Valencia, Spain
 
-## Publication (TBD)
