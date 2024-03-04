@@ -8,7 +8,7 @@ python3 ggsashimi.py \
  -O 3 \
  -C 3 \
  -A mean_j \
- --palette palette_2sashimis.txt \
+ --palette palette_U2AF1.txt \
  --shrink \
  --fix-y-scale \
  --base-size 15 \
