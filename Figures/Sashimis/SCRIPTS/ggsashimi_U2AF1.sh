@@ -1,0 +1,16 @@
+python3 ggsashimi.py \
+ -b /TSV/U2AF1.tsv \
+ -c chr21:43094471-43094788 \
+ -o /PLOTS/U2AF1_exons6-7 \
+ -S minus \
+ -g /gencode.v36.annotation.gtf \
+ -F png \
+ -O 3 \
+ -C 3 \
+ -A mean_j \
+ --palette palette_3sashimis.txt \
+ --shrink \
+ --fix-y-scale \
+ --base-size 15 \
+ --ann-height 3 \
+ -M 4
