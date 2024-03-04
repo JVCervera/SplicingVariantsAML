@@ -1,7 +1,7 @@
 python3 ggsashimi.py \
  -b /TSV/FLT3_TCGA.tsv \
  -c chr13:28015590-28024943 \
- -o /PLOTS/FLT3_TCGA_chr13-28018485-G-T_exons18-21 \
+ -o /PLOTS/FLT3_chr13-28018485-G-T_exons18-21_TCGA \
  -S minus \
  -g gencode.v36.annotation.gtf \
  -F png \
