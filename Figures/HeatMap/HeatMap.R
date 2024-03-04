@@ -71,7 +71,7 @@ g_left
 
 g_main + g_left
 
-ggsave("/media/adminiis/HematoLaFe/variantes_Papaemmanuil/SplicingVariants/FIGURES/HeatMap/FINAL_FIGURES_AMR_legendPaper.png",
+ggsave("FINAL_FIGURES_AMR_legendPaper.png",
        plot = last_plot(),
        device = "png",
        width = 12,
@@ -110,7 +110,7 @@ g_SPLICE<- ggplot(data_transformed_sub, aes(x=VARIANT, y=EFFECT, fill=RANGE)) +
         legend.direction = 'horizontal',
         legend.text=element_text(size=rel(1))) 
 g_SPLICE
-ggsave("/media/adminiis/HematoLaFe/variantes_Papaemmanuil/SplicingVariants/FIGURES/HeatMap/FINAL_FIGURES_Splice.png",
+ggsave("FINAL_FIGURES_Splice.png",
        plot = last_plot(),
        device = "png",
        width = 7,
@@ -194,7 +194,7 @@ g_left
 
 g_MISSENSE + g_left
 
-ggsave("/media/adminiis/HematoLaFe/variantes_Papaemmanuil/SplicingVariants/FIGURES/HeatMap/FINAL_FIGURES_Missense&SpliceRegion.png",
+ggsave("FINAL_FIGURES_Missense&SpliceRegion.png",
        plot = last_plot(),
        device = "png",
        width = 9,
@@ -253,7 +253,7 @@ g_left
 
 g_NONSENSE + g_left
 
-ggsave("/media/adminiis/HematoLaFe/variantes_Papaemmanuil/SplicingVariants/FIGURES/HeatMap/FINAL_FIGURES_Nonsense&SpliceRegion.png",
+ggsave("FINAL_FIGURES_Nonsense&SpliceRegion.png",
        plot = last_plot(),
        device = "png",
        width = 9,
