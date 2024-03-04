@@ -1,5 +1,5 @@
 python3 ggsashimi.py \
- -b /TSV/TET2_chr4-105259774-G-A_exons6-8.tsv \
+ -b /TSV/TET2_chr4-105259774-G-A.tsv \
  -c chr4:105259619-105261848 \
  -o /PLOTS/TET2_chr4-105259774-G-A_exons6-8 \
  -S plus \
