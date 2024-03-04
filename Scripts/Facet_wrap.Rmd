@@ -1,0 +1,436 @@
+---
+title: "Facet Wrap"
+author: "Maria G"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r echo = T, results = 'hide', warning=FALSE, message=FALSE}
+library(readxl)
+library(ggplot2)
+library(ggprism)
+library(ggsignif)
+library(stringr)
+library(dplyr)
+```
+
+
+# BeatAML
+
+Load data:
+```{r warning=FALSE}
+# Set working directory:
+setwd("../Results/BeatAML/SpliceJunction/NormalizedExpression/")
+
+# Load files:
+IDH1 <- read_excel("BeatAML.IDH1.xlsx")
+IDH1_A <- IDH1[IDH1$Variant_status %in% c("R132C", "WT"),c("sample_id", "GROUP","Normalized_DGEx4")]
+colnames(IDH1_A)[3] <- "NormalizedExpression"
+IDH1_A$MutationKey_Hg38 <- "IDH1 p.R132C\nchr2:208245425-208248422 (DG)"
+
+IDH1_C <- IDH1[IDH1$Variant_status %in% c("R132G", "WT"),c("sample_id", "GROUP","Normalized_DGEx4")]
+colnames(IDH1_C)[3] <- "NormalizedExpression"
+IDH1_C$MutationKey_Hg38 <- "IDH1 p.R132G\nchr2:208245425-208248422 (DG)"
+
+IDH1_T <- IDH1[IDH1$Variant_status %in% c("R132S", "WT"),c("sample_id", "GROUP","Normalized_DGEx4")]
+colnames(IDH1_T)[3] <- "NormalizedExpression"
+IDH1_T$MutationKey_Hg38 <- "IDH1 p.R132S\nchr2:208245425-208248422 (DG)"
+
+TET2 <- read_excel("BeatAML.TET2.chr4-105259774-G-A.xlsx")
+TET2 <- TET2[,c("sample_id", "GROUP","Normalized_Ex7DG")]
+colnames(TET2)[3] <- "NormalizedExpression"
+TET2$MutationKey_Hg38 <- "TET2 c.3954+5G>A\nchr4:105259708-105261758 (DG)"
+
+PTPN11 <- read_excel("BeatAML.PTPN11.chr12-112489084-G-T.xlsx")
+PTPN11 <- PTPN11[,c("sample_id", "GROUP", "Normalized_Ex13DG")]
+colnames(PTPN11)[3]  <-"NormalizedExpression"
+PTPN11$MutationKey_Hg38 <- "PTPN11 p.G503V\nchr12:112489079-112502143 (DG)"
+
+U2AF1 <- read_excel("BeatAML.U2AF1.xlsx")
+U2AF1 <- U2AF1[,c("sample_id", "GROUP", "Normalized_Ex6DG")]
+colnames(U2AF1)[3] <-"NormalizedExpression"
+U2AF1$MutationKey_Hg38 <- "U2AF1 p.Q157R\nchr21:43094564-43094666 (DG)"
+
+TP53_238 <- read_excel("BeatAML.TP53.chr17-7675238-T-C.xlsx")
+TP53_238 <- TP53_238[,c("sample_id", "GROUP", "Normalized_AG")]
+colnames(TP53_238)[3] <- "NormalizedExpression"
+TP53_238$MutationKey_Hg38 <- "TP53 c.376-2A>G\nchr17:7675216-7675993 (AG)" 
+
+TP53_217 <- read_excel("BeatAML.TP53.chr17-7675217-T-C.xlsx")
+TP53_217 <- TP53_217[,c("sample_id", "GROUP", "Normalized_AG")]
+colnames(TP53_217)[3] <- "NormalizedExpression"
+TP53_217$MutationKey_Hg38 <- "TP53 p.K132R\nchr17:7675216-7675993 (AG)" 
+
+
+DNMT3A_792 <- read_excel("BeatAML.DNMT3A.chr2-25235792-T-C.xlsx")
+DNMT3A_792 <- DNMT3A_792[,c("sample_id", "GROUP", "Normalized_AG")]
+colnames(DNMT3A_792)[3] <- "NormalizedExpression"
+DNMT3A_792$MutationKey_Hg38 <- "DNMT3A p.N838D\nchr2:25235821-25236935 (AG)"
+
+KDM6A <- read_excel("BeatAML.KDM6A.chrX-45062737-C-T.xlsx")
+KDM6A <- KDM6A[,c("sample_id", "GROUP", "Normalized_DG")]
+colnames(KDM6A)[3] <- "NormalizedExpression"
+KDM6A$MutationKey_Hg38 <- "KDM6A p.Q506*\nchrX:45062720-45063421 (DG)"
+
+FLT3 <- read_excel("BeatAML.FLT3.chr13-28018485-G-T.xlsx")
+FLT3_20 <- FLT3[,c("sample_id", "GROUP","Normalized_SE20")]
+colnames(FLT3_20)[3] <- "NormalizedExpression"
+FLT3_20$MutationKey_Hg38 <- "FLT3 p.N841K\nchr13:28015702-28023349 (ES)"
+
+FLT3_1920 <- FLT3[,c("sample_id", "GROUP","Normalized_SE1920")]
+colnames(FLT3_1920)[3] <- "NormalizedExpression"
+FLT3_1920$MutationKey_Hg38 <- "FLT3 p.N841K\nchr13:28015702-28024860 (ES)"
+
+
+DNMT3A_130 <- read_excel("BeatAML.DNMT3A.chr2-25239130-C-T.xlsx")
+DNMT3A_130 <- DNMT3A_130[,c("sample_id", "GROUP", "Normalized_DG")]
+colnames(DNMT3A_130)[3] <- "NormalizedExpression"
+DNMT3A_130$MutationKey_Hg38 <- "DNMT3A p.R803K\nchr2:25237006-25239139 (DG)"
+
+TP53_872 <- read_excel("BeatAML.TP53.chr17-7674872-T-C.xlsx")
+TP53_872 <- TP53_872[,c("sample_id", "GROUP", "Normalized_ES")]
+colnames(TP53_872)[3] <- "NormalizedExpression"
+TP53_872$MutationKey_Hg38 <- "TP53 p.Y220C\nchr17:7674291-7675052 (ES)"
+
+TP53_894 <- read_excel("BeatAML.TP53.chr17-7674894-G-A.xlsx")
+TP53_894 <- TP53_894[,c("sample_id", "GROUP", "Normalized_ES")]
+colnames(TP53_894)[3] <- "NormalizedExpression"
+TP53_894$MutationKey_Hg38 <- "TP53 p.R213*\nchr17:7674291-7675052 (ES)"
+
+NRAS <- read_excel("BeatAML.NRAS.chr1-114716123-C-T.xlsx")
+NRAS <- NRAS[,c("sample_id", "GROUP","chr1_114713979_114716657_ES2")]
+colnames(NRAS)[3] <- "NormalizedExpression"
+NRAS$MutationKey_Hg38 <- "NRAS p.G13D\nchr1:114713979-114716126 (DG)"
+
+WT1_364 <- read_excel("BeatAML.WT1.chr11-32396364-G-T.xlsx")
+WT1_364 <- WT1_364[,c("sample_id", "GROUP", "Normalized_ES7")]
+colnames(WT1_364)[3] <- "NormalizedExpression"
+WT1_364$MutationKey_Hg38 <- "WT1 p.S381*\nchr11:32392756-32399947 (ES)"
+
+WT1_696 <- read_excel("BeatAML.WT1.chr11-32392696-G-A.xlsx")
+WT1_696 <- WT1_696[,c("sample_id", "GROUP", "Normalized_ES")]
+colnames(WT1_696)[3] <- "NormalizedExpression"
+WT1_696$MutationKey_Hg38 <- "WT1 p.G437*\nchr11:32392065-32396256 (ES)"
+```
+
+Merge:
+```{r}
+plot <- rbind(IDH1_A, IDH1_T)
+plot <- rbind(plot, IDH1_C)
+plot <- rbind(plot, TET2)
+plot <- rbind(plot, PTPN11)
+plot <- rbind(plot, U2AF1)
+plot <- rbind(plot, TP53_238)
+plot <- rbind(plot, TP53_217)
+plot <- rbind(plot, DNMT3A_792)
+plot <- rbind(plot, KDM6A)
+plot <- rbind(plot, FLT3_20)
+plot <- rbind(plot, FLT3_1920)
+plot <- rbind(plot, TP53_872)
+plot <- rbind(plot, NRAS)
+plot <- rbind(plot, WT1_364)
+plot <- rbind(plot, WT1_696)
+```
+
+MUT Dotplots
+```{r}
+plot_dotplot <- plot[plot$GROUP == "MUT",]
+
+outlier_PTPN11 <- plot[plot$sample_id == "BA2006R" & plot$MutationKey_Hg38 == "PTPN11 p.G503V\nchr12:112489079-112502143 (DG)",]
+outlier_PTPN11$MutationKey_Hg38 <- "PTPN11 p.G503V\nchr12:112489079-112502143 (DG)"
+outlier_PTPN11$GROUP <- "WT"
+
+plot_dotplot <- rbind(plot_dotplot, outlier_PTPN11)
+
+plot[plot$MutationKey_Hg38 == "PTPN11 p.G503V\nchr12:112489079-112502143 (DG)" & plot$sample_id == "BA2006R",]
+plot <- plot[!(plot$MutationKey_Hg38 == "PTPN11 p.G503V\nchr12:112489079-112502143 (DG)" & plot$sample_id == "BA2006R"),]
+
+```
+
+Figure design:
+```{r}
+blank_data <- data.frame(
+MutationKey_Hg38 =  c("TET2 c.3954+5G>A\nchr4:105259708-105261758 (DG)","TET2 c.3954+5G>A\nchr4:105259708-105261758 (DG)",
+                              "TP53 c.376-2A>G\nchr17:7675216-7675993 (AG)","TP53 c.376-2A>G\nchr17:7675216-7675993 (AG)",  
+                              "PTPN11 p.G503V\nchr12:112489079-112502143 (DG)","PTPN11 p.G503V\nchr12:112489079-112502143 (DG)",
+                              "U2AF1 p.Q157R\nchr21:43094564-43094666 (DG)", "U2AF1 p.Q157R\nchr21:43094564-43094666 (DG)", 
+                              "IDH1 p.R132C\nchr2:208245425-208248422 (DG)","IDH1 p.R132C\nchr2:208245425-208248422 (DG)",
+                              "IDH1 p.R132S\nchr2:208245425-208248422 (DG)","IDH1 p.R132S\nchr2:208245425-208248422 (DG)",
+                              "DNMT3A p.N838D\nchr2:25235821-25236935 (AG)", "DNMT3A p.N838D\nchr2:25235821-25236935 (AG)", 
+                              "TP53 p.K132R\nchr17:7675216-7675993 (AG)","TP53 p.K132R\nchr17:7675216-7675993 (AG)",
+                              "FLT3 p.N841K\nchr13:28015702-28023349 (ES)","FLT3 p.N841K\nchr13:28015702-28023349 (ES)",
+                              "FLT3 p.N841K\nchr13:28015702-28024860 (ES)", "FLT3 p.N841K\nchr13:28015702-28024860 (ES)",
+                              "KDM6A p.Q506*\nchrX:45062720-45063421 (DG)","KDM6A p.Q506*\nchrX:45062720-45063421 (DG)",
+                              "TP53 p.Y220C\nchr17:7674291-7675052 (ES)","TP53 p.Y220C\nchr17:7674291-7675052 (ES)",
+                              "WT1 p.S381*\nchr11:32392756-32399947 (ES)","WT1 p.S381*\nchr11:32392756-32399947 (ES)",  
+                              "WT1 p.G437*\nchr11:32392065-32396256 (ES)","WT1 p.G437*\nchr11:32392065-32396256 (ES)",                             
+                              "IDH1 p.R132G\nchr2:208245425-208248422 (DG)","IDH1 p.R132G\nchr2:208245425-208248422 (DG)",
+                              "NRAS p.G13D\nchr1:114713979-114716126 (DG)","NRAS p.G13D\nchr1:114713979-114716126 (DG)"
+                ), 
+        
+        x = 0, 
+        y = c(0,4.8, #TET2
+              0,6, #TP53
+              0,0.9, #PTPN11
+              0,0.22, #U2AF1
+              0,0.65, #IDH1 A
+              0,1.7, #IDH1 T
+              0,1.5, #DNMT3A
+              0,4.5, #TP53 238
+              0,1.5, #FLT3 SE20
+              0,1.5, #FLT3 SE1920
+              0,0.45, #KDM6A  
+              0,2, #TP53 217
+              0,4, #WT1 S381*
+              0,16, #WT1 G437*
+              0,0.65, #IDH1 C
+              0,150 #NRAS
+              )) 
+```
+
+
+Facet wrap:
+```{r  warning=FALSE, message=FALSE}
+beat <- ggplot(plot, aes(y=NormalizedExpression, x=factor(GROUP, level=c("WT", "MUT")))) + 
+        geom_violin(scale="area")  +
+        geom_blank(data = blank_data, aes(x = x, y = y)) +
+        facet_wrap(~factor(MutationKey_Hg38,
+                   levels = c("TET2 c.3954+5G>A\nchr4:105259708-105261758 (DG)",
+                              "TP53 c.376-2A>G\nchr17:7675216-7675993 (AG)", 
+                              "PTPN11 p.G503V\nchr12:112489079-112502143 (DG)",
+                              "U2AF1 p.Q157R\nchr21:43094564-43094666 (DG)", 
+                              "IDH1 p.R132C\nchr2:208245425-208248422 (DG)",
+                              "IDH1 p.R132S\nchr2:208245425-208248422 (DG)",
+                              "DNMT3A p.N838D\nchr2:25235821-25236935 (AG)", 
+                              "TP53 p.K132R\nchr17:7675216-7675993 (AG)",
+                              "FLT3 p.N841K\nchr13:28015702-28023349 (ES)",
+                              "FLT3 p.N841K\nchr13:28015702-28024860 (ES)",
+                              "KDM6A p.Q506*\nchrX:45062720-45063421 (DG)",
+                              "TP53 p.Y220C\nchr17:7674291-7675052 (ES)",
+                              "WT1 p.S381*\nchr11:32392756-32399947 (ES)", 
+                              "WT1 p.G437*\nchr11:32392065-32396256 (ES)",                             
+                              "IDH1 p.R132G\nchr2:208245425-208248422 (DG)",
+                              "NRAS p.G13D\nchr1:114713979-114716126 (DG)"
+)),
+                   scales="free",
+                   nrow=4) +
+        geom_point(data = plot_dotplot, 
+                  aes(y=NormalizedExpression, x=GROUP),
+                  color="black",
+                  size=2
+                  ) +
+        geom_signif(data=data.frame(MutationKey_Hg38 = c("TET2 c.3954+5G>A\nchr4:105259708-105261758 (DG)")),
+                   aes(y_position=c(4), xmin=c(1), xmax=c(2),
+                       annotations=c("p = 0")), 
+                   tip_length=0,
+                   vjust=-0.5,
+                   manual=T) +
+        geom_signif(data=data.frame(MutationKey_Hg38 = c("TP53 c.376-2A>G\nchr17:7675216-7675993 (AG)")),
+                   aes(y_position=c(5), xmin=c(1), xmax=c(2),
+                       annotations=c("p = 0")), 
+                   tip_length=0,
+                   vjust=-0.5,
+                   manual=T) +
+        geom_signif(data=data.frame(MutationKey_Hg38 = c("PTPN11 p.G503V\nchr12:112489079-112502143 (DG)")),
+                   aes(y_position=c(0.8), xmin=c(1), xmax=c(2),
+                       annotations=c("p = 0.002/0.015")), 
+                   tip_length=0,
+                   vjust=-0.5,
+                   manual=T) +
+        geom_signif(data=data.frame(MutationKey_Hg38 = c("U2AF1 p.Q157R\nchr21:43094564-43094666 (DG)")),
+                   aes(y_position=c(0.2), xmin=c(1), xmax=c(2),
+                       annotations=c("p = 0.045")), 
+                   tip_length=0,
+                   vjust=-0.5,
+                   manual=T) +
+        geom_signif(data=data.frame(MutationKey_Hg38 = c("IDH1 p.R132C\nchr2:208245425-208248422 (DG)")),
+                   aes(y_position=c(0.5), xmin=c(1), xmax=c(2),
+                       annotations=c("p = 0.045")), 
+                   tip_length=0,
+                   vjust=-0.5,
+                   manual=T)+
+        geom_signif(data=data.frame(MutationKey_Hg38 = c("IDH1 p.R132S\nchr2:208245425-208248422 (DG)")),
+                   aes(y_position=c(1.5), xmin=c(1), xmax=c(2),
+                       annotations=c("p = 8.94E-016")), 
+                   tip_length=0,
+                   vjust=-0.5,
+                   manual=T) +
+        geom_signif(data=data.frame(MutationKey_Hg38 = c("DNMT3A p.N838D\nchr2:25235821-25236935 (AG)")),
+                   aes(y_position=c(1.3), xmin=c(1), xmax=c(2),
+                       annotations=c("p = 0.032")), 
+                   tip_length=0,
+                   vjust=-0.5,
+                   manual=T) +
+        ylab("Normalized Expression") +
+        labs(x=NULL)
+
+ggsave("BeatAMLwrapped.png",
+       plot=last_plot(),
+       width = 15, 
+       dpi = 300,
+       height = 10,
+       device = "png")
+
+```
+
+
+
+#TCGA
+Load data:
+```{r warning=FALSE}
+# Set working directory
+setwd("../Results/TCGA/SpliceJunction/NormalizedExpression/")
+
+# Load files:
+CBL <- read_excel("TCGA.CBL.xlsx")
+CBL_AG1 <-CBL[,c("sample_id","GROUP", "chr11_119277845_119278189_Ex8AG")]
+colnames(CBL_AG1)[3] <- "NormalizedExpression"
+CBL_AG1$MutationKey_Hg38 <-"CBL c.1096-1G>C & c.1096-2A>T\nchr11:119277845-119278189 (AG)"
+
+CBL_AG2 <-CBL[,c("sample_id","GROUP", "chr11_119277845_119278237_Ex8AG")]
+colnames(CBL_AG2)[3] <- "NormalizedExpression"
+CBL_AG2$MutationKey_Hg38 <- "CBL c.1096-1G>C & c.1096-2A>T\nchr11:119277845-119278237 (AG)"
+
+IDH1 <- read_excel("TCGA.IDH1.xlsx")
+IDH1_A <- IDH1[IDH1$Variant_status %in% c("R132C", "WT"),c("sample_id", "GROUP","Normalized_DGEx4")]
+colnames(IDH1_A)[3] <- "NormalizedExpression"
+IDH1_A$MutationKey_Hg38 <- "IDH1 p.R132C\nchr2:208245425-208248422 (DG)"
+
+IDH1_C <- IDH1[IDH1$Variant_status %in% c("R132G", "WT"),c("sample_id", "GROUP","Normalized_DGEx4")]
+colnames(IDH1_C)[3] <- "NormalizedExpression"
+IDH1_C$MutationKey_Hg38 <- "IDH1 p.R132G\nchr2:208245425-208248422 (DG)"
+
+IDH1_T <- IDH1[IDH1$Variant_status %in% c("R132S", "WT"),c("sample_id", "GROUP","Normalized_DGEx4")]
+colnames(IDH1_T)[3] <- "NormalizedExpression"
+IDH1_T$MutationKey_Hg38 <- "IDH1 p.R132S\nchr2:208245425-208248422 (DG)"
+
+FLT3 <- read_excel("TCGA.FLT3.chr13-28018485-G-T.xlsx")
+FLT3_20 <- FLT3[,c("sample_id", "GROUP","Normalized_SE20")]
+colnames(FLT3_20)[3] <- "NormalizedExpression"
+FLT3_20$MutationKey_Hg38 <- "FLT3 p.N841K\nchr13:28015702-28023349 (ES)"
+
+FLT3_1920 <- FLT3[,c("sample_id", "GROUP","Normalized_SE1920")]
+colnames(FLT3_1920)[3] <- "NormalizedExpression"
+FLT3_1920$MutationKey_Hg38 <- "FLT3 p.N841K\nchr13:28015702-28024860 (ES)"
+
+NRAS <- read_excel("TCGA.NRAS.chr1-114716123-C-T.xlsx")
+NRAS <- NRAS[,c("sample_id", "GROUP","chr1_114713979_114716657_ES2")]
+colnames(NRAS)[3] <- "NormalizedExpression"
+NRAS$MutationKey_Hg38 <- "NRAS p.G13D\nchr1:114713979-114716126 (DG)"
+
+```
+
+Merge:
+```{r}
+plot <- rbind(IDH1_A, IDH1_T)
+plot  <- rbind(plot, IDH1_C)
+plot <- rbind(plot, CBL_AG1)
+plot <- rbind(plot, CBL_AG2)
+plot <- rbind(plot, FLT3_20)
+plot <- rbind(plot, FLT3_1920)
+plot <- rbind(plot, IDH1_C)
+plot <- rbind(plot, NRAS)
+
+plot_dotplot <- plot[plot$GROUP == "MUT",]
+```
+
+Figure design:
+```{r}
+blank_data <- data.frame(
+MutationKey_Hg38 =  c("CBL c.1096-1G>C & c.1096-2A>T\nchr11:119277845-119278189 (AG)" ,"CBL c.1096-1G>C & c.1096-2A>T\nchr11:119277845-119278189 (AG)",
+                      "CBL c.1096-1G>C & c.1096-2A>T\nchr11:119277845-119278237 (AG)", "CBL c.1096-1G>C & c.1096-2A>T\nchr11:119277845-119278237 (AG)",
+                              "IDH1 p.R132C\nchr2:208245425-208248422 (DG)","IDH1 p.R132C\nchr2:208245425-208248422 (DG)",
+                              "IDH1 p.R132S\nchr2:208245425-208248422 (DG)","IDH1 p.R132S\nchr2:208245425-208248422 (DG)",
+                              "FLT3 p.N841K\nchr13:28015702-28023349 (ES)","FLT3 p.N841K\nchr13:28015702-28023349 (ES)",
+                              "FLT3 p.N841K\nchr13:28015702-28024860 (ES)", "FLT3 p.N841K\nchr13:28015702-28024860 (ES)",
+                              "IDH1 p.R132G\nchr2:208245425-208248422 (DG)","IDH1 p.R132G\nchr2:208245425-208248422 (DG)",
+                              "NRAS p.G13D\nchr1:114713979-114716126 (DG)","NRAS p.G13D\nchr1:114713979-114716126 (DG)"
+                ), 
+        
+        x = 0, 
+        y = c(0,23, #CBL
+              0,23, #CBL
+              0,0.6, #IDH1 A
+              0,0.6, #IDH1 T
+              0,1, #FLT3 SE20
+              0,0.5, #FLT3 SE1920
+              0,0.6, #IDH1 C
+              0,10 #NRAS
+              )) 
+```
+
+Facet wrap:
+```{r  warning=FALSE, message=FALSE}
+tcga <- ggplot(plot, aes(y=NormalizedExpression, x=factor(GROUP, level=c("WT", "MUT")))) + 
+        geom_violin(scale="area")  +
+        geom_blank(data = blank_data, aes(x = x, y = y)) +
+        facet_wrap(~factor(MutationKey_Hg38,
+                   levels = c("CBL c.1096-1G>C & c.1096-2A>T\nchr11:119277845-119278189 (AG)" ,
+                              "CBL c.1096-1G>C & c.1096-2A>T\nchr11:119277845-119278237 (AG)",
+                              "IDH1 p.R132C\nchr2:208245425-208248422 (DG)",
+                              "IDH1 p.R132S\nchr2:208245425-208248422 (DG)",
+                              "FLT3 p.N841K\nchr13:28015702-28023349 (ES)",
+                              "FLT3 p.N841K\nchr13:28015702-28024860 (ES)", 
+                              "IDH1 p.R132G\nchr2:208245425-208248422 (DG)",
+                              "NRAS p.G13D\nchr1:114713979-114716126 (DG)"
+)),
+                   scales="free",
+                   nrow=2) +
+        geom_point(data = plot_dotplot, 
+                  aes(y=NormalizedExpression, x=GROUP),
+                  color="black",
+                  size=2
+                  ) +
+        geom_signif(data=data.frame(MutationKey_Hg38 = c("CBL c.1096-1G>C & c.1096-2A>T\nchr11:119277845-119278189 (AG)")),
+                   aes(y_position=c(17), xmin=c(1), xmax=c(2),
+                       annotations=c("p = 0")), 
+                   tip_length=0,
+                   vjust=-0.5,
+                   manual=T) +
+        geom_signif(data=data.frame(MutationKey_Hg38 = c("CBL c.1096-1G>C & c.1096-2A>T\nchr11:119277845-119278237 (AG)")),
+                   aes(y_position=c(21), xmin=c(1), xmax=c(2),
+                       annotations=c("p = 0")), 
+                   tip_length=0,
+                   vjust=-0.45,
+                   manual=T) +
+        geom_signif(data=data.frame(MutationKey_Hg38 = c("IDH1 p.R132C\nchr2:208245425-208248422 (DG)")),
+                   aes(y_position=c(0.5), xmin=c(1), xmax=c(2),
+                       annotations=c("p = 0.02")), 
+                   tip_length=0,
+                   vjust=-0.5,
+                   manual=T)+
+        geom_signif(data=data.frame(MutationKey_Hg38 = c("IDH1 p.R132S\nchr2:208245425-208248422 (DG)")),
+                   aes(y_position=c(0.45), xmin=c(1), xmax=c(2),
+                       annotations=c("p = 6.54E-07")), 
+                   tip_length=0,
+                   vjust=-0.5,
+                   manual=T) +
+        ylab("Normalized Expression") +
+        labs(x=NULL)
+
+ggsave("TCGAwrapped.png",
+       plot=last_plot(),
+       width = 15, 
+       dpi = 300,
+       height = 5,
+       device = "png")
+
+```
+
+
+```{r}
+ggarrange(beat, tcga, heights = c(10, 5), ncol = 1, nrow = 2)
+
+ggsave("wrapped.png",
+       plot=last_plot(),
+       width = 15, 
+       dpi = 300,
+       height = 15,
+       device = "png")
+```
+
+
