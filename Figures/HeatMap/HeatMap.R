@@ -110,11 +110,6 @@ g_SPLICE<- ggplot(data_transformed_sub, aes(x=VARIANT, y=EFFECT, fill=RANGE)) +
         legend.direction = 'horizontal',
         legend.text=element_text(size=rel(1))) 
 g_SPLICE
-ggsave("FINAL_FIGURES_Splice.png",
-       plot = last_plot(),
-       device = "png",
-       width = 7,
-       height = 12)
 
 g_left <- ggplot() +
   theme_void() +
