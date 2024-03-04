@@ -4,7 +4,7 @@ library(ggplot2)
 library(patchwork)
 library(RColorBrewer)
 
-data_transformed <- read.csv("/media/adminiis/HematoLaFe/variantes_Papaemmanuil/SplicingVariants/FIGURES/HeatMap/HeatMap_transformed.csv")
+data_transformed <- read.csv("../Figures/HeatMap/HeatMap_transformed.csv")
 ### DEFINE DATA ORDER BY CONSEQUENCE 
 data_transformed$order <- ifelse(data_transformed$CONSEQUENCE == "SPLICE", 1,
                                  ifelse(data_transformed$CONSEQUENCE == "MISSENSE", 2,
@@ -18,7 +18,7 @@ variant_order <- a$VARIANT
 consequence_order <- a$CONSEQUENCE
 
 values = c("#D53E4F","#FC8D59", "#B2DF8A","#F8766D00")
-data_subset <- read.csv("/media/adminiis/HematoLaFe/variantes_Papaemmanuil/SplicingVariants/FIGURES/HeatMap/HeatMap_transformed2.csv")
+data_subset <- read.csv("../Figures/HeatMap/HeatMap_transformed2.csv")
 data_subset <- data_subset[data_subset$EFFECT == "CONSEQUENCE",c("VARIANT", "EFFECT", "RANGE")]
 data_subset$order <- ifelse(data_subset$RANGE == "SPLICE", 1,
                             ifelse(data_subset$RANGE == "MISSENSE", 2,
