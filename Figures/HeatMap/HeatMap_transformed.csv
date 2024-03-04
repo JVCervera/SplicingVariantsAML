@@ -1,0 +1,1001 @@
+CONSEQUENCE,VARIANT,EFFECT,VALUES_original,VALUES,RANGE
+SPLICE,"CBL,c.1096-2A>T",SpliceAI_AG,,0,No impact
+SPLICE,"CBL,c.1096-2A>T",SpliceAI_AL,99,99,High
+SPLICE,"CBL,c.1096-2A>T",SpliceAI_DG,,0,No impact
+SPLICE,"CBL,c.1096-2A>T",SpliceAI_DL,,0,No impact
+SPLICE,"CBL,c.1096-2A>T",MaxEntScan_AG,,0,No impact
+SPLICE,"CBL,c.1096-2A>T",MaxEntScan_AL,-3.63,-3.63,High
+SPLICE,"CBL,c.1096-2A>T",MaxEntScan_DG,,0,No impact
+SPLICE,"CBL,c.1096-2A>T",MaxEntScan_DL,,1000,No impact
+SPLICE,"CBL,c.1096-1G>C",SpliceAI_AG,,0,No impact
+SPLICE,"CBL,c.1096-1G>C",SpliceAI_AL,99,99,High
+SPLICE,"CBL,c.1096-1G>C",SpliceAI_DG,,0,No impact
+SPLICE,"CBL,c.1096-1G>C",SpliceAI_DL,,0,No impact
+SPLICE,"CBL,c.1096-1G>C",MaxEntScan_AG,,0,No impact
+SPLICE,"CBL,c.1096-1G>C",MaxEntScan_AL,-3.33,-3.33,High
+SPLICE,"CBL,c.1096-1G>C",MaxEntScan_DG,,0,No impact
+SPLICE,"CBL,c.1096-1G>C",MaxEntScan_DL,,1000,No impact
+SPLICE,"CBL,c.1228-1G>A",SpliceAI_AG,86,86,High
+SPLICE,"CBL,c.1228-1G>A",SpliceAI_AL,100,100,High
+SPLICE,"CBL,c.1228-1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"CBL,c.1228-1G>A",SpliceAI_DL,,0,No impact
+SPLICE,"CBL,c.1228-1G>A",MaxEntScan_AG,3.9,3.9,Low
+SPLICE,"CBL,c.1228-1G>A",MaxEntScan_AL,1.91,1.91,High
+SPLICE,"CBL,c.1228-1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"CBL,c.1228-1G>A",MaxEntScan_DL,,1000,No impact
+SPLICE,"CREBBP,c.4134-1G>A",SpliceAI_AG,,0,No impact
+SPLICE,"CREBBP,c.4134-1G>A",SpliceAI_AL,98,98,High
+SPLICE,"CREBBP,c.4134-1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"CREBBP,c.4134-1G>A",SpliceAI_DL,,0,No impact
+SPLICE,"CREBBP,c.4134-1G>A",MaxEntScan_AG,5,5,Low
+SPLICE,"CREBBP,c.4134-1G>A",MaxEntScan_AL,2.67,2.67,High
+SPLICE,"CREBBP,c.4134-1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"CREBBP,c.4134-1G>A",MaxEntScan_DL,,1000,No impact
+SPLICE,"CREBBP,c.1216+5G>A",SpliceAI_AG,,0,No impact
+SPLICE,"CREBBP,c.1216+5G>A",SpliceAI_AL,,0,No impact
+SPLICE,"CREBBP,c.1216+5G>A",SpliceAI_DG,,0,No impact
+SPLICE,"CREBBP,c.1216+5G>A",SpliceAI_DL,,0,No impact
+SPLICE,"CREBBP,c.1216+5G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"CREBBP,c.1216+5G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"CREBBP,c.1216+5G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"CREBBP,c.1216+5G>A",MaxEntScan_DL,8.88,8.88,Low
+SPLICE,"CREBBP,c.2283+1G>A",SpliceAI_AG,,0,No impact
+SPLICE,"CREBBP,c.2283+1G>A",SpliceAI_AL,,0,No impact
+SPLICE,"CREBBP,c.2283+1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"CREBBP,c.2283+1G>A",SpliceAI_DL,99,99,High
+SPLICE,"CREBBP,c.2283+1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"CREBBP,c.2283+1G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"CREBBP,c.2283+1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"CREBBP,c.2283+1G>A",MaxEntScan_DL,1.47,1.47,High
+SPLICE,"CUX1,c.1563+1G>A",SpliceAI_AG,,0,No impact
+SPLICE,"CUX1,c.1563+1G>A",SpliceAI_AL,,0,No impact
+SPLICE,"CUX1,c.1563+1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"CUX1,c.1563+1G>A",SpliceAI_DL,92,92,High
+SPLICE,"CUX1,c.1563+1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"CUX1,c.1563+1G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"CUX1,c.1563+1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"CUX1,c.1563+1G>A",MaxEntScan_DL,0.38,0.38,High
+SPLICE,"DNMT3A,c.2479-1G>T",SpliceAI_AG,27,27,Low
+SPLICE,"DNMT3A,c.2479-1G>T",SpliceAI_AL,99,99,High
+SPLICE,"DNMT3A,c.2479-1G>T",SpliceAI_DG,,0,No impact
+SPLICE,"DNMT3A,c.2479-1G>T",SpliceAI_DL,,0,No impact
+SPLICE,"DNMT3A,c.2479-1G>T",MaxEntScan_AG,9.09,9.09,High
+SPLICE,"DNMT3A,c.2479-1G>T",MaxEntScan_AL,0.45,0.45,High
+SPLICE,"DNMT3A,c.2479-1G>T",MaxEntScan_DG,,0,No impact
+SPLICE,"DNMT3A,c.2479-1G>T",MaxEntScan_DL,,1000,No impact
+SPLICE,"DNMT3A,c.2479-2A>G",SpliceAI_AG,25,25,Low
+SPLICE,"DNMT3A,c.2479-2A>G",SpliceAI_AL,99,99,High
+SPLICE,"DNMT3A,c.2479-2A>G",SpliceAI_DG,,0,No impact
+SPLICE,"DNMT3A,c.2479-2A>G",SpliceAI_DL,,0,No impact
+SPLICE,"DNMT3A,c.2479-2A>G",MaxEntScan_AG,6.51,6.51,Intermediate
+SPLICE,"DNMT3A,c.2479-2A>G",MaxEntScan_AL,1.1,1.1,High
+SPLICE,"DNMT3A,c.2479-2A>G",MaxEntScan_DG,,0,No impact
+SPLICE,"DNMT3A,c.2479-2A>G",MaxEntScan_DL,,1000,No impact
+SPLICE,"DNMT3A,c.2408+5G>A",SpliceAI_AG,,0,No impact
+SPLICE,"DNMT3A,c.2408+5G>A",SpliceAI_AL,,0,No impact
+SPLICE,"DNMT3A,c.2408+5G>A",SpliceAI_DG,35,35,Low
+SPLICE,"DNMT3A,c.2408+5G>A",SpliceAI_DL,60,60,Intermediate
+SPLICE,"DNMT3A,c.2408+5G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"DNMT3A,c.2408+5G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"DNMT3A,c.2408+5G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"DNMT3A,c.2408+5G>A",MaxEntScan_DL,3.82,3.82,High
+SPLICE,"DNMT3A,c.1667+1G>A",SpliceAI_AG,,0,No impact
+SPLICE,"DNMT3A,c.1667+1G>A",SpliceAI_AL,,0,No impact
+SPLICE,"DNMT3A,c.1667+1G>A",SpliceAI_DG,27,27,Low
+SPLICE,"DNMT3A,c.1667+1G>A",SpliceAI_DL,100,100,High
+SPLICE,"DNMT3A,c.1667+1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"DNMT3A,c.1667+1G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"DNMT3A,c.1667+1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"DNMT3A,c.1667+1G>A",MaxEntScan_DL,1.89,1.89,High
+SPLICE,"DNMT3A,c.1429+2T>C",SpliceAI_AG,,0,No impact
+SPLICE,"DNMT3A,c.1429+2T>C",SpliceAI_AL,,0,No impact
+SPLICE,"DNMT3A,c.1429+2T>C",SpliceAI_DG,,0,No impact
+SPLICE,"DNMT3A,c.1429+2T>C",SpliceAI_DL,99,99,High
+SPLICE,"DNMT3A,c.1429+2T>C",MaxEntScan_AG,,0,No impact
+SPLICE,"DNMT3A,c.1429+2T>C",MaxEntScan_AL,,1000,No impact
+SPLICE,"DNMT3A,c.1429+2T>C",MaxEntScan_DG,,0,No impact
+SPLICE,"DNMT3A,c.1429+2T>C",MaxEntScan_DL,-1.97,-1.97,High
+SPLICE,"EP300,c.3502-1G>T",SpliceAI_AG,95,95,High
+SPLICE,"EP300,c.3502-1G>T",SpliceAI_AL,100,100,High
+SPLICE,"EP300,c.3502-1G>T",SpliceAI_DG,,0,No impact
+SPLICE,"EP300,c.3502-1G>T",SpliceAI_DL,,0,No impact
+SPLICE,"EP300,c.3502-1G>T",MaxEntScan_AG,7.48,7.48,Intermediate
+SPLICE,"EP300,c.3502-1G>T",MaxEntScan_AL,0.14,0.14,High
+SPLICE,"EP300,c.3502-1G>T",MaxEntScan_DG,,0,No impact
+SPLICE,"EP300,c.3502-1G>T",MaxEntScan_DL,,1000,No impact
+SPLICE,"EP300,c.4453-2A>T",SpliceAI_AG,68,68,Intermediate
+SPLICE,"EP300,c.4453-2A>T",SpliceAI_AL,100,100,High
+SPLICE,"EP300,c.4453-2A>T",SpliceAI_DG,,0,No impact
+SPLICE,"EP300,c.4453-2A>T",SpliceAI_DL,,0,No impact
+SPLICE,"EP300,c.4453-2A>T",MaxEntScan_AG,,0,No impact
+SPLICE,"EP300,c.4453-2A>T",MaxEntScan_AL,-1.69,-1.69,High
+SPLICE,"EP300,c.4453-2A>T",MaxEntScan_DG,,0,No impact
+SPLICE,"EP300,c.4453-2A>T",MaxEntScan_DL,,1000,No impact
+SPLICE,"EP300,c.2241+5G>A",SpliceAI_AG,,0,No impact
+SPLICE,"EP300,c.2241+5G>A",SpliceAI_AL,,0,No impact
+SPLICE,"EP300,c.2241+5G>A",SpliceAI_DG,82,82,High
+SPLICE,"EP300,c.2241+5G>A",SpliceAI_DL,81,81,High
+SPLICE,"EP300,c.2241+5G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"EP300,c.2241+5G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"EP300,c.2241+5G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"EP300,c.2241+5G>A",MaxEntScan_DL,0.85,0.85,High
+SPLICE,"EP300,c.2997+5G>A",SpliceAI_AG,,0,No impact
+SPLICE,"EP300,c.2997+5G>A",SpliceAI_AL,,0,No impact
+SPLICE,"EP300,c.2997+5G>A",SpliceAI_DG,76,76,Intermediate
+SPLICE,"EP300,c.2997+5G>A",SpliceAI_DL,,0,No impact
+SPLICE,"EP300,c.2997+5G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"EP300,c.2997+5G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"EP300,c.2997+5G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"EP300,c.2997+5G>A",MaxEntScan_DL,2.91,2.91,High
+SPLICE,"ETV6,c.329-1G>T",SpliceAI_AG,,0,No impact
+SPLICE,"ETV6,c.329-1G>T",SpliceAI_AL,100,100,High
+SPLICE,"ETV6,c.329-1G>T",SpliceAI_DG,,0,No impact
+SPLICE,"ETV6,c.329-1G>T",SpliceAI_DL,,0,No impact
+SPLICE,"ETV6,c.329-1G>T",MaxEntScan_AG,,0,No impact
+SPLICE,"ETV6,c.329-1G>T",MaxEntScan_AL,5.08,5.08,High
+SPLICE,"ETV6,c.329-1G>T",MaxEntScan_DG,,0,No impact
+SPLICE,"ETV6,c.329-1G>T",MaxEntScan_DL,,1000,No impact
+SPLICE,"KMT2D,c.1112+1G>A",SpliceAI_AG,,0,No impact
+SPLICE,"KMT2D,c.1112+1G>A",SpliceAI_AL,,0,No impact
+SPLICE,"KMT2D,c.1112+1G>A",SpliceAI_DG,80,80,High
+SPLICE,"KMT2D,c.1112+1G>A",SpliceAI_DL,99,99,High
+SPLICE,"KMT2D,c.1112+1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"KMT2D,c.1112+1G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"KMT2D,c.1112+1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"KMT2D,c.1112+1G>A",MaxEntScan_DL,2.68,2.68,High
+SPLICE,"PHF6,c.241-1G>A",SpliceAI_AG,,0,No impact
+SPLICE,"PHF6,c.241-1G>A",SpliceAI_AL,100,100,High
+SPLICE,"PHF6,c.241-1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"PHF6,c.241-1G>A",SpliceAI_DL,,0,No impact
+SPLICE,"PHF6,c.241-1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"PHF6,c.241-1G>A",MaxEntScan_AL,-0.25,-0.25,High
+SPLICE,"PHF6,c.241-1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"PHF6,c.241-1G>A",MaxEntScan_DL,,1000,No impact
+SPLICE,"PHF6,c.375-2A>T",SpliceAI_AG,,0,No impact
+SPLICE,"PHF6,c.375-2A>T",SpliceAI_AL,99,99,High
+SPLICE,"PHF6,c.375-2A>T",SpliceAI_DG,,0,No impact
+SPLICE,"PHF6,c.375-2A>T",SpliceAI_DL,,0,No impact
+SPLICE,"PHF6,c.375-2A>T",MaxEntScan_AG,,0,No impact
+SPLICE,"PHF6,c.375-2A>T",MaxEntScan_AL,-0.24,-0.24,High
+SPLICE,"PHF6,c.375-2A>T",MaxEntScan_DG,,0,No impact
+SPLICE,"PHF6,c.375-2A>T",MaxEntScan_DL,,1000,No impact
+SPLICE,"PHF6,c.586-2A>G",SpliceAI_AG,68,68,Intermediate
+SPLICE,"PHF6,c.586-2A>G",SpliceAI_AL,99,99,High
+SPLICE,"PHF6,c.586-2A>G",SpliceAI_DG,,0,No impact
+SPLICE,"PHF6,c.586-2A>G",SpliceAI_DL,,0,No impact
+SPLICE,"PHF6,c.586-2A>G",MaxEntScan_AG,,0,No impact
+SPLICE,"PHF6,c.586-2A>G",MaxEntScan_AL,2.81,2.81,High
+SPLICE,"PHF6,c.586-2A>G",MaxEntScan_DG,,0,No impact
+SPLICE,"PHF6,c.586-2A>G",MaxEntScan_DL,,1000,No impact
+SPLICE,"PHF6,c.730-2A>G",SpliceAI_AG,93,93,High
+SPLICE,"PHF6,c.730-2A>G",SpliceAI_AL,100,100,High
+SPLICE,"PHF6,c.730-2A>G",SpliceAI_DG,,0,No impact
+SPLICE,"PHF6,c.730-2A>G",SpliceAI_DL,,0,No impact
+SPLICE,"PHF6,c.730-2A>G",MaxEntScan_AG,,0,No impact
+SPLICE,"PHF6,c.730-2A>G",MaxEntScan_AL,1.73,1.73,High
+SPLICE,"PHF6,c.730-2A>G",MaxEntScan_DG,,0,No impact
+SPLICE,"PHF6,c.730-2A>G",MaxEntScan_DL,,1000,No impact
+SPLICE,"PHF6,c.969-2A>G",SpliceAI_AG,,0,No impact
+SPLICE,"PHF6,c.969-2A>G",SpliceAI_AL,91,91,High
+SPLICE,"PHF6,c.969-2A>G",SpliceAI_DG,,0,No impact
+SPLICE,"PHF6,c.969-2A>G",SpliceAI_DL,,0,No impact
+SPLICE,"PHF6,c.969-2A>G",MaxEntScan_AG,,0,No impact
+SPLICE,"PHF6,c.969-2A>G",MaxEntScan_AL,1.47,1.47,High
+SPLICE,"PHF6,c.969-2A>G",MaxEntScan_DG,,0,No impact
+SPLICE,"PHF6,c.969-2A>G",MaxEntScan_DL,,1000,No impact
+SPLICE,"PHF6,c.585+5G>A",SpliceAI_AG,,0,No impact
+SPLICE,"PHF6,c.585+5G>A",SpliceAI_AL,,0,No impact
+SPLICE,"PHF6,c.585+5G>A",SpliceAI_DG,,0,No impact
+SPLICE,"PHF6,c.585+5G>A",SpliceAI_DL,81,81,High
+SPLICE,"PHF6,c.585+5G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"PHF6,c.585+5G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"PHF6,c.585+5G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"PHF6,c.585+5G>A",MaxEntScan_DL,-0.49,-0.49,High
+SPLICE,"PHF6,c.834+2T>A",SpliceAI_AG,,0,No impact
+SPLICE,"PHF6,c.834+2T>A",SpliceAI_AL,,0,No impact
+SPLICE,"PHF6,c.834+2T>A",SpliceAI_DG,,0,No impact
+SPLICE,"PHF6,c.834+2T>A",SpliceAI_DL,100,100,High
+SPLICE,"PHF6,c.834+2T>A",MaxEntScan_AG,,0,No impact
+SPLICE,"PHF6,c.834+2T>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"PHF6,c.834+2T>A",MaxEntScan_DG,,0,No impact
+SPLICE,"PHF6,c.834+2T>A",MaxEntScan_DL,-5321,-5321,High
+SPLICE,"RAD21,c.1322-1G>A",SpliceAI_AG,34,34,Low
+SPLICE,"RAD21,c.1322-1G>A",SpliceAI_AL,99,99,High
+SPLICE,"RAD21,c.1322-1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"RAD21,c.1322-1G>A",SpliceAI_DL,,0,No impact
+SPLICE,"RAD21,c.1322-1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"RAD21,c.1322-1G>A",MaxEntScan_AL,-3.38,-3.38,High
+SPLICE,"RAD21,c.1322-1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"RAD21,c.1322-1G>A",MaxEntScan_DL,,1000,No impact
+SPLICE,"RAD21,c.688+5G>T",SpliceAI_AG,,0,No impact
+SPLICE,"RAD21,c.688+5G>T",SpliceAI_AL,,0,No impact
+SPLICE,"RAD21,c.688+5G>T",SpliceAI_DG,,0,No impact
+SPLICE,"RAD21,c.688+5G>T",SpliceAI_DL,,0,No impact
+SPLICE,"RAD21,c.688+5G>T",MaxEntScan_AG,,0,No impact
+SPLICE,"RAD21,c.688+5G>T",MaxEntScan_AL,,1000,No impact
+SPLICE,"RAD21,c.688+5G>T",MaxEntScan_DG,,0,No impact
+SPLICE,"RAD21,c.688+5G>T",MaxEntScan_DL,5.39,5.39,High
+SPLICE,"RAD21,c.688+5G>A",SpliceAI_AG,,0,No impact
+SPLICE,"RAD21,c.688+5G>A",SpliceAI_AL,,0,No impact
+SPLICE,"RAD21,c.688+5G>A",SpliceAI_DG,,0,No impact
+SPLICE,"RAD21,c.688+5G>A",SpliceAI_DL,,0,No impact
+SPLICE,"RAD21,c.688+5G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"RAD21,c.688+5G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"RAD21,c.688+5G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"RAD21,c.688+5G>A",MaxEntScan_DL,4.89,4.89,High
+SPLICE,"RAD21,c.374+5G>A",SpliceAI_AG,,0,No impact
+SPLICE,"RAD21,c.374+5G>A",SpliceAI_AL,,0,No impact
+SPLICE,"RAD21,c.374+5G>A",SpliceAI_DG,,0,No impact
+SPLICE,"RAD21,c.374+5G>A",SpliceAI_DL,24,24,Low
+SPLICE,"RAD21,c.374+5G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"RAD21,c.374+5G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"RAD21,c.374+5G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"RAD21,c.374+5G>A",MaxEntScan_DL,-2.33,-2.33,High
+SPLICE,"RAD21,c.1321+1G>T",SpliceAI_AG,,0,No impact
+SPLICE,"RAD21,c.1321+1G>T",SpliceAI_AL,,0,No impact
+SPLICE,"RAD21,c.1321+1G>T",SpliceAI_DG,37,37,Low
+SPLICE,"RAD21,c.1321+1G>T",SpliceAI_DL,99,99,High
+SPLICE,"RAD21,c.1321+1G>T",MaxEntScan_AG,,0,No impact
+SPLICE,"RAD21,c.1321+1G>T",MaxEntScan_AL,,1000,No impact
+SPLICE,"RAD21,c.1321+1G>T",MaxEntScan_DG,,0,No impact
+SPLICE,"RAD21,c.1321+1G>T",MaxEntScan_DL,-4.96,-4.96,High
+SPLICE,"RAD21,c.1321+1G>A",SpliceAI_AG,,0,No impact
+SPLICE,"RAD21,c.1321+1G>A",SpliceAI_AL,,0,No impact
+SPLICE,"RAD21,c.1321+1G>A",SpliceAI_DG,55,55,Intermediate
+SPLICE,"RAD21,c.1321+1G>A",SpliceAI_DL,99,99,High
+SPLICE,"RAD21,c.1321+1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"RAD21,c.1321+1G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"RAD21,c.1321+1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"RAD21,c.1321+1G>A",MaxEntScan_DL,-4.63,-4.63,High
+SPLICE,"RAD21,c.1161+1G>A",SpliceAI_AG,,0,No impact
+SPLICE,"RAD21,c.1161+1G>A",SpliceAI_AL,,0,No impact
+SPLICE,"RAD21,c.1161+1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"RAD21,c.1161+1G>A",SpliceAI_DL,100,100,High
+SPLICE,"RAD21,c.1161+1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"RAD21,c.1161+1G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"RAD21,c.1161+1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"RAD21,c.1161+1G>A",MaxEntScan_DL,0.31,0.31,High
+SPLICE,"RUNX1,c.806-1G>T",SpliceAI_AG,65,65,Intermediate
+SPLICE,"RUNX1,c.806-1G>T",SpliceAI_AL,98,98,High
+SPLICE,"RUNX1,c.806-1G>T",SpliceAI_DG,,0,No impact
+SPLICE,"RUNX1,c.806-1G>T",SpliceAI_DL,,0,No impact
+SPLICE,"RUNX1,c.806-1G>T",MaxEntScan_AG,3.29,3.29,Low
+SPLICE,"RUNX1,c.806-1G>T",MaxEntScan_AL,2.49,2.49,High
+SPLICE,"RUNX1,c.806-1G>T",MaxEntScan_DG,,0,No impact
+SPLICE,"RUNX1,c.806-1G>T",MaxEntScan_DL,,1000,No impact
+SPLICE,"RUNX1,c.806-1G>A",SpliceAI_AG,53,53,Intermediate
+SPLICE,"RUNX1,c.806-1G>A",SpliceAI_AL,98,98,High
+SPLICE,"RUNX1,c.806-1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"RUNX1,c.806-1G>A",SpliceAI_DL,,0,No impact
+SPLICE,"RUNX1,c.806-1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"RUNX1,c.806-1G>A",MaxEntScan_AL,2.34,2.34,High
+SPLICE,"RUNX1,c.806-1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"RUNX1,c.806-1G>A",MaxEntScan_DL,,1000,No impact
+SPLICE,"RUNX1,c.508+5G>A",SpliceAI_AG,,0,No impact
+SPLICE,"RUNX1,c.508+5G>A",SpliceAI_AL,,0,No impact
+SPLICE,"RUNX1,c.508+5G>A",SpliceAI_DG,44,44,Low
+SPLICE,"RUNX1,c.508+5G>A",SpliceAI_DL,,0,No impact
+SPLICE,"RUNX1,c.508+5G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"RUNX1,c.508+5G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"RUNX1,c.508+5G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"RUNX1,c.508+5G>A",MaxEntScan_DL,6.75,6.75,Intermediate
+SPLICE,"RUNX1,c.805+1G>C",SpliceAI_AG,,0,No impact
+SPLICE,"RUNX1,c.805+1G>C",SpliceAI_AL,,0,No impact
+SPLICE,"RUNX1,c.805+1G>C",SpliceAI_DG,,0,No impact
+SPLICE,"RUNX1,c.805+1G>C",SpliceAI_DL,96,96,High
+SPLICE,"RUNX1,c.805+1G>C",MaxEntScan_AG,,0,No impact
+SPLICE,"RUNX1,c.805+1G>C",MaxEntScan_AL,,1000,No impact
+SPLICE,"RUNX1,c.805+1G>C",MaxEntScan_DG,,0,No impact
+SPLICE,"RUNX1,c.805+1G>C",MaxEntScan_DL,2.18,2.18,High
+SPLICE,"SF3B1,c.2224-1G>A",SpliceAI_AG,99,99,High
+SPLICE,"SF3B1,c.2224-1G>A",SpliceAI_AL,99,99,High
+SPLICE,"SF3B1,c.2224-1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"SF3B1,c.2224-1G>A",SpliceAI_DL,,0,No impact
+SPLICE,"SF3B1,c.2224-1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"SF3B1,c.2224-1G>A",MaxEntScan_AL,-2.38,-2.38,High
+SPLICE,"SF3B1,c.2224-1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"SF3B1,c.2224-1G>A",MaxEntScan_DL,,1000,No impact
+SPLICE,"STAG2,c.820-1G>A",SpliceAI_AG,90,90,High
+SPLICE,"STAG2,c.820-1G>A",SpliceAI_AL,100,100,High
+SPLICE,"STAG2,c.820-1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"STAG2,c.820-1G>A",SpliceAI_DL,,0,No impact
+SPLICE,"STAG2,c.820-1G>A",MaxEntScan_AG,9.14,9.14,High
+SPLICE,"STAG2,c.820-1G>A",MaxEntScan_AL,0.67,0.67,High
+SPLICE,"STAG2,c.820-1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"STAG2,c.820-1G>A",MaxEntScan_DL,,1000,No impact
+SPLICE,"STAG2,c.894-2A>G",SpliceAI_AG,99,99,High
+SPLICE,"STAG2,c.894-2A>G",SpliceAI_AL,100,100,High
+SPLICE,"STAG2,c.894-2A>G",SpliceAI_DG,,0,No impact
+SPLICE,"STAG2,c.894-2A>G",SpliceAI_DL,,0,No impact
+SPLICE,"STAG2,c.894-2A>G",MaxEntScan_AG,,0,No impact
+SPLICE,"STAG2,c.894-2A>G",MaxEntScan_AL,1.68,1.68,High
+SPLICE,"STAG2,c.894-2A>G",MaxEntScan_DG,,0,No impact
+SPLICE,"STAG2,c.894-2A>G",MaxEntScan_DL,,1000,No impact
+SPLICE,"STAG2,c.1117-2A>G",SpliceAI_AG,,0,No impact
+SPLICE,"STAG2,c.1117-2A>G",SpliceAI_AL,100,100,High
+SPLICE,"STAG2,c.1117-2A>G",SpliceAI_DG,,0,No impact
+SPLICE,"STAG2,c.1117-2A>G",SpliceAI_DL,,0,No impact
+SPLICE,"STAG2,c.1117-2A>G",MaxEntScan_AG,5.87,5.87,Low
+SPLICE,"STAG2,c.1117-2A>G",MaxEntScan_AL,3.78,3.78,High
+SPLICE,"STAG2,c.1117-2A>G",MaxEntScan_DG,,0,No impact
+SPLICE,"STAG2,c.1117-2A>G",MaxEntScan_DL,,1000,No impact
+SPLICE,"STAG2,c.1197-1G>A",SpliceAI_AG,90,90,High
+SPLICE,"STAG2,c.1197-1G>A",SpliceAI_AL,100,100,High
+SPLICE,"STAG2,c.1197-1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"STAG2,c.1197-1G>A",SpliceAI_DL,,0,No impact
+SPLICE,"STAG2,c.1197-1G>A",MaxEntScan_AG,3.53,3.53,Low
+SPLICE,"STAG2,c.1197-1G>A",MaxEntScan_AL,-0.9,-0.9,High
+SPLICE,"STAG2,c.1197-1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"STAG2,c.1197-1G>A",MaxEntScan_DL,,1000,No impact
+SPLICE,"STAG2,c.2924+2T>C",SpliceAI_AG,,0,No impact
+SPLICE,"STAG2,c.2924+2T>C",SpliceAI_AL,,0,No impact
+SPLICE,"STAG2,c.2924+2T>C",SpliceAI_DG,,0,No impact
+SPLICE,"STAG2,c.2924+2T>C",SpliceAI_DL,99,99,High
+SPLICE,"STAG2,c.2924+2T>C",MaxEntScan_AG,,0,No impact
+SPLICE,"STAG2,c.2924+2T>C",MaxEntScan_AL,,1000,No impact
+SPLICE,"STAG2,c.2924+2T>C",MaxEntScan_DG,,0,No impact
+SPLICE,"STAG2,c.2924+2T>C",MaxEntScan_DL,-7097,-7097,High
+SPLICE,"STAG2,c.3277+1G>A",SpliceAI_AG,,0,No impact
+SPLICE,"STAG2,c.3277+1G>A",SpliceAI_AL,,0,No impact
+SPLICE,"STAG2,c.3277+1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"STAG2,c.3277+1G>A",SpliceAI_DL,97,97,High
+SPLICE,"STAG2,c.3277+1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"STAG2,c.3277+1G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"STAG2,c.3277+1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"STAG2,c.3277+1G>A",MaxEntScan_DL,-2.98,-2.98,High
+SPLICE,"TET2,c.3955-1G>A",SpliceAI_AG,73,73,Intermediate
+SPLICE,"TET2,c.3955-1G>A",SpliceAI_AL,99,99,High
+SPLICE,"TET2,c.3955-1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"TET2,c.3955-1G>A",SpliceAI_DL,,0,No impact
+SPLICE,"TET2,c.3955-1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"TET2,c.3955-1G>A",MaxEntScan_AL,-2.77,-2.77,High
+SPLICE,"TET2,c.3955-1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"TET2,c.3955-1G>A",MaxEntScan_DL,,1000,No impact
+SPLICE,"TET2,c.4045-2A>G",SpliceAI_AG,38,38,Low
+SPLICE,"TET2,c.4045-2A>G",SpliceAI_AL,99,99,High
+SPLICE,"TET2,c.4045-2A>G",SpliceAI_DG,,0,No impact
+SPLICE,"TET2,c.4045-2A>G",SpliceAI_DL,,0,No impact
+SPLICE,"TET2,c.4045-2A>G",MaxEntScan_AG,,0,No impact
+SPLICE,"TET2,c.4045-2A>G",MaxEntScan_AL,2.58,2.58,High
+SPLICE,"TET2,c.4045-2A>G",MaxEntScan_DG,,0,No impact
+SPLICE,"TET2,c.4045-2A>G",MaxEntScan_DL,,1000,No impact
+SPLICE,"TET2,c.4045-1G>A",SpliceAI_AG,36,36,Low
+SPLICE,"TET2,c.4045-1G>A",SpliceAI_AL,99,99,High
+SPLICE,"TET2,c.4045-1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"TET2,c.4045-1G>A",SpliceAI_DL,,0,No impact
+SPLICE,"TET2,c.4045-1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"TET2,c.4045-1G>A",MaxEntScan_AL,1.78,1.78,High
+SPLICE,"TET2,c.4045-1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"TET2,c.4045-1G>A",MaxEntScan_DL,,1000,No impact
+SPLICE,"TET2,c.4183-2A>G",SpliceAI_AG,68,68,Intermediate
+SPLICE,"TET2,c.4183-2A>G",SpliceAI_AL,99,99,High
+SPLICE,"TET2,c.4183-2A>G",SpliceAI_DG,,0,No impact
+SPLICE,"TET2,c.4183-2A>G",SpliceAI_DL,,0,No impact
+SPLICE,"TET2,c.4183-2A>G",MaxEntScan_AG,4.47,4.47,Low
+SPLICE,"TET2,c.4183-2A>G",MaxEntScan_AL,1.88,1.88,High
+SPLICE,"TET2,c.4183-2A>G",MaxEntScan_DG,,0,No impact
+SPLICE,"TET2,c.4183-2A>G",MaxEntScan_DL,,1000,No impact
+SPLICE,"TET2,c.3954+5G>A",SpliceAI_AG,,0,No impact
+SPLICE,"TET2,c.3954+5G>A",SpliceAI_AL,,0,No impact
+SPLICE,"TET2,c.3954+5G>A",SpliceAI_DG,,0,No impact
+SPLICE,"TET2,c.3954+5G>A",SpliceAI_DL,92,92,High
+SPLICE,"TET2,c.3954+5G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"TET2,c.3954+5G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"TET2,c.3954+5G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"TET2,c.3954+5G>A",MaxEntScan_DL,2.62,2.62,High
+SPLICE,"TET2,c.3409+1G>A",SpliceAI_AG,,0,No impact
+SPLICE,"TET2,c.3409+1G>A",SpliceAI_AL,,0,No impact
+SPLICE,"TET2,c.3409+1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"TET2,c.3409+1G>A",SpliceAI_DL,33,33,Low
+SPLICE,"TET2,c.3409+1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"TET2,c.3409+1G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"TET2,c.3409+1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"TET2,c.3409+1G>A",MaxEntScan_DL,1.48,1.48,High
+SPLICE,"TET2,c.3954+1G>A",SpliceAI_AG,20,20,No impact
+SPLICE,"TET2,c.3954+1G>A",SpliceAI_AL,,0,No impact
+SPLICE,"TET2,c.3954+1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"TET2,c.3954+1G>A",SpliceAI_DL,96,96,High
+SPLICE,"TET2,c.3954+1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"TET2,c.3954+1G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"TET2,c.3954+1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"TET2,c.3954+1G>A",MaxEntScan_DL,-1.82,-1.82,High
+SPLICE,"TET2,c.3954+1G>T",SpliceAI_AG,21,21,Low
+SPLICE,"TET2,c.3954+1G>T",SpliceAI_AL,,0,No impact
+SPLICE,"TET2,c.3954+1G>T",SpliceAI_DG,,0,No impact
+SPLICE,"TET2,c.3954+1G>T",SpliceAI_DL,96,96,High
+SPLICE,"TET2,c.3954+1G>T",MaxEntScan_AG,,0,No impact
+SPLICE,"TET2,c.3954+1G>T",MaxEntScan_AL,,1000,No impact
+SPLICE,"TET2,c.3954+1G>T",MaxEntScan_DG,,0,No impact
+SPLICE,"TET2,c.3954+1G>T",MaxEntScan_DL,-2.14,-2.14,High
+SPLICE,"TP53,c.994-1G>A",SpliceAI_AG,97,97,High
+SPLICE,"TP53,c.994-1G>A",SpliceAI_AL,100,100,High
+SPLICE,"TP53,c.994-1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"TP53,c.994-1G>A",SpliceAI_DL,,0,No impact
+SPLICE,"TP53,c.994-1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"TP53,c.994-1G>A",MaxEntScan_AL,1.89,1.89,High
+SPLICE,"TP53,c.994-1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"TP53,c.994-1G>A",MaxEntScan_DL,,1000,No impact
+SPLICE,"TP53,c.376-2A>G",SpliceAI_AG,96,96,High
+SPLICE,"TP53,c.376-2A>G",SpliceAI_AL,100,100,High
+SPLICE,"TP53,c.376-2A>G",SpliceAI_DG,,0,No impact
+SPLICE,"TP53,c.376-2A>G",SpliceAI_DL,,0,No impact
+SPLICE,"TP53,c.376-2A>G",MaxEntScan_AG,3.42,3.42,Low
+SPLICE,"TP53,c.376-2A>G",MaxEntScan_AL,2.67,2.67,High
+SPLICE,"TP53,c.376-2A>G",MaxEntScan_DG,,0,No impact
+SPLICE,"TP53,c.376-2A>G",MaxEntScan_DL,,1000,No impact
+SPLICE,"TP53,c.993+1G>A",SpliceAI_AG,,0,No impact
+SPLICE,"TP53,c.993+1G>A",SpliceAI_AL,,0,No impact
+SPLICE,"TP53,c.993+1G>A",SpliceAI_DG,,0,No impact
+SPLICE,"TP53,c.993+1G>A",SpliceAI_DL,99,99,High
+SPLICE,"TP53,c.993+1G>A",MaxEntScan_AG,,0,No impact
+SPLICE,"TP53,c.993+1G>A",MaxEntScan_AL,,1000,No impact
+SPLICE,"TP53,c.993+1G>A",MaxEntScan_DG,,0,No impact
+SPLICE,"TP53,c.993+1G>A",MaxEntScan_DL,-0.54,-0.54,High
+"NONSENSE, SPLICE REGION","KDM5A,c.1773G>A,p.Trp591Ter",SpliceAI_AG,,0,No impact
+"NONSENSE, SPLICE REGION","KDM5A,c.1773G>A,p.Trp591Ter",SpliceAI_AL,,0,No impact
+"NONSENSE, SPLICE REGION","KDM5A,c.1773G>A,p.Trp591Ter",SpliceAI_DG,,0,No impact
+"NONSENSE, SPLICE REGION","KDM5A,c.1773G>A,p.Trp591Ter",SpliceAI_DL,81,81,High
+"NONSENSE, SPLICE REGION","KDM5A,c.1773G>A,p.Trp591Ter",MaxEntScan_AG,,0,No impact
+"NONSENSE, SPLICE REGION","KDM5A,c.1773G>A,p.Trp591Ter",MaxEntScan_AL,,1000,No impact
+"NONSENSE, SPLICE REGION","KDM5A,c.1773G>A,p.Trp591Ter",MaxEntScan_DG,,0,No impact
+"NONSENSE, SPLICE REGION","KDM5A,c.1773G>A,p.Trp591Ter",MaxEntScan_DL,-7582,-7582,High
+NONSENSE,"BCOR,c.3622C>T,p.Gln1208Ter",SpliceAI_AG,41,41,Low
+NONSENSE,"BCOR,c.3622C>T,p.Gln1208Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"BCOR,c.3622C>T,p.Gln1208Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"BCOR,c.3622C>T,p.Gln1208Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"BCOR,c.3622C>T,p.Gln1208Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"BCOR,c.3622C>T,p.Gln1208Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"BCOR,c.3622C>T,p.Gln1208Ter",MaxEntScan_DG,,0,No impact
+NONSENSE,"BCOR,c.3622C>T,p.Gln1208Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"DNMT3A,c.1792C>T,p.Arg598Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"DNMT3A,c.1792C>T,p.Arg598Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"DNMT3A,c.1792C>T,p.Arg598Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"DNMT3A,c.1792C>T,p.Arg598Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"DNMT3A,c.1792C>T,p.Arg598Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"DNMT3A,c.1792C>T,p.Arg598Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"DNMT3A,c.1792C>T,p.Arg598Ter",MaxEntScan_DG,7.4,7.4,Intermediate
+NONSENSE,"DNMT3A,c.1792C>T,p.Arg598Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"KDM6A,c.493C>T,p.Arg165Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"KDM6A,c.493C>T,p.Arg165Ter",SpliceAI_AL,29,29,Low
+NONSENSE,"KDM6A,c.493C>T,p.Arg165Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"KDM6A,c.493C>T,p.Arg165Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"KDM6A,c.493C>T,p.Arg165Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"KDM6A,c.493C>T,p.Arg165Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"KDM6A,c.493C>T,p.Arg165Ter",MaxEntScan_DG,,0,No impact
+NONSENSE,"KDM6A,c.493C>T,p.Arg165Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"KDM6A,c.1516C>T,p.Gln506Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"KDM6A,c.1516C>T,p.Gln506Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"KDM6A,c.1516C>T,p.Gln506Ter",SpliceAI_DG,39,39,Low
+NONSENSE,"KDM6A,c.1516C>T,p.Gln506Ter",SpliceAI_DL,28,28,Low
+NONSENSE,"KDM6A,c.1516C>T,p.Gln506Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"KDM6A,c.1516C>T,p.Gln506Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"KDM6A,c.1516C>T,p.Gln506Ter",MaxEntScan_DG,3.19,3.19,Low
+NONSENSE,"KDM6A,c.1516C>T,p.Gln506Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"KMT2D,c.16501C>T,p.Arg5501Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"KMT2D,c.16501C>T,p.Arg5501Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"KMT2D,c.16501C>T,p.Arg5501Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"KMT2D,c.16501C>T,p.Arg5501Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"KMT2D,c.16501C>T,p.Arg5501Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"KMT2D,c.16501C>T,p.Arg5501Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"KMT2D,c.16501C>T,p.Arg5501Ter",MaxEntScan_DG,4.89,4.89,Low
+NONSENSE,"KMT2D,c.16501C>T,p.Arg5501Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"KMT2D,c.13450C>T,p.Arg4484Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"KMT2D,c.13450C>T,p.Arg4484Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"KMT2D,c.13450C>T,p.Arg4484Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"KMT2D,c.13450C>T,p.Arg4484Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"KMT2D,c.13450C>T,p.Arg4484Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"KMT2D,c.13450C>T,p.Arg4484Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"KMT2D,c.13450C>T,p.Arg4484Ter",MaxEntScan_DG,3.2,3.2,Low
+NONSENSE,"KMT2D,c.13450C>T,p.Arg4484Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"KMT2D,c.10951C>T,p.Gln3651Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"KMT2D,c.10951C>T,p.Gln3651Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"KMT2D,c.10951C>T,p.Gln3651Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"KMT2D,c.10951C>T,p.Gln3651Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"KMT2D,c.10951C>T,p.Gln3651Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"KMT2D,c.10951C>T,p.Gln3651Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"KMT2D,c.10951C>T,p.Gln3651Ter",MaxEntScan_DG,8.84,8.84,High
+NONSENSE,"KMT2D,c.10951C>T,p.Gln3651Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"KMT2D,c.6673G>T,p.Glu2225Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"KMT2D,c.6673G>T,p.Glu2225Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"KMT2D,c.6673G>T,p.Glu2225Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"KMT2D,c.6673G>T,p.Glu2225Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"KMT2D,c.6673G>T,p.Glu2225Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"KMT2D,c.6673G>T,p.Glu2225Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"KMT2D,c.6673G>T,p.Glu2225Ter",MaxEntScan_DG,6.62,6.62,Intermediate
+NONSENSE,"KMT2D,c.6673G>T,p.Glu2225Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"KMT2D,c.3532C>T,p.Gln1178Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"KMT2D,c.3532C>T,p.Gln1178Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"KMT2D,c.3532C>T,p.Gln1178Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"KMT2D,c.3532C>T,p.Gln1178Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"KMT2D,c.3532C>T,p.Gln1178Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"KMT2D,c.3532C>T,p.Gln1178Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"KMT2D,c.3532C>T,p.Gln1178Ter",MaxEntScan_DG,5.76,5.76,Low
+NONSENSE,"KMT2D,c.3532C>T,p.Gln1178Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"KMT2E,c.1756C>T,p.Gln586Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"KMT2E,c.1756C>T,p.Gln586Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"KMT2E,c.1756C>T,p.Gln586Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"KMT2E,c.1756C>T,p.Gln586Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"KMT2E,c.1756C>T,p.Gln586Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"KMT2E,c.1756C>T,p.Gln586Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"KMT2E,c.1756C>T,p.Gln586Ter",MaxEntScan_DG,3.93,3.93,Low
+NONSENSE,"KMT2E,c.1756C>T,p.Gln586Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"NF1,c.2875C>T,p.Gln959Ter",SpliceAI_AG,38,38,Low
+NONSENSE,"NF1,c.2875C>T,p.Gln959Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"NF1,c.2875C>T,p.Gln959Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"NF1,c.2875C>T,p.Gln959Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"NF1,c.2875C>T,p.Gln959Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"NF1,c.2875C>T,p.Gln959Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"NF1,c.2875C>T,p.Gln959Ter",MaxEntScan_DG,,0,No impact
+NONSENSE,"NF1,c.2875C>T,p.Gln959Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"NF1,c.6772C>T,p.Arg2258Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"NF1,c.6772C>T,p.Arg2258Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"NF1,c.6772C>T,p.Arg2258Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"NF1,c.6772C>T,p.Arg2258Ter",SpliceAI_DL,35,35,Low
+NONSENSE,"NF1,c.6772C>T,p.Arg2258Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"NF1,c.6772C>T,p.Arg2258Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"NF1,c.6772C>T,p.Arg2258Ter",MaxEntScan_DG,,0,No impact
+NONSENSE,"NF1,c.6772C>T,p.Arg2258Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"STAG2,c.545T>G,p.Leu182Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"STAG2,c.545T>G,p.Leu182Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"STAG2,c.545T>G,p.Leu182Ter",SpliceAI_DG,92,92,High
+NONSENSE,"STAG2,c.545T>G,p.Leu182Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"STAG2,c.545T>G,p.Leu182Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"STAG2,c.545T>G,p.Leu182Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"STAG2,c.545T>G,p.Leu182Ter",MaxEntScan_DG,7.42,7.42,Intermediate
+NONSENSE,"STAG2,c.545T>G,p.Leu182Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"STAG2,c.2020C>T,p.Gln674Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"STAG2,c.2020C>T,p.Gln674Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"STAG2,c.2020C>T,p.Gln674Ter",SpliceAI_DG,41,41,Low
+NONSENSE,"STAG2,c.2020C>T,p.Gln674Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"STAG2,c.2020C>T,p.Gln674Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"STAG2,c.2020C>T,p.Gln674Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"STAG2,c.2020C>T,p.Gln674Ter",MaxEntScan_DG,4.08,4.08,Low
+NONSENSE,"STAG2,c.2020C>T,p.Gln674Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"STAG2,c.2740C>T,p.Gln914Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"STAG2,c.2740C>T,p.Gln914Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"STAG2,c.2740C>T,p.Gln914Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"STAG2,c.2740C>T,p.Gln914Ter",SpliceAI_DL,27,27,Low
+NONSENSE,"STAG2,c.2740C>T,p.Gln914Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"STAG2,c.2740C>T,p.Gln914Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"STAG2,c.2740C>T,p.Gln914Ter",MaxEntScan_DG,,0,No impact
+NONSENSE,"STAG2,c.2740C>T,p.Gln914Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"TET2,c.4315A>T,p.Lys1439Ter",SpliceAI_AG,21,21,Low
+NONSENSE,"TET2,c.4315A>T,p.Lys1439Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"TET2,c.4315A>T,p.Lys1439Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"TET2,c.4315A>T,p.Lys1439Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"TET2,c.4315A>T,p.Lys1439Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"TET2,c.4315A>T,p.Lys1439Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"TET2,c.4315A>T,p.Lys1439Ter",MaxEntScan_DG,,0,No impact
+NONSENSE,"TET2,c.4315A>T,p.Lys1439Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"TET2,c.4546C>T,p.Arg1516Ter",SpliceAI_AG,34,34,Low
+NONSENSE,"TET2,c.4546C>T,p.Arg1516Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"TET2,c.4546C>T,p.Arg1516Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"TET2,c.4546C>T,p.Arg1516Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"TET2,c.4546C>T,p.Arg1516Ter",MaxEntScan_AG,7.79,7.79,Intermediate
+NONSENSE,"TET2,c.4546C>T,p.Arg1516Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"TET2,c.4546C>T,p.Arg1516Ter",MaxEntScan_DG,,0,No impact
+NONSENSE,"TET2,c.4546C>T,p.Arg1516Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"TET2,c.5543C>G,p.Ser1848Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"TET2,c.5543C>G,p.Ser1848Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"TET2,c.5543C>G,p.Ser1848Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"TET2,c.5543C>G,p.Ser1848Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"TET2,c.5543C>G,p.Ser1848Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"TET2,c.5543C>G,p.Ser1848Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"TET2,c.5543C>G,p.Ser1848Ter",MaxEntScan_DG,7.54,7.54,Intermediate
+NONSENSE,"TET2,c.5543C>G,p.Ser1848Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"TP53,c.637C>T,p.Arg213Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"TP53,c.637C>T,p.Arg213Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"TP53,c.637C>T,p.Arg213Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"TP53,c.637C>T,p.Arg213Ter",SpliceAI_DL,47,47,Low
+NONSENSE,"TP53,c.637C>T,p.Arg213Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"TP53,c.637C>T,p.Arg213Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"TP53,c.637C>T,p.Arg213Ter",MaxEntScan_DG,,0,No impact
+NONSENSE,"TP53,c.637C>T,p.Arg213Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"TP53,c.437G>A,p.Trp146Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"TP53,c.437G>A,p.Trp146Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"TP53,c.437G>A,p.Trp146Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"TP53,c.437G>A,p.Trp146Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"TP53,c.437G>A,p.Trp146Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"TP53,c.437G>A,p.Trp146Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"TP53,c.437G>A,p.Trp146Ter",MaxEntScan_DG,3.41,3.41,Low
+NONSENSE,"TP53,c.437G>A,p.Trp146Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"WT1,c.1309C>T,p.Gln437Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"WT1,c.1309C>T,p.Gln437Ter",SpliceAI_AL,,0,No impact
+NONSENSE,"WT1,c.1309C>T,p.Gln437Ter",SpliceAI_DG,,0,No impact
+NONSENSE,"WT1,c.1309C>T,p.Gln437Ter",SpliceAI_DL,22,22,Low
+NONSENSE,"WT1,c.1309C>T,p.Gln437Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"WT1,c.1309C>T,p.Gln437Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"WT1,c.1309C>T,p.Gln437Ter",MaxEntScan_DG,,0,No impact
+NONSENSE,"WT1,c.1309C>T,p.Gln437Ter",MaxEntScan_DL,,1000,No impact
+NONSENSE,"WT1,c.1157C>A,p.Ser381Ter",SpliceAI_AG,,0,No impact
+NONSENSE,"WT1,c.1157C>A,p.Ser381Ter",SpliceAI_AL,22,22,Low
+NONSENSE,"WT1,c.1157C>A,p.Ser381Ter",SpliceAI_DG,29,29,Low
+NONSENSE,"WT1,c.1157C>A,p.Ser381Ter",SpliceAI_DL,,0,No impact
+NONSENSE,"WT1,c.1157C>A,p.Ser381Ter",MaxEntScan_AG,,0,No impact
+NONSENSE,"WT1,c.1157C>A,p.Ser381Ter",MaxEntScan_AL,,1000,No impact
+NONSENSE,"WT1,c.1157C>A,p.Ser381Ter",MaxEntScan_DG,8.81,8.81,High
+NONSENSE,"WT1,c.1157C>A,p.Ser381Ter",MaxEntScan_DL,,1000,No impact
+"MISSENSE, SPLICE REGION","ASXL1,c.254A>G,p.Lys85Arg",SpliceAI_AG,,0,No impact
+"MISSENSE, SPLICE REGION","ASXL1,c.254A>G,p.Lys85Arg",SpliceAI_AL,81,81,High
+"MISSENSE, SPLICE REGION","ASXL1,c.254A>G,p.Lys85Arg",SpliceAI_DG,,0,No impact
+"MISSENSE, SPLICE REGION","ASXL1,c.254A>G,p.Lys85Arg",SpliceAI_DL,,0,No impact
+"MISSENSE, SPLICE REGION","ASXL1,c.254A>G,p.Lys85Arg",MaxEntScan_AG,,0,No impact
+"MISSENSE, SPLICE REGION","ASXL1,c.254A>G,p.Lys85Arg",MaxEntScan_AL,,1000,No impact
+"MISSENSE, SPLICE REGION","ASXL1,c.254A>G,p.Lys85Arg",MaxEntScan_DG,,0,No impact
+"MISSENSE, SPLICE REGION","ASXL1,c.254A>G,p.Lys85Arg",MaxEntScan_DL,,1000,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2408G>A,p.Arg803Lys",SpliceAI_AG,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2408G>A,p.Arg803Lys",SpliceAI_AL,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2408G>A,p.Arg803Lys",SpliceAI_DG,33,33,Low
+"MISSENSE, SPLICE REGION","DNMT3A,c.2408G>A,p.Arg803Lys",SpliceAI_DL,74,74,Intermediate
+"MISSENSE, SPLICE REGION","DNMT3A,c.2408G>A,p.Arg803Lys",MaxEntScan_AG,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2408G>A,p.Arg803Lys",MaxEntScan_AL,,1000,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2408G>A,p.Arg803Lys",MaxEntScan_DG,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2408G>A,p.Arg803Lys",MaxEntScan_DL,2.11,2.11,High
+"MISSENSE, SPLICE REGION","DNMT3A,c.2407A>G,p.Arg803Gly",SpliceAI_AG,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2407A>G,p.Arg803Gly",SpliceAI_AL,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2407A>G,p.Arg803Gly",SpliceAI_DG,40,40,Low
+"MISSENSE, SPLICE REGION","DNMT3A,c.2407A>G,p.Arg803Gly",SpliceAI_DL,37,37,Low
+"MISSENSE, SPLICE REGION","DNMT3A,c.2407A>G,p.Arg803Gly",MaxEntScan_AG,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2407A>G,p.Arg803Gly",MaxEntScan_AL,,1000,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2407A>G,p.Arg803Gly",MaxEntScan_DG,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2407A>G,p.Arg803Gly",MaxEntScan_DL,3.35,3.35,High
+"MISSENSE, SPLICE REGION","DNMT3A,c.2322G>T,p.Glu774Asp",SpliceAI_AG,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2322G>T,p.Glu774Asp",SpliceAI_AL,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2322G>T,p.Glu774Asp",SpliceAI_DG,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2322G>T,p.Glu774Asp",SpliceAI_DL,95,95,High
+"MISSENSE, SPLICE REGION","DNMT3A,c.2322G>T,p.Glu774Asp",MaxEntScan_AG,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2322G>T,p.Glu774Asp",MaxEntScan_AL,,1000,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2322G>T,p.Glu774Asp",MaxEntScan_DG,,0,No impact
+"MISSENSE, SPLICE REGION","DNMT3A,c.2322G>T,p.Glu774Asp",MaxEntScan_DL,-2.49,-2.49,High
+"MISSENSE, SPLICE REGION","EZH2,c.363G>A,p.Met121Ile",SpliceAI_AG,,0,No impact
+"MISSENSE, SPLICE REGION","EZH2,c.363G>A,p.Met121Ile",SpliceAI_AL,,0,No impact
+"MISSENSE, SPLICE REGION","EZH2,c.363G>A,p.Met121Ile",SpliceAI_DG,,0,No impact
+"MISSENSE, SPLICE REGION","EZH2,c.363G>A,p.Met121Ile",SpliceAI_DL,26,26,Low
+"MISSENSE, SPLICE REGION","EZH2,c.363G>A,p.Met121Ile",MaxEntScan_AG,,0,No impact
+"MISSENSE, SPLICE REGION","EZH2,c.363G>A,p.Met121Ile",MaxEntScan_AL,,1000,No impact
+"MISSENSE, SPLICE REGION","EZH2,c.363G>A,p.Met121Ile",MaxEntScan_DG,,0,No impact
+"MISSENSE, SPLICE REGION","EZH2,c.363G>A,p.Met121Ile",MaxEntScan_DL,4.41,4.41,High
+"MISSENSE, SPLICE REGION","KIT,c.65C>T,p.Thr22Ile",SpliceAI_AG,,0,No impact
+"MISSENSE, SPLICE REGION","KIT,c.65C>T,p.Thr22Ile",SpliceAI_AL,,0,No impact
+"MISSENSE, SPLICE REGION","KIT,c.65C>T,p.Thr22Ile",SpliceAI_DG,,0,No impact
+"MISSENSE, SPLICE REGION","KIT,c.65C>T,p.Thr22Ile",SpliceAI_DL,,0,No impact
+"MISSENSE, SPLICE REGION","KIT,c.65C>T,p.Thr22Ile",MaxEntScan_AG,,0,No impact
+"MISSENSE, SPLICE REGION","KIT,c.65C>T,p.Thr22Ile",MaxEntScan_AL,,1000,No impact
+"MISSENSE, SPLICE REGION","KIT,c.65C>T,p.Thr22Ile",MaxEntScan_DG,,0,No impact
+"MISSENSE, SPLICE REGION","KIT,c.65C>T,p.Thr22Ile",MaxEntScan_DL,3.27,3.27,High
+"MISSENSE, SPLICE REGION","PHF6,c.729G>A,p.Met243Ile",SpliceAI_AG,,0,No impact
+"MISSENSE, SPLICE REGION","PHF6,c.729G>A,p.Met243Ile",SpliceAI_AL,,0,No impact
+"MISSENSE, SPLICE REGION","PHF6,c.729G>A,p.Met243Ile",SpliceAI_DG,,0,No impact
+"MISSENSE, SPLICE REGION","PHF6,c.729G>A,p.Met243Ile",SpliceAI_DL,,0,No impact
+"MISSENSE, SPLICE REGION","PHF6,c.729G>A,p.Met243Ile",MaxEntScan_AG,,0,No impact
+"MISSENSE, SPLICE REGION","PHF6,c.729G>A,p.Met243Ile",MaxEntScan_AL,,1000,No impact
+"MISSENSE, SPLICE REGION","PHF6,c.729G>A,p.Met243Ile",MaxEntScan_DG,,0,No impact
+"MISSENSE, SPLICE REGION","PHF6,c.729G>A,p.Met243Ile",MaxEntScan_DL,5.26,5.26,High
+"MISSENSE, SPLICE REGION","RAD21,c.688G>A,p.Asp230Asn",SpliceAI_AG,,0,No impact
+"MISSENSE, SPLICE REGION","RAD21,c.688G>A,p.Asp230Asn",SpliceAI_AL,,0,No impact
+"MISSENSE, SPLICE REGION","RAD21,c.688G>A,p.Asp230Asn",SpliceAI_DG,,0,No impact
+"MISSENSE, SPLICE REGION","RAD21,c.688G>A,p.Asp230Asn",SpliceAI_DL,,0,No impact
+"MISSENSE, SPLICE REGION","RAD21,c.688G>A,p.Asp230Asn",MaxEntScan_AG,,0,No impact
+"MISSENSE, SPLICE REGION","RAD21,c.688G>A,p.Asp230Asn",MaxEntScan_AL,,1000,No impact
+"MISSENSE, SPLICE REGION","RAD21,c.688G>A,p.Asp230Asn",MaxEntScan_DG,,0,No impact
+"MISSENSE, SPLICE REGION","RAD21,c.688G>A,p.Asp230Asn",MaxEntScan_DL,4.89,4.89,High
+"MISSENSE, SPLICE REGION","TET2,c.3500G>A,p.Arg1167Lys",SpliceAI_AG,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.3500G>A,p.Arg1167Lys",SpliceAI_AL,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.3500G>A,p.Arg1167Lys",SpliceAI_DG,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.3500G>A,p.Arg1167Lys",SpliceAI_DL,85,85,High
+"MISSENSE, SPLICE REGION","TET2,c.3500G>A,p.Arg1167Lys",MaxEntScan_AG,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.3500G>A,p.Arg1167Lys",MaxEntScan_AL,,1000,No impact
+"MISSENSE, SPLICE REGION","TET2,c.3500G>A,p.Arg1167Lys",MaxEntScan_DG,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.3500G>A,p.Arg1167Lys",MaxEntScan_DL,3.64,3.64,High
+"MISSENSE, SPLICE REGION","TET2,c.3956A>T,p.Glu1319Val",SpliceAI_AG,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.3956A>T,p.Glu1319Val",SpliceAI_AL,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.3956A>T,p.Glu1319Val",SpliceAI_DG,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.3956A>T,p.Glu1319Val",SpliceAI_DL,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.3956A>T,p.Glu1319Val",MaxEntScan_AG,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.3956A>T,p.Glu1319Val",MaxEntScan_AL,,1000,No impact
+"MISSENSE, SPLICE REGION","TET2,c.3956A>T,p.Glu1319Val",MaxEntScan_DG,7.1,7.1,Intermediate
+"MISSENSE, SPLICE REGION","TET2,c.3956A>T,p.Glu1319Val",MaxEntScan_DL,,1000,No impact
+"MISSENSE, SPLICE REGION","TET2,c.4535C>T,p.Ala1512Val",SpliceAI_AG,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.4535C>T,p.Ala1512Val",SpliceAI_AL,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.4535C>T,p.Ala1512Val",SpliceAI_DG,97,97,High
+"MISSENSE, SPLICE REGION","TET2,c.4535C>T,p.Ala1512Val",SpliceAI_DL,75,75,Intermediate
+"MISSENSE, SPLICE REGION","TET2,c.4535C>T,p.Ala1512Val",MaxEntScan_AG,,0,No impact
+"MISSENSE, SPLICE REGION","TET2,c.4535C>T,p.Ala1512Val",MaxEntScan_AL,,1000,No impact
+"MISSENSE, SPLICE REGION","TET2,c.4535C>T,p.Ala1512Val",MaxEntScan_DG,7.03,7.03,Intermediate
+"MISSENSE, SPLICE REGION","TET2,c.4535C>T,p.Ala1512Val",MaxEntScan_DL,6.62,6.62,Intermediate
+MISSENSE,"ASXL1,c.1589C>T,p.Ala530Val",SpliceAI_AG,,0,No impact
+MISSENSE,"ASXL1,c.1589C>T,p.Ala530Val",SpliceAI_AL,,0,No impact
+MISSENSE,"ASXL1,c.1589C>T,p.Ala530Val",SpliceAI_DG,,0,No impact
+MISSENSE,"ASXL1,c.1589C>T,p.Ala530Val",SpliceAI_DL,,0,No impact
+MISSENSE,"ASXL1,c.1589C>T,p.Ala530Val",MaxEntScan_AG,,0,No impact
+MISSENSE,"ASXL1,c.1589C>T,p.Ala530Val",MaxEntScan_AL,,1000,No impact
+MISSENSE,"ASXL1,c.1589C>T,p.Ala530Val",MaxEntScan_DG,3.48,3.48,Low
+MISSENSE,"ASXL1,c.1589C>T,p.Ala530Val",MaxEntScan_DL,,1000,No impact
+MISSENSE,"BRAF,c.1780G>A,p.Asp594Asn",SpliceAI_AG,,0,No impact
+MISSENSE,"BRAF,c.1780G>A,p.Asp594Asn",SpliceAI_AL,,0,No impact
+MISSENSE,"BRAF,c.1780G>A,p.Asp594Asn",SpliceAI_DG,,0,No impact
+MISSENSE,"BRAF,c.1780G>A,p.Asp594Asn",SpliceAI_DL,,0,No impact
+MISSENSE,"BRAF,c.1780G>A,p.Asp594Asn",MaxEntScan_AG,,0,No impact
+MISSENSE,"BRAF,c.1780G>A,p.Asp594Asn",MaxEntScan_AL,,1000,No impact
+MISSENSE,"BRAF,c.1780G>A,p.Asp594Asn",MaxEntScan_DG,7.27,7.27,Intermediate
+MISSENSE,"BRAF,c.1780G>A,p.Asp594Asn",MaxEntScan_DL,,1000,No impact
+MISSENSE,"DNMT3A,c.2602T>G,p.Phe868Val",SpliceAI_AG,64,64,Intermediate
+MISSENSE,"DNMT3A,c.2602T>G,p.Phe868Val",SpliceAI_AL,,0,No impact
+MISSENSE,"DNMT3A,c.2602T>G,p.Phe868Val",SpliceAI_DG,,0,No impact
+MISSENSE,"DNMT3A,c.2602T>G,p.Phe868Val",SpliceAI_DL,,0,No impact
+MISSENSE,"DNMT3A,c.2602T>G,p.Phe868Val",MaxEntScan_AG,3.66,3.66,Low
+MISSENSE,"DNMT3A,c.2602T>G,p.Phe868Val",MaxEntScan_AL,,1000,No impact
+MISSENSE,"DNMT3A,c.2602T>G,p.Phe868Val",MaxEntScan_DG,,0,No impact
+MISSENSE,"DNMT3A,c.2602T>G,p.Phe868Val",MaxEntScan_DL,,1000,No impact
+MISSENSE,"DNMT3A,c.2512A>G,p.Asn838Asp",SpliceAI_AG,,0,No impact
+MISSENSE,"DNMT3A,c.2512A>G,p.Asn838Asp",SpliceAI_AL,,0,No impact
+MISSENSE,"DNMT3A,c.2512A>G,p.Asn838Asp",SpliceAI_DG,,0,No impact
+MISSENSE,"DNMT3A,c.2512A>G,p.Asn838Asp",SpliceAI_DL,,0,No impact
+MISSENSE,"DNMT3A,c.2512A>G,p.Asn838Asp",MaxEntScan_AG,,0,No impact
+MISSENSE,"DNMT3A,c.2512A>G,p.Asn838Asp",MaxEntScan_AL,,1000,No impact
+MISSENSE,"DNMT3A,c.2512A>G,p.Asn838Asp",MaxEntScan_DG,5.24,5.24,Low
+MISSENSE,"DNMT3A,c.2512A>G,p.Asn838Asp",MaxEntScan_DL,,1000,No impact
+MISSENSE,"DNMT3A,c.2450A>T,p.Glu817Val",SpliceAI_AG,,0,No impact
+MISSENSE,"DNMT3A,c.2450A>T,p.Glu817Val",SpliceAI_AL,,0,No impact
+MISSENSE,"DNMT3A,c.2450A>T,p.Glu817Val",SpliceAI_DG,42,42,Low
+MISSENSE,"DNMT3A,c.2450A>T,p.Glu817Val",SpliceAI_DL,,0,No impact
+MISSENSE,"DNMT3A,c.2450A>T,p.Glu817Val",MaxEntScan_AG,,0,No impact
+MISSENSE,"DNMT3A,c.2450A>T,p.Glu817Val",MaxEntScan_AL,,1000,No impact
+MISSENSE,"DNMT3A,c.2450A>T,p.Glu817Val",MaxEntScan_DG,6.99,6.99,Intermediate
+MISSENSE,"DNMT3A,c.2450A>T,p.Glu817Val",MaxEntScan_DL,,1000,No impact
+MISSENSE,"DNMT3A,c.2120G>T,p.Gly707Val",SpliceAI_AG,,0,No impact
+MISSENSE,"DNMT3A,c.2120G>T,p.Gly707Val",SpliceAI_AL,,0,No impact
+MISSENSE,"DNMT3A,c.2120G>T,p.Gly707Val",SpliceAI_DG,,0,No impact
+MISSENSE,"DNMT3A,c.2120G>T,p.Gly707Val",SpliceAI_DL,,0,No impact
+MISSENSE,"DNMT3A,c.2120G>T,p.Gly707Val",MaxEntScan_AG,,0,No impact
+MISSENSE,"DNMT3A,c.2120G>T,p.Gly707Val",MaxEntScan_AL,,1000,No impact
+MISSENSE,"DNMT3A,c.2120G>T,p.Gly707Val",MaxEntScan_DG,3.99,3.99,Low
+MISSENSE,"DNMT3A,c.2120G>T,p.Gly707Val",MaxEntScan_DL,,1000,No impact
+MISSENSE,"DNMT3A,c.2056G>T,p.Asp686Tyr",SpliceAI_AG,,0,No impact
+MISSENSE,"DNMT3A,c.2056G>T,p.Asp686Tyr",SpliceAI_AL,,0,No impact
+MISSENSE,"DNMT3A,c.2056G>T,p.Asp686Tyr",SpliceAI_DG,98,98,High
+MISSENSE,"DNMT3A,c.2056G>T,p.Asp686Tyr",SpliceAI_DL,,0,No impact
+MISSENSE,"DNMT3A,c.2056G>T,p.Asp686Tyr",MaxEntScan_AG,,0,No impact
+MISSENSE,"DNMT3A,c.2056G>T,p.Asp686Tyr",MaxEntScan_AL,,1000,No impact
+MISSENSE,"DNMT3A,c.2056G>T,p.Asp686Tyr",MaxEntScan_DG,9.5,9.5,High
+MISSENSE,"DNMT3A,c.2056G>T,p.Asp686Tyr",MaxEntScan_DL,,1000,No impact
+MISSENSE,"DNMT3A,c.1904G>A,p.Arg635Gln",SpliceAI_AG,,0,No impact
+MISSENSE,"DNMT3A,c.1904G>A,p.Arg635Gln",SpliceAI_AL,,0,No impact
+MISSENSE,"DNMT3A,c.1904G>A,p.Arg635Gln",SpliceAI_DG,,0,No impact
+MISSENSE,"DNMT3A,c.1904G>A,p.Arg635Gln",SpliceAI_DL,,0,No impact
+MISSENSE,"DNMT3A,c.1904G>A,p.Arg635Gln",MaxEntScan_AG,,0,No impact
+MISSENSE,"DNMT3A,c.1904G>A,p.Arg635Gln",MaxEntScan_AL,,1000,No impact
+MISSENSE,"DNMT3A,c.1904G>A,p.Arg635Gln",MaxEntScan_DG,4.87,4.87,Low
+MISSENSE,"DNMT3A,c.1904G>A,p.Arg635Gln",MaxEntScan_DL,,1000,No impact
+MISSENSE,"DNMT3A,c.1640T>G,p.Leu547Arg",SpliceAI_AG,,0,No impact
+MISSENSE,"DNMT3A,c.1640T>G,p.Leu547Arg",SpliceAI_AL,,0,No impact
+MISSENSE,"DNMT3A,c.1640T>G,p.Leu547Arg",SpliceAI_DG,,0,No impact
+MISSENSE,"DNMT3A,c.1640T>G,p.Leu547Arg",SpliceAI_DL,,0,No impact
+MISSENSE,"DNMT3A,c.1640T>G,p.Leu547Arg",MaxEntScan_AG,,0,No impact
+MISSENSE,"DNMT3A,c.1640T>G,p.Leu547Arg",MaxEntScan_AL,,1000,No impact
+MISSENSE,"DNMT3A,c.1640T>G,p.Leu547Arg",MaxEntScan_DG,7.52,7.52,Intermediate
+MISSENSE,"DNMT3A,c.1640T>G,p.Leu547Arg",MaxEntScan_DL,,1000,No impact
+MISSENSE,"DNMT3A,c.1489T>G,p.Cys497Gly",SpliceAI_AG,,0,No impact
+MISSENSE,"DNMT3A,c.1489T>G,p.Cys497Gly",SpliceAI_AL,,0,No impact
+MISSENSE,"DNMT3A,c.1489T>G,p.Cys497Gly",SpliceAI_DG,,0,No impact
+MISSENSE,"DNMT3A,c.1489T>G,p.Cys497Gly",SpliceAI_DL,,0,No impact
+MISSENSE,"DNMT3A,c.1489T>G,p.Cys497Gly",MaxEntScan_AG,,0,No impact
+MISSENSE,"DNMT3A,c.1489T>G,p.Cys497Gly",MaxEntScan_AL,,1000,No impact
+MISSENSE,"DNMT3A,c.1489T>G,p.Cys497Gly",MaxEntScan_DG,5.27,5.27,Low
+MISSENSE,"DNMT3A,c.1489T>G,p.Cys497Gly",MaxEntScan_DL,,1000,No impact
+MISSENSE,"DNMT3A,c.920C>T,p.Pro307Leu",SpliceAI_AG,21,21,Low
+MISSENSE,"DNMT3A,c.920C>T,p.Pro307Leu",SpliceAI_AL,,0,No impact
+MISSENSE,"DNMT3A,c.920C>T,p.Pro307Leu",SpliceAI_DG,,0,No impact
+MISSENSE,"DNMT3A,c.920C>T,p.Pro307Leu",SpliceAI_DL,,0,No impact
+MISSENSE,"DNMT3A,c.920C>T,p.Pro307Leu",MaxEntScan_AG,,0,No impact
+MISSENSE,"DNMT3A,c.920C>T,p.Pro307Leu",MaxEntScan_AL,,1000,No impact
+MISSENSE,"DNMT3A,c.920C>T,p.Pro307Leu",MaxEntScan_DG,,0,No impact
+MISSENSE,"DNMT3A,c.920C>T,p.Pro307Leu",MaxEntScan_DL,,1000,No impact
+MISSENSE,"EP300,c.3601T>C,p.Cys1201Arg",SpliceAI_AG,,0,No impact
+MISSENSE,"EP300,c.3601T>C,p.Cys1201Arg",SpliceAI_AL,,0,No impact
+MISSENSE,"EP300,c.3601T>C,p.Cys1201Arg",SpliceAI_DG,,0,No impact
+MISSENSE,"EP300,c.3601T>C,p.Cys1201Arg",SpliceAI_DL,,0,No impact
+MISSENSE,"EP300,c.3601T>C,p.Cys1201Arg",MaxEntScan_AG,,0,No impact
+MISSENSE,"EP300,c.3601T>C,p.Cys1201Arg",MaxEntScan_AL,,1000,No impact
+MISSENSE,"EP300,c.3601T>C,p.Cys1201Arg",MaxEntScan_DG,3.71,3.71,Low
+MISSENSE,"EP300,c.3601T>C,p.Cys1201Arg",MaxEntScan_DL,,1000,No impact
+MISSENSE,"EZH2,c.1642T>C, p.Cys548Arg",SpliceAI_AG,,0,No impact
+MISSENSE,"EZH2,c.1642T>C, p.Cys548Arg",SpliceAI_AL,,0,No impact
+MISSENSE,"EZH2,c.1642T>C, p.Cys548Arg",SpliceAI_DG,23,23,Low
+MISSENSE,"EZH2,c.1642T>C, p.Cys548Arg",SpliceAI_DL,,0,No impact
+MISSENSE,"EZH2,c.1642T>C, p.Cys548Arg",MaxEntScan_AG,,0,No impact
+MISSENSE,"EZH2,c.1642T>C, p.Cys548Arg",MaxEntScan_AL,,1000,No impact
+MISSENSE,"EZH2,c.1642T>C, p.Cys548Arg",MaxEntScan_DG,,0,No impact
+MISSENSE,"EZH2,c.1642T>C, p.Cys548Arg",MaxEntScan_DL,,1000,No impact
+MISSENSE,"EZH2,c.1991A>T,p.Asp664Val",SpliceAI_AG,,0,No impact
+MISSENSE,"EZH2,c.1991A>T,p.Asp664Val",SpliceAI_AL,,0,No impact
+MISSENSE,"EZH2,c.1991A>T,p.Asp664Val",SpliceAI_DG,23,23,Low
+MISSENSE,"EZH2,c.1991A>T,p.Asp664Val",SpliceAI_DL,,0,No impact
+MISSENSE,"EZH2,c.1991A>T,p.Asp664Val",MaxEntScan_AG,,0,No impact
+MISSENSE,"EZH2,c.1991A>T,p.Asp664Val",MaxEntScan_AL,,1000,No impact
+MISSENSE,"EZH2,c.1991A>T,p.Asp664Val",MaxEntScan_DG,4.8,4.8,Low
+MISSENSE,"EZH2,c.1991A>T,p.Asp664Val",MaxEntScan_DL,,1000,No impact
+MISSENSE,"FLT3,c.2523C>A,p.Asn841Lys",SpliceAI_AG,,0,No impact
+MISSENSE,"FLT3,c.2523C>A,p.Asn841Lys",SpliceAI_AL,,0,No impact
+MISSENSE,"FLT3,c.2523C>A,p.Asn841Lys",SpliceAI_DG,,0,No impact
+MISSENSE,"FLT3,c.2523C>A,p.Asn841Lys",SpliceAI_DL,24,24,Low
+MISSENSE,"FLT3,c.2523C>A,p.Asn841Lys",MaxEntScan_AG,,0,No impact
+MISSENSE,"FLT3,c.2523C>A,p.Asn841Lys",MaxEntScan_AL,,1000,No impact
+MISSENSE,"FLT3,c.2523C>A,p.Asn841Lys",MaxEntScan_DG,,0,No impact
+MISSENSE,"FLT3,c.2523C>A,p.Asn841Lys",MaxEntScan_DL,,1000,No impact
+MISSENSE,"FLT3,c.2512A>G,p.Ser838Gly",SpliceAI_AG,,0,No impact
+MISSENSE,"FLT3,c.2512A>G,p.Ser838Gly",SpliceAI_AL,,0,No impact
+MISSENSE,"FLT3,c.2512A>G,p.Ser838Gly",SpliceAI_DG,37,37,Low
+MISSENSE,"FLT3,c.2512A>G,p.Ser838Gly",SpliceAI_DL,,0,No impact
+MISSENSE,"FLT3,c.2512A>G,p.Ser838Gly",MaxEntScan_AG,,0,No impact
+MISSENSE,"FLT3,c.2512A>G,p.Ser838Gly",MaxEntScan_AL,,1000,No impact
+MISSENSE,"FLT3,c.2512A>G,p.Ser838Gly",MaxEntScan_DG,,0,No impact
+MISSENSE,"FLT3,c.2512A>G,p.Ser838Gly",MaxEntScan_DL,,1000,No impact
+MISSENSE,"FLT3,c.2343T>G,p.Asn781Lys",SpliceAI_AG,,0,No impact
+MISSENSE,"FLT3,c.2343T>G,p.Asn781Lys",SpliceAI_AL,,0,No impact
+MISSENSE,"FLT3,c.2343T>G,p.Asn781Lys",SpliceAI_DG,23,23,Low
+MISSENSE,"FLT3,c.2343T>G,p.Asn781Lys",SpliceAI_DL,,0,No impact
+MISSENSE,"FLT3,c.2343T>G,p.Asn781Lys",MaxEntScan_AG,,0,No impact
+MISSENSE,"FLT3,c.2343T>G,p.Asn781Lys",MaxEntScan_AL,,1000,No impact
+MISSENSE,"FLT3,c.2343T>G,p.Asn781Lys",MaxEntScan_DG,4.72,4.72,Low
+MISSENSE,"FLT3,c.2343T>G,p.Asn781Lys",MaxEntScan_DL,,1000,No impact
+MISSENSE,"IDH1,c.394C>T,p.Arg132Cys",SpliceAI_AG,,0,No impact
+MISSENSE,"IDH1,c.394C>T,p.Arg132Cys",SpliceAI_AL,,0,No impact
+MISSENSE,"IDH1,c.394C>T,p.Arg132Cys",SpliceAI_DG,51,51,Intermediate
+MISSENSE,"IDH1,c.394C>T,p.Arg132Cys",SpliceAI_DL,32,32,Low
+MISSENSE,"IDH1,c.394C>T,p.Arg132Cys",MaxEntScan_AG,,0,No impact
+MISSENSE,"IDH1,c.394C>T,p.Arg132Cys",MaxEntScan_AL,,1000,No impact
+MISSENSE,"IDH1,c.394C>T,p.Arg132Cys",MaxEntScan_DG,,0,No impact
+MISSENSE,"IDH1,c.394C>T,p.Arg132Cys",MaxEntScan_DL,,1000,No impact
+MISSENSE,"IDH1,c.394C>G,p.Arg132Gly",SpliceAI_AG,,0,No impact
+MISSENSE,"IDH1,c.394C>G,p.Arg132Gly",SpliceAI_AL,,0,No impact
+MISSENSE,"IDH1,c.394C>G,p.Arg132Gly",SpliceAI_DG,30,30,Low
+MISSENSE,"IDH1,c.394C>G,p.Arg132Gly",SpliceAI_DL,,0,No impact
+MISSENSE,"IDH1,c.394C>G,p.Arg132Gly",MaxEntScan_AG,,0,No impact
+MISSENSE,"IDH1,c.394C>G,p.Arg132Gly",MaxEntScan_AL,,1000,No impact
+MISSENSE,"IDH1,c.394C>G,p.Arg132Gly",MaxEntScan_DG,,0,No impact
+MISSENSE,"IDH1,c.394C>G,p.Arg132Gly",MaxEntScan_DL,,1000,No impact
+MISSENSE,"IDH1,c.394C>A,p.Arg132Ser",SpliceAI_AG,,0,No impact
+MISSENSE,"IDH1,c.394C>A,p.Arg132Ser",SpliceAI_AL,,0,No impact
+MISSENSE,"IDH1,c.394C>A,p.Arg132Ser",SpliceAI_DG,61,61,Intermediate
+MISSENSE,"IDH1,c.394C>A,p.Arg132Ser",SpliceAI_DL,48,48,Low
+MISSENSE,"IDH1,c.394C>A,p.Arg132Ser",MaxEntScan_AG,,0,No impact
+MISSENSE,"IDH1,c.394C>A,p.Arg132Ser",MaxEntScan_AL,,1000,No impact
+MISSENSE,"IDH1,c.394C>A,p.Arg132Ser",MaxEntScan_DG,3.06,3.06,Low
+MISSENSE,"IDH1,c.394C>A,p.Arg132Ser",MaxEntScan_DL,,1000,No impact
+MISSENSE,"KRAS,c.38G>A,p.Gly13Asp",SpliceAI_AG,,0,No impact
+MISSENSE,"KRAS,c.38G>A,p.Gly13Asp",SpliceAI_AL,,0,No impact
+MISSENSE,"KRAS,c.38G>A,p.Gly13Asp",SpliceAI_DG,,0,No impact
+MISSENSE,"KRAS,c.38G>A,p.Gly13Asp",SpliceAI_DL,,0,No impact
+MISSENSE,"KRAS,c.38G>A,p.Gly13Asp",MaxEntScan_AG,,0,No impact
+MISSENSE,"KRAS,c.38G>A,p.Gly13Asp",MaxEntScan_AL,,1000,No impact
+MISSENSE,"KRAS,c.38G>A,p.Gly13Asp",MaxEntScan_DG,3.52,3.52,Low
+MISSENSE,"KRAS,c.38G>A,p.Gly13Asp",MaxEntScan_DL,,1000,No impact
+MISSENSE,"NRAS,c.38G>A,p.Gly13Asp",SpliceAI_AG,,0,No impact
+MISSENSE,"NRAS,c.38G>A,p.Gly13Asp",SpliceAI_AL,,0,No impact
+MISSENSE,"NRAS,c.38G>A,p.Gly13Asp",SpliceAI_DG,,0,No impact
+MISSENSE,"NRAS,c.38G>A,p.Gly13Asp",SpliceAI_DL,,0,No impact
+MISSENSE,"NRAS,c.38G>A,p.Gly13Asp",MaxEntScan_AG,,0,No impact
+MISSENSE,"NRAS,c.38G>A,p.Gly13Asp",MaxEntScan_AL,,1000,No impact
+MISSENSE,"NRAS,c.38G>A,p.Gly13Asp",MaxEntScan_DG,5.99,5.99,Low
+MISSENSE,"NRAS,c.38G>A,p.Gly13Asp",MaxEntScan_DL,,1000,No impact
+MISSENSE,"PHF6,c.824G>T,p.Gly275Val",SpliceAI_AG,,0,No impact
+MISSENSE,"PHF6,c.824G>T,p.Gly275Val",SpliceAI_AL,,0,No impact
+MISSENSE,"PHF6,c.824G>T,p.Gly275Val",SpliceAI_DG,28,28,Low
+MISSENSE,"PHF6,c.824G>T,p.Gly275Val",SpliceAI_DL,,0,No impact
+MISSENSE,"PHF6,c.824G>T,p.Gly275Val",MaxEntScan_AG,,0,No impact
+MISSENSE,"PHF6,c.824G>T,p.Gly275Val",MaxEntScan_AL,,1000,No impact
+MISSENSE,"PHF6,c.824G>T,p.Gly275Val",MaxEntScan_DG,,0,No impact
+MISSENSE,"PHF6,c.824G>T,p.Gly275Val",MaxEntScan_DL,,1000,No impact
+MISSENSE,"PTPN11,c.181G>A,p.Asp61Asn",SpliceAI_AG,,0,No impact
+MISSENSE,"PTPN11,c.181G>A,p.Asp61Asn",SpliceAI_AL,,0,No impact
+MISSENSE,"PTPN11,c.181G>A,p.Asp61Asn",SpliceAI_DG,,0,No impact
+MISSENSE,"PTPN11,c.181G>A,p.Asp61Asn",SpliceAI_DL,,0,No impact
+MISSENSE,"PTPN11,c.181G>A,p.Asp61Asn",MaxEntScan_AG,,0,No impact
+MISSENSE,"PTPN11,c.181G>A,p.Asp61Asn",MaxEntScan_AL,,1000,No impact
+MISSENSE,"PTPN11,c.181G>A,p.Asp61Asn",MaxEntScan_DG,5.99,5.99,Low
+MISSENSE,"PTPN11,c.181G>A,p.Asp61Asn",MaxEntScan_DL,,1000,No impact
+MISSENSE,"PTPN11,c.236A>G,p.Gln79Arg",SpliceAI_AG,,0,No impact
+MISSENSE,"PTPN11,c.236A>G,p.Gln79Arg",SpliceAI_AL,,0,No impact
+MISSENSE,"PTPN11,c.236A>G,p.Gln79Arg",SpliceAI_DG,,0,No impact
+MISSENSE,"PTPN11,c.236A>G,p.Gln79Arg",SpliceAI_DL,,0,No impact
+MISSENSE,"PTPN11,c.236A>G,p.Gln79Arg",MaxEntScan_AG,,0,No impact
+MISSENSE,"PTPN11,c.236A>G,p.Gln79Arg",MaxEntScan_AL,,1000,No impact
+MISSENSE,"PTPN11,c.236A>G,p.Gln79Arg",MaxEntScan_DG,3.61,3.61,Low
+MISSENSE,"PTPN11,c.236A>G,p.Gln79Arg",MaxEntScan_DL,,1000,No impact
+MISSENSE,"PTPN11,c.1508G>T,p.Gly503Val",SpliceAI_AG,,0,No impact
+MISSENSE,"PTPN11,c.1508G>T,p.Gly503Val",SpliceAI_AL,,0,No impact
+MISSENSE,"PTPN11,c.1508G>T,p.Gly503Val",SpliceAI_DG,,0,No impact
+MISSENSE,"PTPN11,c.1508G>T,p.Gly503Val",SpliceAI_DL,,0,No impact
+MISSENSE,"PTPN11,c.1508G>T,p.Gly503Val",MaxEntScan_AG,,0,No impact
+MISSENSE,"PTPN11,c.1508G>T,p.Gly503Val",MaxEntScan_AL,,1000,No impact
+MISSENSE,"PTPN11,c.1508G>T,p.Gly503Val",MaxEntScan_DG,7.7,7.7,Intermediate
+MISSENSE,"PTPN11,c.1508G>T,p.Gly503Val",MaxEntScan_DL,,1000,No impact
+MISSENSE,"RUNX1,c.497G>T,p.Arg166Leu",SpliceAI_AG,,0,No impact
+MISSENSE,"RUNX1,c.497G>T,p.Arg166Leu",SpliceAI_AL,,0,No impact
+MISSENSE,"RUNX1,c.497G>T,p.Arg166Leu",SpliceAI_DG,25,25,Low
+MISSENSE,"RUNX1,c.497G>T,p.Arg166Leu",SpliceAI_DL,,0,No impact
+MISSENSE,"RUNX1,c.497G>T,p.Arg166Leu",MaxEntScan_AG,,0,No impact
+MISSENSE,"RUNX1,c.497G>T,p.Arg166Leu",MaxEntScan_AL,,1000,No impact
+MISSENSE,"RUNX1,c.497G>T,p.Arg166Leu",MaxEntScan_DG,,0,No impact
+MISSENSE,"RUNX1,c.497G>T,p.Arg166Leu",MaxEntScan_DL,,1000,No impact
+MISSENSE,"SF3B1,c.2342A>G,p.Asp781Gly",SpliceAI_AG,,0,No impact
+MISSENSE,"SF3B1,c.2342A>G,p.Asp781Gly",SpliceAI_AL,,0,No impact
+MISSENSE,"SF3B1,c.2342A>G,p.Asp781Gly",SpliceAI_DG,,0,No impact
+MISSENSE,"SF3B1,c.2342A>G,p.Asp781Gly",SpliceAI_DL,,0,No impact
+MISSENSE,"SF3B1,c.2342A>G,p.Asp781Gly",MaxEntScan_AG,,0,No impact
+MISSENSE,"SF3B1,c.2342A>G,p.Asp781Gly",MaxEntScan_AL,,1000,No impact
+MISSENSE,"SF3B1,c.2342A>G,p.Asp781Gly",MaxEntScan_DG,8.3,8.3,Intermediate
+MISSENSE,"SF3B1,c.2342A>G,p.Asp781Gly",MaxEntScan_DL,,1000,No impact
+MISSENSE,"TET2,c.3590A>G,p.Lys1197Arg",SpliceAI_AG,,0,No impact
+MISSENSE,"TET2,c.3590A>G,p.Lys1197Arg",SpliceAI_AL,,0,No impact
+MISSENSE,"TET2,c.3590A>G,p.Lys1197Arg",SpliceAI_DG,89,89,High
+MISSENSE,"TET2,c.3590A>G,p.Lys1197Arg",SpliceAI_DL,,0,No impact
+MISSENSE,"TET2,c.3590A>G,p.Lys1197Arg",MaxEntScan_AG,,0,No impact
+MISSENSE,"TET2,c.3590A>G,p.Lys1197Arg",MaxEntScan_AL,,1000,No impact
+MISSENSE,"TET2,c.3590A>G,p.Lys1197Arg",MaxEntScan_DG,5.56,5.56,Low
+MISSENSE,"TET2,c.3590A>G,p.Lys1197Arg",MaxEntScan_DL,,1000,No impact
+MISSENSE,"TET2,c.3791C>T,p.Ala1264Val",SpliceAI_AG,,0,No impact
+MISSENSE,"TET2,c.3791C>T,p.Ala1264Val",SpliceAI_AL,,0,No impact
+MISSENSE,"TET2,c.3791C>T,p.Ala1264Val",SpliceAI_DG,20,20,No impact
+MISSENSE,"TET2,c.3791C>T,p.Ala1264Val",SpliceAI_DL,,0,No impact
+MISSENSE,"TET2,c.3791C>T,p.Ala1264Val",MaxEntScan_AG,,0,No impact
+MISSENSE,"TET2,c.3791C>T,p.Ala1264Val",MaxEntScan_AL,,1000,No impact
+MISSENSE,"TET2,c.3791C>T,p.Ala1264Val",MaxEntScan_DG,6.56,6.56,Intermediate
+MISSENSE,"TET2,c.3791C>T,p.Ala1264Val",MaxEntScan_DL,,1000,No impact
+MISSENSE,"TET2,c.3894T>G,p.Cys1298Trp",SpliceAI_AG,,0,No impact
+MISSENSE,"TET2,c.3894T>G,p.Cys1298Trp",SpliceAI_AL,,0,No impact
+MISSENSE,"TET2,c.3894T>G,p.Cys1298Trp",SpliceAI_DG,,0,No impact
+MISSENSE,"TET2,c.3894T>G,p.Cys1298Trp",SpliceAI_DL,70,70,Intermediate
+MISSENSE,"TET2,c.3894T>G,p.Cys1298Trp",MaxEntScan_AG,,0,No impact
+MISSENSE,"TET2,c.3894T>G,p.Cys1298Trp",MaxEntScan_AL,,1000,No impact
+MISSENSE,"TET2,c.3894T>G,p.Cys1298Trp",MaxEntScan_DG,,0,No impact
+MISSENSE,"TET2,c.3894T>G,p.Cys1298Trp",MaxEntScan_DL,1.47,1.47,High
+MISSENSE,"TET2,c.3897G>C,p.Lys1299Asn",SpliceAI_AG,,0,No impact
+MISSENSE,"TET2,c.3897G>C,p.Lys1299Asn",SpliceAI_AL,,0,No impact
+MISSENSE,"TET2,c.3897G>C,p.Lys1299Asn",SpliceAI_DG,,0,No impact
+MISSENSE,"TET2,c.3897G>C,p.Lys1299Asn",SpliceAI_DL,70,70,Intermediate
+MISSENSE,"TET2,c.3897G>C,p.Lys1299Asn",MaxEntScan_AG,,0,No impact
+MISSENSE,"TET2,c.3897G>C,p.Lys1299Asn",MaxEntScan_AL,,1000,No impact
+MISSENSE,"TET2,c.3897G>C,p.Lys1299Asn",MaxEntScan_DG,,0,No impact
+MISSENSE,"TET2,c.3897G>C,p.Lys1299Asn",MaxEntScan_DL,6.09,6.09,High
+MISSENSE,"TET2,c.4334A>G,p.Gln1445Arg",SpliceAI_AG,,0,No impact
+MISSENSE,"TET2,c.4334A>G,p.Gln1445Arg",SpliceAI_AL,,0,No impact
+MISSENSE,"TET2,c.4334A>G,p.Gln1445Arg",SpliceAI_DG,49,49,Low
+MISSENSE,"TET2,c.4334A>G,p.Gln1445Arg",SpliceAI_DL,,0,No impact
+MISSENSE,"TET2,c.4334A>G,p.Gln1445Arg",MaxEntScan_AG,,0,No impact
+MISSENSE,"TET2,c.4334A>G,p.Gln1445Arg",MaxEntScan_AL,,1000,No impact
+MISSENSE,"TET2,c.4334A>G,p.Gln1445Arg",MaxEntScan_DG,,0,No impact
+MISSENSE,"TET2,c.4334A>G,p.Gln1445Arg",MaxEntScan_DL,5.43,5.43,High
+MISSENSE,"TET2,c.5711A>G,p.His1904Arg",SpliceAI_AG,,0,No impact
+MISSENSE,"TET2,c.5711A>G,p.His1904Arg",SpliceAI_AL,,0,No impact
+MISSENSE,"TET2,c.5711A>G,p.His1904Arg",SpliceAI_DG,,0,No impact
+MISSENSE,"TET2,c.5711A>G,p.His1904Arg",SpliceAI_DL,,0,No impact
+MISSENSE,"TET2,c.5711A>G,p.His1904Arg",MaxEntScan_AG,,0,No impact
+MISSENSE,"TET2,c.5711A>G,p.His1904Arg",MaxEntScan_AL,,1000,No impact
+MISSENSE,"TET2,c.5711A>G,p.His1904Arg",MaxEntScan_DG,6.21,6.21,Intermediate
+MISSENSE,"TET2,c.5711A>G,p.His1904Arg",MaxEntScan_DL,,1000,No impact
+MISSENSE,"TP53,c.659A>G,p.Tyr220Cys",SpliceAI_AG,,0,No impact
+MISSENSE,"TP53,c.659A>G,p.Tyr220Cys",SpliceAI_AL,,0,No impact
+MISSENSE,"TP53,c.659A>G,p.Tyr220Cys",SpliceAI_DG,,0,No impact
+MISSENSE,"TP53,c.659A>G,p.Tyr220Cys",SpliceAI_DL,,0,No impact
+MISSENSE,"TP53,c.659A>G,p.Tyr220Cys",MaxEntScan_AG,,0,No impact
+MISSENSE,"TP53,c.659A>G,p.Tyr220Cys",MaxEntScan_AL,,1000,No impact
+MISSENSE,"TP53,c.659A>G,p.Tyr220Cys",MaxEntScan_DG,3.28,3.28,Low
+MISSENSE,"TP53,c.659A>G,p.Tyr220Cys",MaxEntScan_DL,,1000,No impact
+MISSENSE,"TP53,c.395A>G,p.Lys132Arg",SpliceAI_AG,23,23,Low
+MISSENSE,"TP53,c.395A>G,p.Lys132Arg",SpliceAI_AL,,0,No impact
+MISSENSE,"TP53,c.395A>G,p.Lys132Arg",SpliceAI_DG,,0,No impact
+MISSENSE,"TP53,c.395A>G,p.Lys132Arg",SpliceAI_DL,,0,No impact
+MISSENSE,"TP53,c.395A>G,p.Lys132Arg",MaxEntScan_AG,,0,No impact
+MISSENSE,"TP53,c.395A>G,p.Lys132Arg",MaxEntScan_AL,,1000,No impact
+MISSENSE,"TP53,c.395A>G,p.Lys132Arg",MaxEntScan_DG,,0,No impact
+MISSENSE,"TP53,c.395A>G,p.Lys132Arg",MaxEntScan_DL,,1000,No impact
+MISSENSE,"U2AF1,c.470A>G,p.Gln157Arg",SpliceAI_AG,,0,No impact
+MISSENSE,"U2AF1,c.470A>G,p.Gln157Arg",SpliceAI_AL,,0,No impact
+MISSENSE,"U2AF1,c.470A>G,p.Gln157Arg",SpliceAI_DG,79,79,Intermediate
+MISSENSE,"U2AF1,c.470A>G,p.Gln157Arg",SpliceAI_DL,,0,No impact
+MISSENSE,"U2AF1,c.470A>G,p.Gln157Arg",MaxEntScan_AG,,0,No impact
+MISSENSE,"U2AF1,c.470A>G,p.Gln157Arg",MaxEntScan_AL,,1000,No impact
+MISSENSE,"U2AF1,c.470A>G,p.Gln157Arg",MaxEntScan_DG,7.72,7.72,Intermediate
+MISSENSE,"U2AF1,c.470A>G,p.Gln157Arg",MaxEntScan_DL,,1000,No impact
