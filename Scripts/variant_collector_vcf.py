@@ -480,7 +480,7 @@ def main():
 
 	# Value access by attribute names
 	input_file = args.inputfile
-	mode = args.mode
+	mode = str(args.mode)
 	if args.outputfile:
 		output_collection = args.outputfile
 
@@ -512,13 +512,13 @@ def main():
 	sampleTAGlist = create_sampleTAG_list(sample_id_list, case_id_list)
 
 	# 1. Extract somatic variantas of all the files:
-	if mode == "1" or "4":
+	if mode == "1" or mode == "4":
 		print("Extracting the somatic variants of individual files ...")
 		create_output_directory(working_directory, "ExtractedSomatic")
 		main_extract_somatic(cohortMetadata, sampleTAGlist, working_directory)
 
 	# 2. Merge somatic variants of each individual sample:
-	if mode == "2" or "4":
+	if mode == "2" or mode == "4":
 		print("Merging the somatic variants of individual samples ...")
 		create_output_directory(working_directory, "MergedSomatic")
 		somatic_dir = working_directory + "ExtractedSomatic" # without last "/"
@@ -526,7 +526,7 @@ def main():
 		main_merge_somatic(sampleTAGlist, somatic_dir, merged_dir)
 
 	# 3. Generate somatic variant collection
-	if mode == "3" or "4":
+	if mode == "3" or mode == "4":
 		print("Generating unique somatic variant collection ...")
 		create_output_directory(working_directory, "VariantCollection")
 		merged_dir = working_directory + "MergedSomatic" # without last "/"
