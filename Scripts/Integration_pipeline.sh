@@ -120,7 +120,7 @@ do
 	# 3. RUN RNAMut on Custom Panel
 
 	java -jar $RNAMUT_EXECUTABLE_DIR/RNAmut.jar -n ${sampleTAG} $FASTQ_DIR/${fileName}_1.fq,$FASTQ_DIR/${fileName}_2.fq $RNAMUT_VARCALL_DIR -i $GENE_PANEL -f $RNAMUT_EXECUTABLE_DIR/oncogenicity_filter.txt
-	rm ${fileName}_1.fq ${fileName}_2.fq ${fileName}_M.fq
+	rm $FASTQ_DIR/${fileName}_1.fq $FASTQ_DIR/${fileName}_2.fq $FASTQ_DIR/${fileName}_M.fq
 done
 
 # 4. RNAMut results processing and find candidate SAV
