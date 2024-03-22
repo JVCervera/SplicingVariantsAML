@@ -5977,7 +5977,7 @@ MUT_df <- GeneSJ[GeneSJ$GROUP == "MUT",c("sample_id","case_id")]
 
 
 ```{r echo=FALSE}
-## Add not found effects information: Donor Gain 1
+## Add not found effects information: 
 MUT_df <- MUT_df[,c("sample_id", "case_id")]
 MUT_df$NormalizedExpression <- NA
 MUT_df$Prediction <- "Aceptor Gain"
@@ -5992,30 +5992,6 @@ colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
 colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
 
 col_order <- c("Gene", "MutationKey_Hg38", "Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression", "ECDF","Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
-MUT_vaf <- MUT_vaf[, col_order]
-
-## Save
-summary_res <- rbind(summary_res, MUT_vaf)
-```
-
-
-
-```{r echo=FALSE}
-## Add not found effects information:
-MUT_df <- MUT_df[,c("sample_id", "case_id")]
-MUT_df$NormalizedExpression <- NA
-MUT_df$Prediction <- "Aceptor Gain"
-MUT_df$splice_junction_status <- "AlternativeSJ not found in MUT samples"
-MUT_df$splice_junction_position <- "chr1:114713979-114716076"
-MUT_df$Pvalue <- NA
-MUT_df$ECDF <- NA
-
-vaf_select <- annot_vaf[,c("Gene","MutationKey_Hg38","sample_id","RNA_Sample","DNA_Sample","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf", "VAF_RNA")]
-MUT_vaf <- merge(MUT_df, vaf_select, by.x="sample_id", by.y = "RNA_Sample")
-colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id"] <- "RNA_Sample"
-colnames(MUT_vaf)[colnames(MUT_vaf) == "sample_id.y"] <- "sample_id"
-
-col_order <- c("Gene", "MutationKey_Hg38", "Prediction","splice_junction_status","splice_junction_position","sample_id", "case_id","RNA_Sample","DNA_Sample","NormalizedExpression","ECDF","Pvalue", "VAF_RNA","MuTect2_vaf","VarScan2_vaf","SomaticSniper_vaf","MuSE_vaf")
 MUT_vaf <- MUT_vaf[, col_order]
 
 ## Save
