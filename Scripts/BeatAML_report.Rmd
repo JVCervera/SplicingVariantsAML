@@ -3185,7 +3185,7 @@ Alternative SJ found in the mutated samples.
 ### Canonical SJ
 Exon 4-5: chr21:43095537-43095693
 
-Exon 5-6: chr21:43064789-43095437
+Exon 5-6: chr21:43094789-43095437
 
 Exon 6-7: chr21:43094564-43094654; splice site chr21:43094554
 
@@ -4256,7 +4256,7 @@ stat_df$SomaticSniper_vaf <-  paste(MUT_vaf$SomaticSniper_vaf, collapse = ';\n')
 stat_df$MuSE_vaf <-  paste(MUT_vaf$MuSE_vaf, collapse = ';\n')
 stat_df$Prediction <- "Canonical Loss"
 stat_df$splice_junction_status <- "CanonicalSJ"
-stat_df$splice_junction_position <- "chr21:43064789-43095437"
+stat_df$splice_junction_position <- "chr21:43094789-43095437"
 
 stat_df$Pvalue <- t$p.value
 ```
