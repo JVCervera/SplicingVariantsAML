@@ -1,0 +1,1436 @@
+---
+title: "AlternativeSplicingPSI"
+author: "Maria G"
+date: "6/5/2024"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    toc_collapsed: yes
+    toc_depth: 3
+    number_sections: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+library(readr)
+library(stringr)
+library(openxlsx)
+library(readxl)
+library(ggplot2)
+library(stats)
+library(rstatix)
+```
+
+# BeatAML
+
+## IDH1 chr2:208248389G>A/C/T{.tabset}
+*DG: chr2:208245425-208248422*
+```{r}
+idh1 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr2-208248389-G-A_chr2-208245425-208248422.xlsx")
+table(idh1$Variant_status)
+```
+
+### PSI
+
+Kruskal wallis
+```{r}
+kruskal.test(PSI ~ Variant_status, data = idh1)
+```
+
+Pairwise Wilcoxon Test
+```{r}
+pairwise.wilcox.test(idh1$PSI, idh1$Variant_status)
+pairwise_wilcox_test(idh1,PSI ~ Variant_status)
+```
+
+### DeltaPSI
+```{r}
+#DeltaPSI
+mean_WT_PSI <- mean(idh1$PSI[idh1$Variant_status == "WT"], na.rm=TRUE)
+idh1$Difference <- idh1$PSI - mean_WT_PSI
+
+idh1[idh1$Variant_status %in% "R132C", c("case_id", "sample_id", "PSI","Difference")]
+idh1[idh1$Variant_status %in% "R132G",c("case_id", "sample_id","PSI", "Difference")]
+idh1[idh1$Variant_status %in% "R132S",c("case_id", "sample_id", "PSI","Difference")]
+```
+
+Kruskal Wallis
+```{r}
+kruskal.test(Difference ~ Variant_status, data = idh1)
+```
+
+Pairwise Wilcoxon Test
+```{r}
+pairwise.wilcox.test(idh1$Difference, idh1$Variant_status)
+pairwise_wilcox_test(idh1,Difference ~ Variant_status)
+```
+
+
+```{r echo=FALSE}
+rm(idh1)
+```
+
+## FLT3 chr13:28018485G>T {.tabset}
+### ES20: chr13:28015702-28023349 {.tabset}
+```{r}
+flt3.se20 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr13-28018485-G-T_chr13-28015702-28023349.xlsx")
+
+ggplot(flt3.se20, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(flt3.se20$PSI[flt3.se20$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- flt3.se20$PSI[flt3.se20$GROUP == "MUT"]
+MUT_PSI
+```
+
+#### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(flt3.se20$PSI)
+v_ecdf
+
+plot(ecdf(flt3.se20$PSI))
+
+v_ecdf(flt3.se20$PSI[flt3.se20$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(flt3.se20$PSI[flt3.se20$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(flt3.se20$PSI[flt3.se20$GROUP == "MUT"])))
+```
+
+#### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI): 
+flt3.se20$Difference <-  flt3.se20$PSI - mean_WT_PSI
+flt3.se20[flt3.se20$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(flt3.se20$Difference)
+v_ecdf
+
+plot(ecdf(flt3.se20$Difference))
+
+v_ecdf(flt3.se20$Difference[flt3.se20$GROUP == "MUT"])
+```
+
+
+```{r}
+print(paste0("MUT Percentile: ", v_ecdf(flt3.se20$Difference[flt3.se20$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(flt3.se20$Difference[flt3.se20$GROUP == "MUT"])))
+```
+
+
+```{r echo=FALSE}
+rm(flt3.se20)
+```
+
+### ES19: chr13:28018590-28024860 {.tabset}
+```{r}
+flt3.se19 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr13-28018485-G-T_chr13-28018590-28024860.xlsx")
+
+ggplot(flt3.se19, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(flt3.se19$PSI[flt3.se19$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- flt3.se19$PSI[flt3.se19$GROUP == "MUT"]
+MUT_PSI
+```
+
+#### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(flt3.se19$PSI)
+v_ecdf
+
+plot(ecdf(flt3.se19$PSI))
+
+v_ecdf(flt3.se19$PSI[flt3.se19$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(flt3.se19$PSI[flt3.se19$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(flt3.se19$PSI[flt3.se19$GROUP == "MUT"])))
+```
+
+#### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+flt3.se19$Difference <-  flt3.se19$PSI - mean_WT_PSI
+flt3.se19[flt3.se19$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(flt3.se19$Difference)
+v_ecdf
+
+plot(ecdf(flt3.se19$Difference))
+v_ecdf(flt3.se19$Difference[flt3.se19$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(flt3.se19$Difference[flt3.se19$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(flt3.se19$Difference[flt3.se19$GROUP == "MUT"])))
+```
+
+
+```{r echo=FALSE}
+rm(flt3.se19)
+```
+
+### ES19+20: chr13:28015702-28024860 {.tabset}
+```{r}
+flt3.se1920<- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr13-28018485-G-T_chr13-28015702-28024860.xlsx")
+
+ggplot(flt3.se1920, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(flt3.se1920$PSI[flt3.se1920$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- flt3.se1920$PSI[flt3.se1920$GROUP == "MUT"]
+MUT_PSI
+```
+
+#### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(flt3.se1920$PSI)
+v_ecdf
+
+plot(ecdf(flt3.se1920$PSI))
+
+v_ecdf(flt3.se1920$PSI[flt3.se1920$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(flt3.se1920$PSI[flt3.se1920$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(flt3.se1920$PSI[flt3.se1920$GROUP == "MUT"])))
+```
+
+#### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+flt3.se1920$Difference <-  flt3.se1920$PSI - mean_WT_PSI
+flt3.se1920[flt3.se1920$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(flt3.se1920$Difference)
+v_ecdf
+
+plot(ecdf(flt3.se1920$Difference))
+
+v_ecdf(flt3.se1920$Difference[flt3.se1920$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(flt3.se1920$Difference[flt3.se1920$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(flt3.se1920$Difference[flt3.se1920$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(flt3.se1920)
+```
+
+## U2AF1 chr21:43094667T>C {.tabset}
+### DG: chr21:43094564-43094666 {.tabset}
+```{r}
+u2af1 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr21-43094667-T-C_chr21-43094564-43094666.xlsx")
+```
+
+#### PSI 
+Welch Two Sample t-test
+```{r}
+#PSI
+shapiro.test(u2af1$PSI[u2af1$GROUP == "WT"])
+var.test(PSI ~ GROUP, u2af1, alternative = "two.sided", conf.level=0.95)
+t.test(PSI ~ GROUP, data=u2af1,
+alternative="two.sided", 
+var.equal=FALSE)
+```
+
+#### DeltaPSI
+```{r}
+#deltaPSI
+mean_WT_PSI <- mean(u2af1$PSI[u2af1$GROUP == "WT"], na.rm=TRUE)
+u2af1$Difference <- u2af1$PSI - mean_WT_PSI
+
+u2af1[u2af1$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+```
+
+Welch Two Sample t-test
+```{r}
+shapiro.test(u2af1$Difference[u2af1$GROUP == "WT"])
+var.test(Difference ~ GROUP, u2af1, alternative = "two.sided", conf.level=0.95)
+t.test(Difference ~ GROUP, data=u2af1,
+alternative="two.sided", 
+var.equal=FALSE)
+```
+
+```{r echo=FALSE}
+rm(u2af1)
+```
+
+
+```{r echo=FALSE}
+rm(u2af1)
+```
+
+## NRAS chr1:114716123C>T {.tabset}
+### DG: chr1:114713979-114716126  {.tabset}
+```{r}
+nras <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr1-114716123-C-T_chr1-114713979-114716126.xlsx")
+#colnames(nras)
+
+ggplot(nras, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(nras$PSI[nras$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- nras$PSI[nras$GROUP == "MUT"]
+MUT_PSI
+```
+
+#### PSI
+Mann-Whitney
+```{r}
+#PSI:
+#Normality:
+shapiro.test(nras$PSI[nras$GROUP== "WT"])
+shapiro.test(nras$PSI[nras$GROUP== "MUT"])
+
+#Mann-Whitney:
+wilcox.test(x=nras$PSI[nras$GROUP== "MUT"], 
+                  y=nras$PSI[nras$GROUP== "WT"],
+                  alternative = "two.sided", 
+                  paired = FALSE, 
+                  conf.int = 0.95)
+```
+
+#### DeltaPSI
+Mann-Whitney
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+nras$Difference <-  nras$PSI - mean_WT_PSI
+nras[nras$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+#Normality:
+shapiro.test(nras$Difference[nras$GROUP== "WT"])
+shapiro.test(nras$Difference[nras$GROUP== "MUT"])
+
+#Mann-Whitney:
+wilcox.test(x=nras$Difference[nras$GROUP== "MUT"], 
+                  y=nras$Difference[nras$GROUP== "WT"],
+                  alternative = "two.sided", 
+                  paired = FALSE, 
+                  conf.int = 0.95)
+```
+
+
+```{r echo=FALSE}
+rm(nras)
+```
+
+### ES: chr1:114713979-114716657 {.tabset}
+```{r}
+nras <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr1-114716123-C-T_chr1-114713979-114716657.xlsx")
+#colnames(nras)
+
+ggplot(nras, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(nras$PSI[nras$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- nras$PSI[nras$GROUP == "MUT"]
+MUT_PSI
+```
+
+#### PSI
+Mann-Whitney
+```{r}
+#PSI:
+#Normality:
+shapiro.test(nras$PSI[nras$GROUP== "WT"])
+shapiro.test(nras$PSI[nras$GROUP== "MUT"])
+
+#Mann-Whitney:
+wilcox.test(x=nras$PSI[nras$GROUP== "MUT"], 
+                  y=nras$PSI[nras$GROUP== "WT"],
+                  alternative = "two.sided", 
+                  paired = FALSE, 
+                  conf.int = 0.95)
+```
+
+#### DeltaPSI
+Mann-Whitney
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+nras$Difference <-  nras$PSI - mean_WT_PSI
+nras[nras$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+#Normality:
+shapiro.test(nras$Difference[nras$GROUP== "WT"])
+shapiro.test(nras$Difference[nras$GROUP== "MUT"])
+
+#Mann-Whitney:
+wilcox.test(x=nras$Difference[nras$GROUP== "MUT"], 
+                  y=nras$Difference[nras$GROUP== "WT"],
+                  alternative = "two.sided", 
+                  paired = FALSE, 
+                  conf.int = 0.95)
+```
+
+
+```{r echo=FALSE}
+rm(nras)
+```
+
+## WT1 chr11:32396364G>T {.tabset}
+*ES: chr11:32392756-32399947*
+```{r}
+wt1 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr11-32396364-G-T_chr11-32392756-32399947.xlsx")
+#colnames(wt1)
+
+ggplot(wt1, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(wt1$PSI[wt1$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- wt1$PSI[wt1$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(wt1$PSI)
+v_ecdf
+
+plot(ecdf(wt1$PSI))
+
+v_ecdf(wt1$PSI[wt1$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(wt1$PSI[wt1$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(wt1$PSI[wt1$GROUP == "MUT"])))
+```
+
+### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+wt1$Difference <-  wt1$PSI - mean_WT_PSI
+wt1[wt1$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(wt1$Difference)
+v_ecdf
+
+plot(ecdf(wt1$Difference))
+
+v_ecdf(wt1$Difference[wt1$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(wt1$Difference[wt1$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(wt1$Difference[wt1$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(wt1)
+```
+
+## WT1 chr11:32392696G>A {.tabset}
+*ES: chr11:32392065-32396256*
+```{r}
+wt1 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr11-32392696-G-A_chr11-32392065-32396256.xlsx")
+#colnames(wt1)
+
+ggplot(wt1, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(wt1$PSI[wt1$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- wt1$PSI[wt1$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(wt1$PSI)
+v_ecdf
+
+plot(ecdf(wt1$PSI))
+
+v_ecdf(wt1$PSI[wt1$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(wt1$PSI[wt1$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(wt1$PSI[wt1$GROUP == "MUT"])))
+```
+
+### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+wt1$Difference <-  wt1$PSI - mean_WT_PSI
+wt1[wt1$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(wt1$Difference)
+v_ecdf
+
+plot(ecdf(wt1$Difference))
+
+v_ecdf(wt1$Difference[wt1$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(wt1$Difference[wt1$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(wt1$Difference[wt1$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(wt1)
+```
+
+## TP53 chr17:7675238T>C {.tabset}
+*AG: chr17:7675216-7675993*
+```{r}
+tp53 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr17-7675238-T-C_chr17-7675216-7675993.xlsx")
+#colnames(tp53)
+
+ggplot(tp53, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(tp53$PSI[tp53$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- tp53$PSI[tp53$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(tp53$PSI[tp53$GROUP == "WT"])
+v_ecdf
+
+plot(ecdf(tp53$PSI[tp53$GROUP == "WT"]))
+
+v_ecdf(tp53$PSI[tp53$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(tp53$PSI[tp53$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(tp53$PSI[tp53$GROUP == "MUT"])))
+```
+
+### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+tp53$Difference <-  tp53$PSI - mean_WT_PSI
+tp53[tp53$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(tp53$Difference)
+v_ecdf
+
+plot(ecdf(tp53$Difference))
+
+v_ecdf(tp53$Difference[tp53$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(tp53$Difference[tp53$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(tp53$Difference[tp53$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(tp53)
+```
+
+## TP53 chr17:7675217T>C {.tabset}
+*AG: chr17:7675216-7675993*
+```{r}
+tp53 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr17-7675217-T-C_chr17-7675216-7675993.xlsx")
+#colnames(tp53)
+
+ggplot(tp53, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(tp53$PSI[tp53$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- tp53$PSI[tp53$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(tp53$PSI)
+v_ecdf
+
+plot(ecdf(tp53$PSI))
+
+v_ecdf(tp53$PSI[tp53$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(tp53$PSI[tp53$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(tp53$PSI[tp53$GROUP == "MUT"])))
+```
+
+### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+tp53$Difference <-  tp53$PSI - mean_WT_PSI
+tp53[tp53$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(tp53$Difference)
+v_ecdf
+
+plot(ecdf(tp53$Difference))
+
+v_ecdf(tp53$Difference[tp53$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(tp53$Difference[tp53$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(tp53$Difference[tp53$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(tp53)
+```
+
+## TP53 chr17:7674872T>C {.tabset}
+*ES:chr17:7674291-7675052*
+```{r}
+tp53 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr17-7674872-T-C_chr17-7674291-7675052.xlsx")
+#colnames(tp53)
+
+ggplot(tp53, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(tp53$PSI[tp53$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- tp53$PSI[tp53$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI 
+Mann-Whitney
+```{r}
+#PSI:
+#Normality:
+shapiro.test(tp53$PSI[tp53$GROUP== "WT"])
+shapiro.test(tp53$PSI[tp53$GROUP== "MUT"])
+
+#Mann-Whitney:
+wilcox.test(x=tp53$PSI[tp53$GROUP== "MUT"], 
+                  y=tp53$PSI[tp53$GROUP== "WT"],
+                  alternative = "two.sided", 
+                  paired = FALSE, 
+                  conf.int = 0.95)
+```
+
+### DeltaPSI
+Mann-Whitney
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+tp53$Difference <-  tp53$PSI - mean_WT_PSI
+tp53[tp53$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+#Normality:
+shapiro.test(tp53$Difference[tp53$GROUP== "WT"])
+shapiro.test(tp53$Difference[tp53$GROUP== "MUT"])
+
+#Mann-Whitney:
+wilcox.test(x=tp53$Difference[tp53$GROUP== "MUT"], 
+                  y=tp53$Difference[tp53$GROUP== "WT"],
+                  alternative = "two.sided", 
+                  paired = FALSE, 
+                  conf.int = 0.95)
+```
+
+```{r echo=FALSE}
+rm(tp53)
+```
+
+## TP53 chr17:7674894G>A {.tabset}
+*ES: chr17:7674291-7675052*
+```{r}
+tp53 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr17-7674894-G-A_chr17-7674291-7675052.xlsx")
+#colnames(tp53)
+
+ggplot(tp53, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(tp53$PSI[tp53$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- tp53$PSI[tp53$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(tp53$PSI)
+v_ecdf
+
+plot(ecdf(tp53$PSI))
+
+v_ecdf(tp53$PSI[tp53$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(tp53$PSI[tp53$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(tp53$PSI[tp53$GROUP == "MUT"])))
+```
+
+### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+tp53$Difference <-  tp53$PSI - mean_WT_PSI
+tp53[tp53$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(tp53$Difference)
+v_ecdf
+
+plot(ecdf(tp53$Difference))
+
+v_ecdf(tp53$Difference[tp53$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(tp53$Difference[tp53$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(tp53$Difference[tp53$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(tp53)
+```
+
+## DNMT3A chr2:25239130C>T {.tabset}
+*DG: chr2:25237006-25239139*
+```{r}
+dnmt3a <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr2-25239130-C-T_chr2-25237006-25239139.xlsx")
+#colnames(dnmt3a)
+
+ggplot(dnmt3a, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(dnmt3a$PSI[dnmt3a$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- dnmt3a$PSI[dnmt3a$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(dnmt3a$PSI)
+v_ecdf
+
+plot(ecdf(dnmt3a$PSI))
+
+v_ecdf(dnmt3a$PSI[dnmt3a$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(dnmt3a$PSI[dnmt3a$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(dnmt3a$PSI[dnmt3a$GROUP == "MUT"])))
+```
+
+### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+dnmt3a$Difference <-  dnmt3a$PSI - mean_WT_PSI
+dnmt3a[dnmt3a$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(dnmt3a$Difference)
+v_ecdf
+
+plot(ecdf(dnmt3a$Difference))
+
+v_ecdf(dnmt3a$Difference[dnmt3a$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(dnmt3a$Difference[dnmt3a$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(dnmt3a$Difference[dnmt3a$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(dnmt3a)
+```
+
+
+## DNMT3A chr2:25235792T>C {.tabset}
+*AG: chr2:25235821-25236935* 
+```{r}
+dnmt3a <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr2-25235792-T-C_chr2-25235821-25236935.xlsx")
+#colnames(dnmt3a)
+
+ggplot(dnmt3a, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(dnmt3a$PSI[dnmt3a$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- dnmt3a$PSI[dnmt3a$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(dnmt3a$PSI)
+v_ecdf
+
+plot(ecdf(dnmt3a$PSI))
+
+v_ecdf(dnmt3a$PSI[dnmt3a$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(dnmt3a$PSI[dnmt3a$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(dnmt3a$PSI[dnmt3a$GROUP == "MUT"])))
+```
+
+### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+dnmt3a$Difference <-  dnmt3a$PSI - mean_WT_PSI
+dnmt3a[dnmt3a$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(dnmt3a$Difference)
+v_ecdf
+
+plot(ecdf(dnmt3a$Difference))
+
+v_ecdf(dnmt3a$Difference[dnmt3a$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(dnmt3a$Difference[dnmt3a$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(dnmt3a$Difference[dnmt3a$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(dnmt3a)
+```
+
+## KMT2D chr12:49031255G>A {.tabset}
+*AG: chr12:49031313-49032512*
+```{r}
+kmt2d <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr12-49031255-G-A_chr12-49031313-49032512.xlsx")
+#colnames(kmt2d)
+
+ggplot(kmt2d, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(kmt2d$PSI[kmt2d$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- kmt2d$PSI[kmt2d$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(kmt2d$PSI)
+v_ecdf
+
+plot(ecdf(kmt2d$PSI))
+
+v_ecdf(kmt2d$PSI[kmt2d$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(kmt2d$PSI[kmt2d$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(kmt2d$PSI[kmt2d$GROUP == "MUT"])))
+```
+
+### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+kmt2d$Difference <-  kmt2d$PSI - mean_WT_PSI
+kmt2d[kmt2d$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(kmt2d$Difference)
+v_ecdf
+
+plot(ecdf(kmt2d$Difference))
+
+v_ecdf(kmt2d$Difference[kmt2d$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(kmt2d$Difference[kmt2d$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(kmt2d$Difference[kmt2d$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(kmt2d)
+```
+
+## TET2 chr4:105259774G>A {.tabset}
+*DG: chr4:105259708-105261758*
+```{r}
+tet2 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr4-105259774-G-A_chr4-105259708-105261758.xlsx")
+#colnames(tet2)
+
+ggplot(tet2, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(tet2$PSI[tet2$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- tet2$PSI[tet2$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(tet2$PSI)
+v_ecdf
+
+plot(ecdf(tet2$PSI))
+
+v_ecdf(tet2$PSI[tet2$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(tet2$PSI[tet2$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(tet2$PSI[tet2$GROUP == "MUT"])))
+```
+
+### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+tet2$Difference <-  tet2$PSI - mean_WT_PSI
+tet2[tet2$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(tet2$Difference)
+v_ecdf
+
+plot(ecdf(tet2$Difference))
+
+v_ecdf(tet2$Difference[tet2$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(tet2$Difference[tet2$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(tet2$Difference[tet2$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(tet2)
+```
+
+## PTPN11 chr12:112489084G>T {.tabset}
+*DG: chr12:112489079-112502143*
+```{r}
+ptpn11 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chr12-112489084-G-T_chr12-112489079-112502143.xlsx")
+#colnames(ptpn11)
+
+ggplot(ptpn11, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(ptpn11$PSI[ptpn11$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- ptpn11$PSI[ptpn11$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(ptpn11$PSI)
+v_ecdf
+
+plot(ecdf(ptpn11$PSI))
+
+v_ecdf(ptpn11$PSI[ptpn11$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(ptpn11$PSI[ptpn11$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(ptpn11$PSI[ptpn11$GROUP == "MUT"])))
+```
+
+### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+ptpn11$Difference <-  ptpn11$PSI - mean_WT_PSI
+ptpn11[ptpn11$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(ptpn11$Difference)
+v_ecdf
+
+plot(ecdf(ptpn11$Difference))
+
+v_ecdf(ptpn11$Difference[ptpn11$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(ptpn11$Difference[ptpn11$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(ptpn11$Difference[ptpn11$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(ptpn11)
+```
+
+## KDM6A chrX:45062737C>T {.tabset}
+*DG: chrX:45062720-45063421*
+```{r}
+kdm6a <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/BeatAML/SpliceJunction/PSI/chrX-45062737-C-T_chrX-45062720-45063421.xlsx")
+#colnames(kdm6a)
+
+ggplot(kdm6a, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(kdm6a$PSI[kdm6a$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- kdm6a$PSI[kdm6a$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(kdm6a$PSI[kdm6a$GROUP == "WT"])
+v_ecdf
+
+plot(ecdf(kdm6a$PSI[kdm6a$GROUP == "WT"]))
+
+v_ecdf(kdm6a$PSI[kdm6a$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(kdm6a$PSI[kdm6a$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(kdm6a$PSI[kdm6a$GROUP == "MUT"])))
+```
+
+### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+kdm6a$Difference <-  kdm6a$PSI - mean_WT_PSI
+kdm6a[kdm6a$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(kdm6a$Difference)
+v_ecdf
+
+plot(ecdf(kdm6a$Difference))
+
+v_ecdf(kdm6a$Difference[kdm6a$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(kdm6a$Difference[kdm6a$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(kdm6a$Difference[kdm6a$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(kdm6a)
+```
+
+# TCGA
+
+## IDH1 chr2:208248389G>A/C/T {.tabset}
+*DG: chr2:208245425-208248422*
+```{r}
+idh1 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/PSI/chr2-208248389-G-A_chr2-208245425-208248422.xlsx")
+table(idh1$Variant_status)
+```
+
+### PSI
+Kruskal Wallis
+```{r}
+#PSI
+kruskal.test(PSI ~ Variant_status, data = idh1)
+```
+
+Pairwise Wilcoxon Test
+```{r}
+pairwise.wilcox.test(idh1$PSI, idh1$Variant_status)
+pairwise_wilcox_test(idh1,PSI ~ Variant_status)
+```
+
+### DeltaPSI
+```{r}
+#DeltaPSI
+mean_WT_PSI <- mean(idh1$PSI[idh1$Variant_status == "WT"], na.rm=TRUE)
+idh1$Difference <- idh1$PSI - mean_WT_PSI
+
+idh1[idh1$Variant_status %in% "R132C", c("case_id", "sample_id", "PSI","Difference")]
+idh1[idh1$Variant_status %in% "R132G",c("case_id", "sample_id","PSI", "Difference")]
+idh1[idh1$Variant_status %in% "R132S",c("case_id", "sample_id", "PSI","Difference")]
+```
+
+Kruskal Wallis
+```{r}
+kruskal.test(Difference ~ Variant_status, data = idh1)
+```
+
+Pairwise Wilcoxon Test
+```{r}
+pairwise.wilcox.test(idh1$Difference, idh1$Variant_status)
+pairwise_wilcox_test(idh1,Difference ~ Variant_status)
+```
+
+```{r echo=FALSE}
+rm(idh1)
+```
+
+## FLT3 chr13:28018485G>T {.tabset}
+### ES20: chr13:28015702-28023349{.tabset}
+```{r}
+flt3.se20 <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/PSI/chr13-28018485-G-T_chr13-28015702-28023349.xlsx")
+
+ggplot(flt3.se20, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(flt3.se20$PSI[flt3.se20$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- flt3.se20$PSI[flt3.se20$GROUP == "MUT"]
+MUT_PSI
+
+flt3.se20[flt3.se20$GROUP == "MUT", c("case_id", "PSI")]
+```
+
+#### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(flt3.se20$PSI)
+v_ecdf
+
+plot(ecdf(flt3.se20$PSI))
+
+v_ecdf(flt3.se20$PSI[flt3.se20$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(flt3.se20$PSI[flt3.se20$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(flt3.se20$PSI[flt3.se20$GROUP == "MUT"])))
+```
+
+#### DeltaPSI Percentile 
+```{r}
+#Deviation from the mean PSI (deltaPSI): 
+flt3.se20$Difference <-  flt3.se20$PSI - mean_WT_PSI
+flt3.se20[flt3.se20$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(flt3.se20$Difference)
+v_ecdf
+
+plot(ecdf(flt3.se20$Difference))
+
+v_ecdf(flt3.se20$Difference[flt3.se20$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(flt3.se20$Difference[flt3.se20$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(flt3.se20$Difference[flt3.se20$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(flt3.se20)
+```
+
+### ES19+20: chr13:28015702-28024860 {.tabset}
+```{r}
+flt3.se1920<- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/PSI/chr13-28018485-G-T_chr13-28015702-28024860.xlsx")
+
+ggplot(flt3.se1920, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(flt3.se1920$PSI[flt3.se1920$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- flt3.se1920$PSI[flt3.se1920$GROUP == "MUT"]
+MUT_PSI
+
+flt3.se1920[flt3.se1920$GROUP == "MUT", c("case_id", "PSI")]
+```
+
+#### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(flt3.se1920$PSI)
+v_ecdf
+
+plot(ecdf(flt3.se1920$PSI))
+
+v_ecdf(flt3.se1920$PSI)
+print(paste0("MUT Percentile: ", v_ecdf(flt3.se1920$PSI[flt3.se1920$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(flt3.se1920$PSI[flt3.se1920$GROUP == "MUT"])))
+```
+
+#### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+flt3.se1920$Difference <-  flt3.se1920$PSI - mean_WT_PSI
+flt3.se1920[flt3.se1920$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+
+v_ecdf <- ecdf(flt3.se1920$Difference)
+v_ecdf
+
+plot(ecdf(flt3.se1920$Difference))
+
+v_ecdf(flt3.se1920$Difference[flt3.se1920$GROUP == "MUT"])
+print(paste0("MUT Percentile: ", v_ecdf(flt3.se1920$Difference[flt3.se1920$GROUP == "MUT"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(flt3.se1920$Difference[flt3.se1920$GROUP == "MUT"])))
+```
+
+```{r echo=FALSE}
+rm(flt3.se1920)
+```
+
+
+## NRAS chr1:114716123C>T {.tabset}
+*DG: chr1:114713979-114716657*
+```{r}
+nras <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/PSI/chr1-114716123-C-T_chr1-114713979-114716657.xlsx")
+#colannras)
+
+ggplot(nras, aes(x=GROUP,y=PSI,color=GROUP)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(nras$PSI[nras$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- nras$PSI[nras$GROUP == "MUT"]
+MUT_PSI
+```
+
+### PSI
+Mann-Whitney
+```{r}
+#PSI:
+#Normality:
+shapiro.test(nras$PSI[nras$GROUP== "WT"])
+shapiro.test(nras$PSI[nras$GROUP== "MUT"])
+
+#Mann-Whitney:
+wilcox.test(x=nras$PSI[nras$GROUP== "MUT"], 
+                  y=nras$PSI[nras$GROUP== "WT"],
+                  alternative = "two.sided", 
+                  paired = FALSE, 
+                  conf.int = 0.95)
+```
+
+### DeltaPSI
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+nras$Difference <-  nras$PSI - mean_WT_PSI
+nras[nras$GROUP == "MUT", c("case_id", "sample_id", "PSI", "Difference")]
+```
+
+Mann-Whitney
+```{r}
+#Normality:
+shapiro.test(nras$Difference[nras$GROUP== "WT"])
+shapiro.test(nras$Difference[nras$GROUP== "MUT"])
+
+#Mann-Whitney:
+wilcox.test(x=nras$Difference[nras$GROUP== "MUT"], 
+                  y=nras$Difference[nras$GROUP== "WT"],
+                  alternative = "two.sided", 
+                  paired = FALSE, 
+                  conf.int = 0.95)
+```
+
+```{r echo=FALSE}
+rm(nras)
+```
+
+## CBL chr11:119278164A>T {.tabset}
+### AG: chr11:119277845-119278189 {.tabset}
+```{r}
+cbl <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/PSI/chr11-119278164-A-T_chr11-119277845-119278189.xlsx")
+
+ggplot(cbl, aes(x=Variant_status,y=PSI,color=Variant_status)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(cbl$PSI[cbl$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- cbl$PSI[cbl$Variant_status == "chr11:119278164A>T"]
+MUT_PSI
+```
+
+#### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(cbl$PSI)
+v_ecdf
+
+plot(ecdf(cbl$PSI))
+
+v_ecdf(cbl$PSI[cbl$Variant_status == "chr11:119278164A>T"])
+print(paste0("MUT Percentile: ", v_ecdf(cbl$PSI[cbl$Variant_status == "chr11:119278164A>T"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(cbl$PSI[cbl$Variant_status == "chr11:119278164A>T"])))
+```
+
+#### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+cbl$Difference <-  cbl$PSI - mean_WT_PSI
+cbl[cbl$Variant_status %in% "chr11:119278164A>T", c("case_id", "sample_id", "PSI","Difference")]
+
+v_ecdf <- ecdf(cbl$Difference)
+v_ecdf
+
+plot(ecdf(cbl$Difference))
+
+v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278164A>T"])
+print(paste0("MUT Percentile: ", v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278164A>T"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278164A>T"])))
+```
+
+```{r echo=FALSE}
+rm(cbl)
+```
+
+### AG: chr11:119277845-119278237 {.tabset}
+```{r}
+cbl <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/PSI/chr11-119278164-A-T_chr11-119277845-119278237.xlsx")
+
+ggplot(cbl, aes(x=Variant_status,y=PSI,color=Variant_status)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(cbl$PSI[cbl$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- cbl$PSI[cbl$Variant_status == "chr11:119278164A>T"]
+MUT_PSI
+```
+
+#### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(cbl$PSI)
+v_ecdf
+
+plot(ecdf(cbl$PSI))
+
+v_ecdf(cbl$PSI[cbl$Variant_status == "chr11:119278164A>T"])
+print(paste0("MUT Percentile: ", v_ecdf(cbl$PSI[cbl$Variant_status == "chr11:119278164A>T"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(cbl$PSI[cbl$Variant_status == "chr11:119278164A>T"])))
+```
+
+#### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+cbl$Difference <-  cbl$PSI - mean_WT_PSI
+cbl[cbl$Variant_status %in% "chr11:119278164A>T", c("case_id", "sample_id", "PSI","Difference")]
+
+v_ecdf <- ecdf(cbl$Difference)
+v_ecdf
+
+plot(ecdf(cbl$Difference))
+
+v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278164A>T"])
+print(paste0("MUT Percentile: ", v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278164A>T"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278164A>T"])))
+```
+
+
+```{r echo=FALSE}
+rm(cbl)
+```
+
+### ES: chr11-119277845-119278509 {.tabset}
+```{r}
+cbl <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/PSI/chr11-119278164-A-T_chr11-119277845-119278509.xlsx")
+
+ggplot(cbl, aes(x=Variant_status,y=PSI,color=Variant_status)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(cbl$PSI[cbl$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- cbl$PSI[cbl$Variant_status == "chr11:119278164A>T"]
+MUT_PSI
+```
+
+#### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+cbl$Difference <-  cbl$PSI - mean_WT_PSI
+cbl[cbl$Variant_status %in% "chr11:119278164A>T", c("case_id", "sample_id", "PSI","Difference")]
+
+v_ecdf <- ecdf(cbl$Difference)
+v_ecdf
+
+plot(ecdf(cbl$Difference))
+
+v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278164A>T"])
+```
+
+
+```{r echo=FALSE}
+print(paste0("MUT Percentile: ", v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278164A>T"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278164A>T"])))
+```
+
+
+
+```{r echo=FALSE}
+rm(cbl)
+```
+
+## CBL chr11:119278165G>C {.tabset}
+### AG: chr11:119277845-119278189 {.tabset}
+```{r}
+cbl <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/PSI/chr11-119278165-G-C_chr11-119277845-119278189.xlsx")
+
+ggplot(cbl, aes(x=Variant_status,y=PSI,color=Variant_status)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(cbl$PSI[cbl$Variant_status == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- cbl$PSI[cbl$Variant_status == "chr11:119278165G>C"]
+MUT_PSI
+```
+
+#### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(cbl$PSI[cbl$GROUP == "WT"])
+v_ecdf
+
+plot(ecdf(cbl$PSI[cbl$GROUP == "WT"]))
+
+v_ecdf(cbl$PSI[cbl$Variant_status == "chr11:119278165G>C"])
+print(paste0("MUT Percentile: ", v_ecdf(cbl$PSI[cbl$Variant_status == "chr11:119278165G>C"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(cbl$PSI[cbl$Variant_status == "chr11:119278165G>C"])))
+```
+
+#### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+cbl$Difference <-  cbl$PSI - mean_WT_PSI
+cbl$Difference[cbl$Variant_status == "chr11:119278165G>C"]
+
+v_ecdf <- ecdf(cbl$Difference[cbl$GROUP == "WT"])
+v_ecdf
+
+plot(ecdf(cbl$Difference[cbl$GROUP == "WT"]))
+
+v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278165G>C"])
+print(paste0("MUT Percentile: ", v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278165G>C"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278165G>C"])))
+```
+
+```{r echo=FALSE}
+rm(cbl)
+```
+
+### AG: chr11:119277845-119278237 {.tabset}
+```{r}
+cbl <- read_excel("/media/adminiis/HematoLaFe/SplicingVariantsAML-main/Results/TCGA/SpliceJunction/PSI/chr11-119278165-G-C_chr11-119277845-119278237.xlsx")
+
+ggplot(cbl, aes(x=Variant_status,y=PSI,color=Variant_status)) +  geom_boxplot()
+
+#Value of Mean PSI in WT samples:
+mean_WT_PSI <- mean(cbl$PSI[cbl$GROUP == "WT"], na.rm=TRUE)
+mean_WT_PSI
+
+#PSI Values in the MUT sample:
+MUT_PSI <- cbl$PSI[cbl$Variant_status == "chr11:119278165G>C"]
+MUT_PSI
+```
+
+#### PSI Percentile
+```{r}
+#Percentile of MUT PSI:
+v_ecdf <- ecdf(cbl$PSI)
+v_ecdf
+
+plot(ecdf(cbl$PSI))
+
+v_ecdf(cbl$PSI[cbl$Variant_status == "chr11:119278165G>C"])
+print(paste0("MUT Percentile: ", v_ecdf(cbl$PSI[cbl$Variant_status == "chr11:119278165G>C"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(cbl$PSI[cbl$Variant_status == "chr11:119278165G>C"])))
+```
+
+#### DeltaPSI Percentile
+```{r}
+#Deviation from the mean PSI (deltaPSI):
+cbl$Difference <-  cbl$PSI - mean_WT_PSI
+cbl[cbl$Variant_status %in% "chr11:119278165G>C", c("case_id", "sample_id", "PSI","Difference")]
+
+v_ecdf <- ecdf(cbl$Difference)
+v_ecdf
+
+plot(ecdf(cbl$Difference))
+
+v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278165G>C"])
+print(paste0("MUT Percentile: ", v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278165G>C"])))
+print(paste0("Inferred Pvalue: ", v_ecdf(cbl$Difference[cbl$Variant_status == "chr11:119278165G>C"])))
+```
+
+```{r echo=FALSE}
+rm(cbl)
+```
