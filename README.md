@@ -259,9 +259,10 @@ Rscript integrate_foundvariants.R
 ```
 
 ## Splice Altering Effect Analysis
-The potential splice altering effect analysis is conducted at the `BeatAML_report.Rmd` and  `TCGA_report.Rmd` scripts and both generate an interactive results report.
- + BeatAML results: `Results/BeatAML_report.html`
- + TCGA results: `Results/TCGA_report.html`
+The potential splice altering effect analysis is conducted at the `BeatAML_report.Rmd`, `TCGA_report.Rmd` and `statisticsdeltaPSI.Rmd` scripts and both generate an interactive results report.
+ + BeatAML splicing analysis: `Results/BeatAML_report.html`
+ + TCGA splicing analysis: `Results/TCGA_report.html`
+ + Statistical analysis (PSI): `Results/statisticsdeltaPSI.html`
 
 ## Contact
 
