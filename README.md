@@ -12,8 +12,9 @@ Format:
   + [RNASeq Splice Junction Collection](#RNASeq-Splice-Junction-Collection)
   + [Integration](#Integration)
 * [Splice altering effect analysis](#Splice-altering-effect-analysis)
+* [Citation](#citation)
 * [Contact](#contact)
-* [Publication](#publication)
+
 
 
 ## Dependencies
@@ -266,6 +267,9 @@ The potential splice altering effect analysis is conducted at the `BeatAML_repor
  + BeatAML splicing analysis: `Results/BeatAML_report.html`
  + TCGA splicing analysis: `Results/TCGA_report.html`
  + Statistical analysis (PSI): `Results/statisticsdeltaPSI.html`
+
+## Citation
+Morote-Faubel M, Guaita-Céspedes M, Fernández-Blanco B, Martínez-Valiente C, Ibáñez M, Santiago-Balsera M, Such E, de la Rubia J, Liquori A, Cervera J. Unveiling splicing disruptions due to common somatic variants in acute myeloid leukemia. Hum Genomics. 2025 Nov 4;19(1):129. doi: 10.1186/s40246-025-00842-6. PMID: 41189001; PMCID: PMC12584550.
 
 ## Contact
 
