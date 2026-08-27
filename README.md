@@ -269,7 +269,7 @@ The potential splice altering effect analysis is conducted at the `BeatAML_repor
  + Statistical analysis (PSI): `Results/statisticsdeltaPSI.html`
 
 ## Citation
-Morote-Faubel M, Guaita-Céspedes M, Fernández-Blanco B, Martínez-Valiente C, Ibáñez M, Santiago-Balsera M, Such E, de la Rubia J, Liquori A, Cervera J. Unveiling splicing disruptions due to common somatic variants in acute myeloid leukemia. Hum Genomics. 2025 Nov 4;19(1):129. doi: [10.1186/s40246-025-00842-6]. PMID: 41189001; PMCID: PMC12584550.
+Morote-Faubel M, Guaita-Céspedes M, Fernández-Blanco B, Martínez-Valiente C, Ibáñez M, Santiago-Balsera M, Such E, de la Rubia J, Liquori A, Cervera J. Unveiling splicing disruptions due to common somatic variants in acute myeloid leukemia. Hum Genomics. 2025 Nov 4;19(1):129. doi: [10.1186/s40246-025-00842-6](https://link.springer.com/article/10.1186/s40246-025-00842-6). PMID: 41189001; PMCID: PMC12584550.
 
 ## Contact
 
